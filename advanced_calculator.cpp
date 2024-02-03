@@ -1,8 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int n, m;
-char op;
+int num1, num2;
 
 int addTwoNumbers (int a, int b) {
     return a + b;
@@ -21,7 +20,7 @@ int divideTwoNumbers (int a, int b) {
     else return a / b;
 }
 
-int calculatePower (int a, int b) {
+int CalculatePower (int a, int b) {
     int p = 1;
     while (true) {
         if (b > 0) b--;
@@ -47,32 +46,35 @@ void readOperator (char &o) {
 // Additional function to calculate result
 void calculateResult (int &r, char o) {
     if (o == '+') 
-        r = addTwoNumbers(n, m);
+        r = addTwoNumbers(num1, num2);
     else if (o == '-') 
-        r = subtractTwoNumbers(n, m);
+        r = subtractTwoNumbers(num1, num2);
     else if (o == '*') 
-        r = multiplyTwoNumbers(n, m);
+        r = multiplyTwoNumbers(num1, num2);
     else if (o == '/') 
-        r = divideTwoNumbers(n, m);
+        r = divideTwoNumbers(num1, num2);
     else if (o == '^') 
-        r = calculatePower(n, m);
+        r = CalculatePower(num1, num2);
 }
 
 void displayResult (int r, char o) {
-    if (o == '^') cout << "Result of " << n << " raised to the power of " << m << " is: " << r;
-    else if (o == '/' && m == 0) cout << "Error: Division by zero.";
+    if (o == '^') cout << "Result of " << num1 << " raised to the power of " << num2 << " is: " << r;
+    else if (o == '/' && num2 == 0) {
+        if (num2 == 0) cout << "Error: Division by zero.";
+        else cout << "Result of dividing " << num1 << " by " << num2 << " is: " << r;
+    }
     else {
         if (o == '+') cout << "Sum of ";
         else if (o == '-') cout << "Difference of ";
         else if (o == '*') cout << "Product of ";
-        else if (o == '/') cout << "Quotient of ";
-        cout << n << " " << o << " " << m << " is: " << r;
+        cout << num1 << " " << o << " " << num2 << " is: " << r;
     }
 }
 
 int main () {
     int result;
-    readTwoNumbers(n, m);
+    char op;
+    readTwoNumbers(num1, num2);
     readOperator(op);
     calculateResult(result, op);
     displayResult(result, op);
