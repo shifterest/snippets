@@ -1,0 +1,78 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int check_int ();
+void process_residential (double &bill);
+void process_business (double &bill);
+    
+int main()
+{
+    int choice;
+    
+    cout << "CABLE BILL CALCULATOR" << endl << endl;
+    cout << "Enter customer type (1 for residential, 2 for business): ";
+    
+    // Repeatedly ask customer type if input is wrong 
+    do {
+        cin >> choice;
+        if (choice != 1 && choice != 2)
+            cout << "Invalid choice. Try again: ";
+    } while (choice != 1 && choice != 2);
+    
+    double cableBill;
+    
+    // It is given that if choice != 1, choice == 2
+    if (choice == 1) process_residential(cableBill);
+    else process_business(cableBill);
+    
+    cout << fixed << setprecision(2);
+    cout << endl << "Cable bill amount: $" << cableBill;
+        
+    return 0;
+}
+
+int check_int () {
+    int n;
+    
+    do {
+        cin >> n;
+        if (n <= 0)
+            cout << "Input cannot be negative or zero. Try again: ";
+    } while (n <= 0);
+    
+    return n;
+}
+
+void process_residential (double &bill) {
+    int channels;
+    
+    cout << "Enter number of premium channels: ";
+    channels = check_int();
+    
+    cout << endl << "Processing fee: $4.50" << endl;
+    cout << "Basic service fee: $30" << endl;
+    cout << "Premium channels: $" << (5 * channels) << endl;
+    
+    bill = 4.5 + 30 + (5 * channels);
+}
+
+void process_business (double &bill) {
+    int connections, channels;
+    
+    cout << "Enter number of connections: ";
+    connections = check_int();
+    cout << "Enter number of premium channels: ";
+    channels = check_int();
+    
+    if (connections <= 5) bill = (80 * connections);
+    else bill = 400 + (4 * (connections - 5));
+    
+    cout << endl << "Processing fee: $16.50" << endl;
+    cout << "Basic service fee: $" << bill << endl;
+    cout << "Premium channels: $" << (50 * channels) << endl;
+    
+    bill += 16.5 + (50 * channels);
+}
+
+
