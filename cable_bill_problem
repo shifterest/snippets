@@ -2,17 +2,18 @@
 #include <iomanip>
 using namespace std;
 
-const double RES_PROC = 4.5,
-             RES_SRVC = 30,
-             RES_CHNL = 5,
-             BUS_PROC = 16.5,
-             BUS_SRVC_UNDER_5 = 80,
-             BUS_SRVC_OVER_5 = 4,
-             BUS_CHNL = 50;
+const double RES_PROC = 4.5,            // Residential processing fee
+             RES_SRVC = 30,             // Residential basic service fee
+             RES_CHNL = 5,              // Residential fee per premium channel
+             BUS_PROC = 16.5,           // Business processing fee
+             BUS_SRVC_UNDER_5 = 80,     // Business basic service fee under 5 connections
+             BUS_SRVC_OVER_5 = 4,       // Business basic service fee per connection over 5 connections
+             BUS_CHNL = 50;             // Business fee per premium channel
     
 int main()
 {
     int choice;
+    double processingFee, serviceFee, channelFee, cableBill;
     
     cout << "CABLE BILL CALCULATOR" << endl << endl;
     cout << "Enter customer type (1 for residential, 2 for business): ";
@@ -23,8 +24,8 @@ int main()
         if (choice != 1 && choice != 2)
             cout << "Invalid choice. Try again: ";
     } while (choice != 1 && choice != 2);
-    
-    double cableBill;
+
+    cout << fixed << setprecision(2);
     
     // It is given that if choice != 1, choice == 2
     if (choice == 1) {
@@ -37,11 +38,13 @@ int main()
                 cout << "Input cannot be negative or zero. Try again: ";
         } while (channels <= 0);
         
-        cout << endl << "Processing fee: $" << RES_PROC << endl;
-        cout << "Basic service fee: $" << RES_SRVC << endl;
-        cout << "Premium channels: $" << (RES_CHNL * channels) << endl;
+        processingFee = RES_PROC;
+        serviceFee = RES_SRVC;
+        channelFee = RES_CHNL * channels;
         
-        cableBill = RES_PROC + RES_SRVC + (RES_CHNL * channels);
+        cout << endl << "Processing fee: $" << processingFee << endl;
+        cout << "Basic service fee: $" << serviceFee << endl;
+        cout << "Premium channels: $" << RES_CHNL << " * " << channels << " channel(s) = $" << channelFee << endl;
     }
     else {
         int connections, channels;
@@ -58,19 +61,28 @@ int main()
             if (channels <= 0)
                 cout << "Input cannot be negative or zero. Try again: ";
         } while (channels <= 0);
+
+        processingFee = BUS_PROC;
+        channelFee = BUS_CHNL * channels;
         
-        if (connections <= 5) cableBill = BUS_SRVC_UNDER_5;
-        else cableBill = BUS_SRVC_OVER_5 + (BUS_SRVC_UNDER_5 * (connections - 5));
-        
-        cout << endl << "Processing fee: $" << BUS_PROC << endl;
-        cout << "Basic service fee: $" << cableBill << endl;
-        cout << "Premium channels: $" << (BUS_CHNL * channels) << endl;
-        
-        cableBill += 16.5 + (BUS_CHNL * channels);
+        cout << endl << "Processing fee: $" << processingFee << endl;
+        cout << "Basic service fee: $";
+        if (connections <= 5) {
+            serviceFee = BUS_SRVC_UNDER_5;
+            cout << serviceFee << endl;
+        }
+        else {
+            serviceFee = BUS_SRVC_UNDER_5 + (BUS_SRVC_OVER_5 * (connections - 5));
+            cout << BUS_SRVC_UNDER_5 << " for 5 connections + ($";
+            cout << BUS_SRVC_OVER_5 << " * " << connections - 5 << " add\'l connection(s)) = ";
+            cout << serviceFee << endl;
+        }
+        cout << "Premium channels: $" << BUS_CHNL << " * " << channels << " channels = $" << channelFee << endl;
     }
     
-    cout << fixed << setprecision(2);
-    cout << endl << "Cable bill amount: $" << cableBill;
+    cableBill = processingFee + serviceFee + channelFee;
+    cout << endl << "Cable bill amount: $" << processingFee << " + $" << serviceFee << " + $" << channelFee << " = $" << cableBill;
         
     return 0;
 }
+
