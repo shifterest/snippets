@@ -3,6 +3,60 @@
 #include <sstream>
 using namespace std;
 
+string parseInput (string str, int &multiple, string &name) {
+	// A = {b E N | b is a multiple of 5}
+	bool hasName = false, 
+		 hasEqual = false,
+		 hasElementName = false,
+		 hasE = false,
+		 hasN = false,
+		 hasPipe = false,
+		 hasCondition = false,
+		 hasMultiple = false;
+	string word, words[50], elementName;
+	
+	stringstream ss(str);
+	for (int i = 0; getline(ss, word, ' '); i++) {
+		words[i] = word;
+	}
+	
+	for (int i = 0; i < 50; i++) {
+		if (words[i] == "") continue;
+		if (!hasName) {
+			name = words[i];
+			hasName = true;
+		}
+		if (!hasEqual && words[i] == "=") hasEqual = true;
+		if (!hasElementName) {
+			if (words[i][0] == "{") {
+				elementName = words[i].substr(1);
+				hasElementName = true;
+			}
+		}
+		if (!hasE && words[i] == "E") hasE = true;
+		if (!hasN && words[i] == "N") hasE = true;
+		if (!hasPipe && words[i] == "|") hasE = true;
+		if (!hasCondition) {
+			if (
+				words[i] == elementName
+				&& words[i + 1] == "is"
+				&& words[i + 1] == "a"
+				&& words[i + 1] == "multiple"
+				&& words[i + 1] == "of"
+			) hasCondition = true;
+		}
+		if (!hasMultiple) {
+			if (words[i].back() == "}") {
+				stringstream num (words[i].substr(0, words[i].length() - 1));
+				num >> multiple;
+				return 0;
+			}
+		}
+	}
+	
+	return 1;
+}
+
 int getMultiple (string str) {
 	int pos1, pos2, multiple;
 	
@@ -17,13 +71,13 @@ int getMultiple (string str) {
 }
 
 int main() {
-	int mult, v;
-    string input;
+	int mult, value;
+    string input, name;
     
     // A = {b E N | b is a multiple of 5}
     cout << "Enter set definition: ";
     getline (cin, input);
-    mult = getMultiple (input);
+    parseInput (input, mult, name);
     if (mult < 0) {
     	cout << "I don't understand.";
     	return 1;
@@ -31,13 +85,13 @@ int main() {
     
     do {
     	cout << endl << "Enter a value: ";
-	    cin >> v;
+	    cin >> value;
 	    
-	    if (v % mult == 0)
-	    	cout << v << " is an element of A" << endl;
+	    if (value % mult == 0 && value != 0)
+	    	cout << value << " is an element of A" << endl;
 		else
-			cout << v << " is not an element of A" << endl;
-	} while (v != 0);
+			cout << value << " is not an element of A" << endl;
+	} while (value != 0);
     
     return 0;
 }
