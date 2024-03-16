@@ -1,43 +1,40 @@
 #include <iostream>
+#include <regex>
 #include <string>
-#include <sstream>
+
 using namespace std;
 
-int getMultiple (string str) {
-	int pos1, pos2, multiple;
-	
-	pos1 = str.find ("of ") + 3;
-	if (pos1 < 0) return -1;
-	pos2 = str.find ("}", pos1) - 1;
-	
-	stringstream num (str.substr (pos1, pos2));
-	num >> multiple;
-        
-    return multiple;
-}
-
 int main() {
-	int mult, v;
-    string input;
-    
     // A = {b E N | b is a multiple of 5}
+    regex definition("\\s*([a-zA-Z]+)\\s*=\\s*\\{\\s*([a-zA-Z]+)\\s*[E∈]\\s*N\\s*\\|\\s*([a-zA-Z]+)\\s+is\\s+a\\s+multiple\\s+of\\s+(\\d+)\\s*\\}");
+    string input, name;
+    int mult, value;
+
     cout << "Enter set definition: ";
-    getline (cin, input);
-    mult = getMultiple (input);
-    if (mult < 0) {
-    	cout << "I don't understand.";
-    	return 1;
-	}
-    
+    getline(cin, input);
+
+    if (!regex_match(input, definition)) {
+        cout << "The set definition cannot be parsed.";
+        return 1;
+    }
+    smatch match;
+    regex_search(input, match, definition);
+    if (match[2].str() != match[3].str()) {
+        cout << "The variable names don't match.";
+        return 1;
+    }
+    name = match[1].str();
+    mult = stoi(match[4].str());
+
     do {
-    	cout << endl << "Enter a value: ";
-	    cin >> v;
-	    
-	    if (v % mult == 0)
-	    	cout << v << " is an element of A" << endl;
-		else
-			cout << v << " is not an element of A" << endl;
-	} while (v != 0);
-    
+        cout << endl << "Enter a value: ";
+        cin >> value;
+
+        if (value % mult == 0 && value != 0)
+            cout << value << " is an element of " << name << endl;
+        else
+            cout << value << " is not an element of " << name << endl;
+    } while (value != 0);
+
     return 0;
 }
