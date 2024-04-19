@@ -16,19 +16,30 @@ int main () {
     
     // Get all prime numbers within 2 and upper limit
     for (int i = 2; i <= hi; i++) {
+        // A number is assumed to be prime unless proven otherwise
         bool prime = true;
+        // Loop through all possible divisors of i to check if it is divisible
+        // by any of them
         for (int j = 2; j < i; j++)
-            if (i % j == 0) prime = false;
+            // If a proper divisor is found, terminate the loop and declare i
+            // as not prime (composite)
+            if (i % j == 0) {
+                prime = false;
+                break;
+            }
         if (prime) primes.push_back(i);
     }
     
     // Obtain all possible prime number combinations equal to an even number
     // within lower limit and upper limit
     for (int i = lo; i <= hi; i++) {
+        // Skip odd numbers
         if (i % 2 != 0) continue;
+        // Iterate through all possible prime number combinations
         for (int p : primes)
             for (int q : primes) {
-                // cout << "i = " << i << ", p = " << p << ", q = " << q << endl;
+                // If a prime combination is found, print it and skip to
+                // checking the next even number
                 if (p + q == i) {
                     cout << i << " = " << p << " + " << q << endl;
                     goto next;
