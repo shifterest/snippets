@@ -37,14 +37,13 @@ int main () {
         if (i % 2 != 0) continue;
         // Iterate through all possible prime number combinations
         for (int p : primes)
-            for (int q : primes) {
+            for (int q : primes)
                 // If a prime combination is found, print it and skip to
                 // checking the next even number
                 if (p + q == i) {
                     cout << i << " = " << p << " + " << q << endl;
                     goto next;
                 }
-            }
         next:;
     }
 
