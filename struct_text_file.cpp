@@ -53,7 +53,10 @@ string padStrLeft (const string& str, int width) {
 int main () {
     // Steps 1-5
     int itemNum = 0;
-    ifstream inputFile ("input.txt");
+    string input;
+    cout << "Enter file to open (input, input2): ";
+    cin >> input;
+    ifstream inputFile (input + ".txt");
     if (!inputFile.is_open()) {
         cerr << "Error opening the input file." << endl;
         return 1;
@@ -66,8 +69,8 @@ int main () {
     inputFile.close();
     
     // Steps 6-8
-    ifstream inputFile2 ("input.txt");
-    if (!inputFile2.is_open()) {
+    inputFile.open (input + ".txt");
+    if (!inputFile.is_open()) {
         cerr << "Error opening the input file." << endl;
         return 1;
     }
@@ -82,7 +85,7 @@ int main () {
     }
     string line, members[5];
     for (int i = 0; i < itemNum; i++) {
-        getline (inputFile2, line);
+        getline (inputFile, line);
         // Iterate through the line and store comma-separated values
         int pos1 = 0, pos2 = 0;
         for (int j = 0; pos2 != string::npos; j++) {
@@ -113,7 +116,7 @@ int main () {
     outputFile << endl << "Total amount of all items: $ " << formatPrice (sum);
 
     // Steps 16-19
-    inputFile2.close();
+    inputFile.close();
     outputFile.close();
     cout << "Output has been written to the file output.txt";
     return 0;
