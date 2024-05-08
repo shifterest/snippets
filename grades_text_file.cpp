@@ -17,8 +17,6 @@ struct course {
     }
 };
 
-const string STUDENT_NAME = "Kenji A. Delmoro BSCS 1";
-
 int main () {
     // Count number of courses
     ifstream grade ("grade.txt");
@@ -26,7 +24,7 @@ int main () {
         cerr << "Grade file failed to open";
         return 1;
     }
-    int totalSubjects = 0;
+    int totalSubjects = -2;
     string courseStr;
     while (getline (grade, courseStr)) totalSubjects++;
     // Create array to store grade data
@@ -40,10 +38,20 @@ int main () {
         return 1;
     }
     string detailsStr[6];
+    string name, course;
     int codeW = 0, descriptionW = 0, teacherW = 0, scheduleW = 0;
     float totalWeightedGrade = 0, totalUnits = 0, GPA;
-    for (int i = 0; i < totalSubjects; i++) {
+    for (int i = -2; i < totalSubjects; i++) {
         getline (grade, courseStr);
+        // Name and course
+        if (i == -2) {
+            name = courseStr;
+            continue;
+        }
+        if (i == -1) {
+            course = courseStr;
+            continue;
+        }
         int pos1 = 0, pos2 = 0;
         for (int j = 0; pos2 != string::npos; j++) {
             pos2 = courseStr.find_first_of (",", pos1);
@@ -81,7 +89,7 @@ int main () {
         return 1;
     }
     report << "Final Grade Report" << endl;
-    report << "Student name: " << STUDENT_NAME << endl << endl;
+    report << "Student name: " << name << " " << course << endl << endl;
     report << fixed << setprecision (2);
     report << left << setw (codeW + 3) << "Subject" << setw (descriptionW + 3) 
            << "Description" << setw (8) << "Units" << setw (teacherW + 3)
