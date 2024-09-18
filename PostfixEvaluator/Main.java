@@ -36,7 +36,7 @@ public class Main {
                         ken.push(op1 / op2);
                         break;
                     case '^':
-                        ken.push((int) Math.pow(op1, op1));
+                        ken.push((int) Math.pow(op1, op2));
                         break;
                 }
             }
