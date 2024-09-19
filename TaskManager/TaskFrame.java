@@ -43,8 +43,13 @@ public class TaskFrame extends javax.swing.JFrame {
         txtTask = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
+        btnListNotCompleted = new javax.swing.JButton();
+        btlListCompleted = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        btnListRemoved = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Delmoro - Task Management Application");
 
         btnAdd.setText("+");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -60,12 +65,13 @@ public class TaskFrame extends javax.swing.JFrame {
             }
         });
 
+        tblTask.setBackground(new java.awt.Color(200, 200, 200));
         tblTask.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Task ID", "Description", "Completed"
+                "Task ID", "Description", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -82,8 +88,15 @@ public class TaskFrame extends javax.swing.JFrame {
             tblTask.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        btnList.setText("List tasks");
+        btnList.setText("All");
+        btnList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListActionPerformed(evt);
+            }
+        });
 
+        btnDelete.setBackground(new java.awt.Color(240, 0, 0));
+        btnDelete.setForeground(new java.awt.Color(240, 240, 240));
         btnDelete.setText("Delete task");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,6 +121,29 @@ public class TaskFrame extends javax.swing.JFrame {
         txtDescription.setRows(5);
         jScrollPane2.setViewportView(txtDescription);
 
+        btnListNotCompleted.setText("Not completed");
+        btnListNotCompleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListNotCompletedActionPerformed(evt);
+            }
+        });
+
+        btlListCompleted.setText("Completed");
+        btlListCompleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlListCompletedActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("List tasks");
+
+        btnListRemoved.setText("Removed");
+        btnListRemoved.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListRemovedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,21 +156,30 @@ public class TaskFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(10, 10, 10)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnExit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAdd))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(27, 27, 27)
+                        .addComponent(txtTask))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnComplete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(27, 27, 27)
-                                .addComponent(txtTask))
-                            .addComponent(btnList)
-                            .addComponent(btnDelete)
-                            .addComponent(btnComplete))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(btnList)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btlListCompleted)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnListNotCompleted)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnListRemoved)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -143,12 +188,18 @@ public class TaskFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnComplete)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnComplete)
+                            .addComponent(btnDelete))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnList)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnList)
+                            .addComponent(btlListCompleted)
+                            .addComponent(btnListNotCompleted)
+                            .addComponent(btnListRemoved))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtTask))
@@ -171,35 +222,34 @@ public class TaskFrame extends javax.swing.JFrame {
         DefaultTableModel mTask = (DefaultTableModel) this.tblTask.getModel();
         v = new Vector();
         
-        if (txtDescription.getText().isEmpty()) {
+        if (txtDescription.getText().equals("TaskRemoved")) {
+            JOptionPane.showMessageDialog(this, "Invalid description.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (txtDescription.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Description empty.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        else {
+        } else {
             taskDescription = txtDescription.getText();
             task = new Task (taskID, taskDescription);
             taskManager.addTask (task);
-            v.add (taskID);
-            v.add (taskDescription);
-            v.add ("NOT COMPLETED");
-            mTask.addRow (v);
-            taskID = "Task" + (taskManager.getSizeTaskManager() + 1);
-            txtTask.setText(taskID);
             txtDescription.setText("");
         }
+        
+        listTasks();
             
     }                                      
 
     private void btnCompleteActionPerformed(java.awt.event.ActionEvent evt) {                                            
         String compTaskID = JOptionPane.showInputDialog("Enter Task ID");
         
-        for (int i = 0; i < tblTask.getRowCount(); i++) {
-            if (tblTask.getValueAt(i, 0).toString().equals(compTaskID)) {
-                if (tblTask.getValueAt(i, 2).toString().equals("COMPLETED")) {
+        for (int i = 0; i < taskManager.getSizeTaskManager(); i++) {
+            if (taskManager.getTask(i).getTaskId().equals(compTaskID)) {
+                if (taskManager.getTask(i).isCompleted()) {
                     JOptionPane.showMessageDialog(this, "Task already completed.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    taskManager.markTaskAsCompleted(taskManager.getTask(i).getDescription());
+                    listTasks();
+                    return;
                 }
-                tblTask.setValueAt("COMPLETED", i, 2);
-                taskManager.markTaskAsCompleted(tblTask.getValueAt(0, i).toString());
-                return;
             }
         }
         
@@ -210,10 +260,15 @@ public class TaskFrame extends javax.swing.JFrame {
         DefaultTableModel mTask = (DefaultTableModel) this.tblTask.getModel();
         String removeTaskDesc = JOptionPane.showInputDialog("Enter Description");
         
-        for (int i = 0; i < tblTask.getRowCount(); i++) {
-            if (tblTask.getValueAt(i, 1).toString().equals(removeTaskDesc)) {
-                mTask.removeRow(i);
+        if (removeTaskDesc.equals("TaskRemoved")) {
+            JOptionPane.showMessageDialog(this, "Invalid description.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        for (int i = 0; i < taskManager.getSizeTaskManager(); i++) {
+            if (taskManager.getTask(i).getDescription().equals(removeTaskDesc)) {
                 taskManager.removeTask(removeTaskDesc);
+                listTasks();
                 return;
             }
         }
@@ -222,9 +277,105 @@ public class TaskFrame extends javax.swing.JFrame {
     }                                         
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        System.exit(0);
+        int result = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (result == JOptionPane.YES_OPTION) System.exit(0);
     }                                       
 
+    private void btnListActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        listTasks();
+        
+        JOptionPane.showMessageDialog(this, "All tasks listed.", "Done", JOptionPane.INFORMATION_MESSAGE);
+    }                                       
+
+    private void btnListNotCompletedActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        listTasks(false, false);
+        
+        JOptionPane.showMessageDialog(this, "Uncompleted tasks listed.", "Done", JOptionPane.INFORMATION_MESSAGE);
+    }                                                   
+
+    private void btlListCompletedActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+        listTasks(true, false);
+        
+        JOptionPane.showMessageDialog(this, "Completed tasks listed.", "Done", JOptionPane.INFORMATION_MESSAGE);
+    }                                                
+
+    private void btnListRemovedActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        listTasks(false, true);
+        
+        JOptionPane.showMessageDialog(this, "Removed tasks listed.", "Done", JOptionPane.INFORMATION_MESSAGE);
+    }                                              
+
+    private void listTasks() {
+        DefaultTableModel mTask = (DefaultTableModel) this.tblTask.getModel();
+        mTask.setRowCount(0);
+        v = new Vector ();
+
+        for (int i = 0; i < taskManager.getSizeTaskManager(); i++) {
+            v = new Vector();
+            task = taskManager.getTask(i);
+
+            if (!task.getDescription().equals("TaskRemoved")) {
+                taskID = task.getTaskId();
+                taskDescription = task.getDescription();
+                v.add (taskID);
+                v.add (taskDescription);
+                if (task.isCompleted()) v.add ("COMPLETED");
+                else v.add ("NOT COMPLETED");
+                mTask.addRow (v);
+            }
+        }
+
+        taskID = "Task" + (taskManager.getSizeTaskManager() + 1);
+        txtTask.setText(taskID);
+    }
+    
+    private void listTasks(boolean isCompleted, boolean isRemoved) {
+        DefaultTableModel mTask = (DefaultTableModel) this.tblTask.getModel();
+        mTask.setRowCount(0);
+        v = new Vector ();
+
+        for (int i = 0; i < taskManager.getSizeTaskManager(); i++) {
+            v = new Vector();
+            task = taskManager.getTask(i);
+
+            if (isRemoved) {
+                if (task.getDescription().equals("TaskRemoved")) {
+                    taskID = task.getTaskId();
+                    taskDescription = "REMOVED";
+                    v.add (taskID);
+                    v.add (taskDescription);
+                    if (task.isCompleted()) v.add ("COMPLETED");
+                    else v.add ("NOT COMPLETED");
+                    mTask.addRow (v);
+                }
+            } else {
+                if (isCompleted) {
+                    if (task.isCompleted() && !task.getDescription().equals("TaskRemoved")) {
+                        taskID = task.getTaskId();
+                        taskDescription = task.getDescription();
+                        v.add (taskID);
+                        v.add (taskDescription);
+                        v.add ("COMPLETED");
+                        mTask.addRow (v);
+                    }
+                } else {
+                    if (!task.isCompleted() && !task.getDescription().equals("TaskRemoved")) {
+                        taskID = task.getTaskId();
+                        taskDescription = task.getDescription();
+                        v.add (taskID);
+                        v.add (taskDescription);
+                        v.add ("NOT COMPLETED");
+                        mTask.addRow (v);
+                    }
+                }
+            }
+        }
+
+        taskID = "Task" + (taskManager.getSizeTaskManager() + 1);
+        txtTask.setText(taskID);
+    }
+     
     /**
      * @param args the command line arguments
      */
@@ -261,13 +412,17 @@ public class TaskFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton btlListCompleted;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnComplete;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnList;
+    private javax.swing.JButton btnListNotCompleted;
+    private javax.swing.JButton btnListRemoved;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblTask;
