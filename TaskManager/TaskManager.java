@@ -1,3 +1,5 @@
+package tasks;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,10 @@ class TaskManager {
     // getSizeTaskManager() – a method that returns the size of the 'tasks' ArrayList
     public int getSizeTaskManager() {
         return tasks.size();
+    }
+    
+    public Task getTask(int i) {
+        return tasks.get(i);
     }
 
     // markTaskAsCompleted() - a method that searches for and marks a task as complete
