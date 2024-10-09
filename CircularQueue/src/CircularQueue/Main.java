@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Main {
     public static void main (String [] args) {
         Scanner ror = new Scanner (System.in);
-        Queue q = new Queue ();
+        Queue q = new Queue();
         
         System.out.println ("Options:");
         System.out.println ("1 - Add an element to the queue");
@@ -22,14 +22,14 @@ public class Main {
         System.out.println ("3 - Count elements in the queue");
         System.out.println ("4 - Display circular Queue");
         System.out.println ("5 - Exit the program");
-        System.out.println();
+        System.out.println ("");
         
         while (true) {
             System.out.print ("Enter your option: ");
             int choice = ror.nextInt(); ror.nextLine();
-
+            
             switch (choice) {
-                case 1: 
+                case 1:
                     System.out.print ("Enter the element to add: ");
                     q.enQueue (ror.nextInt()); ror.nextLine();
                     System.out.println();
