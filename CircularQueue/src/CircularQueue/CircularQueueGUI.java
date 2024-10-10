@@ -93,25 +93,37 @@ public class CircularQueueGUI extends javax.swing.JFrame {
 //    }
     
     void updateCircle() {
+        // Create arrays for text fields (representing queue slots) and labels (representing positions like front and rear)
         JTextField[] queues = {queue0, queue1, queue2, queue3, queue4, queue5, queue6, queue7, queue8, queue9};
         JLabel[] labels = {lbl0, lbl1, lbl2, lbl3, lbl4, lbl5, lbl6, lbl7, lbl8, lbl9};
+
+        // Clear all queue text fields and labels
         for (int i = 0; i < 10; i++) {
-            queues[i].setText("");
-            labels[i].setText("");
+            queues[i].setText("");  // Clear text field
+            labels[i].setText("");  // Clear label
         }
+
+        // Check if the queue is empty
         if (isEmpty()) {
+            // Display message for empty queue
             txtInstruction.setText("Empty queue");
         }
         else {
+            // Set the text field values for the front and rear of the queue
             queues[front].setText(Integer.toString(items[front]));
             queues[rear].setText(Integer.toString(items[rear]));
+
+            // If the front and rear are at the same position, label both as "F, R" (indicating both front and rear)
             if (front == rear) {
                 labels[front].setText("F, R");
             }
             else {
+                // Otherwise, label the front and rear separately
                 labels[front].setText("Front");
                 labels[rear].setText("Rear");
             }
+
+            // Loop through the queue from front to rear (circularly) and display each item in its respective text field
             for (int i = front; i != rear; i = (i + 1) % SIZE) {
                 queues[i].setText(Integer.toString(items[i]));
             }
@@ -418,6 +430,7 @@ public class CircularQueueGUI extends javax.swing.JFrame {
         }
         enQueue (Integer.parseInt(txtQueue.getText()));
         updateCircle();
+        txtQueue.requestFocus();
     }//GEN-LAST:event_btnEnqueueActionPerformed
 
     private void btnDequeueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDequeueActionPerformed
