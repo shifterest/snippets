@@ -439,17 +439,14 @@ public class CircularQueueGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDequeueActionPerformed
 
     private void txtQueueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQueueKeyPressed
-        String text = txtQueue.getText();
-        for (int i = 0; i < text.length(); i++) { 
-            if (text.charAt(i) < '0' || text.charAt(i) > '9') { 
-                txtQueue.setText(text.substring(0, text.length() - 1));
-                return;
-            }
-        }
+
     }//GEN-LAST:event_txtQueueKeyPressed
 
     private void txtQueueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQueueKeyTyped
-
+        char c = evt.getKeyChar();
+        if (c < '0' || c > '9') { 
+            evt.consume();
+        }
     }//GEN-LAST:event_txtQueueKeyTyped
 
     /**
