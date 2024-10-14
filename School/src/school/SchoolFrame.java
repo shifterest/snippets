@@ -5,11 +5,17 @@
  */
 package school;
 
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author delmoro-ke
  */
 public class SchoolFrame extends javax.swing.JFrame {
+    private School school = new School();
+    private int tableMode = 0;
 
     /**
      * Creates new form SchoolFrame
@@ -27,30 +33,33 @@ public class SchoolFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        txtId = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
-        txtCode = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        tblGrades = new javax.swing.JTable();
+        panelButtons = new javax.swing.JPanel();
+        lblCode = new javax.swing.JLabel();
+        btnClearSelectedSubjects = new javax.swing.JButton();
         txtDescription = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        btnListAll = new javax.swing.JButton();
+        lblDescription = new javax.swing.JLabel();
         txtUnits = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        btnListId = new javax.swing.JButton();
+        lblUnits = new javax.swing.JLabel();
+        btnListSubjectCode = new javax.swing.JButton();
         txtGrade = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblGrade = new javax.swing.JLabel();
+        lblStudent = new javax.swing.JLabel();
+        lblSubject = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        lblId = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
         btnAddSubject = new javax.swing.JButton();
-        btnClearSubjects = new javax.swing.JButton();
+        txtCode = new javax.swing.JTextField();
+        btnClearAllSubjects = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -59,7 +68,7 @@ public class SchoolFrame extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false
@@ -73,21 +82,66 @@ public class SchoolFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(true);
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(25);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(15);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(15);
+        tblGrades.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(tblGrades);
+        tblGrades.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        if (tblGrades.getColumnModel().getColumnCount() > 0) {
+            tblGrades.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tblGrades.getColumnModel().getColumn(1).setResizable(false);
+            tblGrades.getColumnModel().getColumn(2).setPreferredWidth(25);
+            tblGrades.getColumnModel().getColumn(4).setPreferredWidth(15);
+            tblGrades.getColumnModel().getColumn(5).setPreferredWidth(15);
         }
 
-        txtId.setText("2025000");
+        lblCode.setText("Code");
 
-        jLabel1.setText("ID");
+        btnClearSelectedSubjects.setBackground(new java.awt.Color(200, 100, 100));
+        btnClearSelectedSubjects.setForeground(new java.awt.Color(255, 255, 255));
+        btnClearSelectedSubjects.setText("Clear selected");
 
-        jLabel2.setText("Name");
+        btnListAll.setText("List all");
+        btnListAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListAllActionPerformed(evt);
+            }
+        });
+
+        lblDescription.setText("Description");
+
+        btnListId.setText("List by ID");
+        btnListId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListIdActionPerformed(evt);
+            }
+        });
+
+        lblUnits.setText("Units");
+
+        btnListSubjectCode.setText("List by subject code");
+        btnListSubjectCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListSubjectCodeActionPerformed(evt);
+            }
+        });
+
+        lblGrade.setText("Grade");
+
+        lblStudent.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStudent.setText("Student");
+
+        lblSubject.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSubject.setText("Subject");
+
+        lblId.setText("ID");
+
+        lblName.setText("Name");
+
+        btnAddSubject.setText("Add subject");
+        btnAddSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSubjectActionPerformed(evt);
+            }
+        });
 
         txtCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,119 +149,134 @@ public class SchoolFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Code");
+        btnClearAllSubjects.setBackground(new java.awt.Color(200, 100, 100));
+        btnClearAllSubjects.setForeground(new java.awt.Color(255, 255, 255));
+        btnClearAllSubjects.setText("Clear subjects");
+        btnClearAllSubjects.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearAllSubjectsActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setText("Description");
-
-        txtUnits.setText("0.0");
-
-        jLabel5.setText("Units");
-
-        txtGrade.setText("1.0");
-
-        jLabel6.setText("Grade");
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel7.setText("Student");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel8.setText("Subject");
-
-        btnAddSubject.setText("Add subject");
-
-        btnClearSubjects.setText("Clear subjects");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
+        panelButtons.setLayout(panelButtonsLayout);
+        panelButtonsLayout.setHorizontalGroup(
+            panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelButtonsLayout.createSequentialGroup()
                         .addComponent(btnAddSubject)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClearSubjects)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                        .addComponent(btnClearAllSubjects)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtUnits, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtGrade, javax.swing.GroupLayout.Alignment.LEADING))))
-                    .addComponent(jLabel8))
+                        .addComponent(btnClearSelectedSubjects))
+                    .addGroup(panelButtonsLayout.createSequentialGroup()
+                        .addComponent(btnListAll)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnListId)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnListSubjectCode)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelButtonsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblName)
+                        .addComponent(lblId)
+                        .addComponent(lblStudent))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelButtonsLayout.createSequentialGroup()
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblDescription)
+                                .addComponent(lblCode)
+                                .addComponent(lblUnits)
+                                .addComponent(lblGrade))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtGrade, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtUnits, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(lblSubject))
+                    .addContainerGap()))
+        );
+        panelButtonsLayout.setVerticalGroup(
+            panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelButtonsLayout.createSequentialGroup()
+                .addContainerGap(96, Short.MAX_VALUE)
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAddSubject)
+                        .addComponent(btnClearAllSubjects)
+                        .addComponent(btnClearSelectedSubjects))
+                    .addGroup(panelButtonsLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnListAll)
+                            .addComponent(btnListId)
+                            .addComponent(btnListSubjectCode))))
                 .addContainerGap())
+            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelButtonsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblStudent)
+                        .addComponent(lblSubject))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelButtonsLayout.createSequentialGroup()
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblId))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblName)
+                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(panelButtonsLayout.createSequentialGroup()
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblCode))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblDescription))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblUnits))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblGrade))))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
-                            .addComponent(btnAddSubject)
-                            .addComponent(btnClearSubjects))))
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("All grades", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+                    .addComponent(panelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -217,6 +286,66 @@ public class SchoolFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodeActionPerformed
 
+    private void btnAddSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectActionPerformed
+        Student student = new Student (Integer.parseInt(txtId.getText()), txtName.getText());
+        Subject subject = new Subject (txtCode.getText(), txtDescription.getText(), Float.parseFloat(txtUnits.getText()));
+        StudentGrade grade = new StudentGrade (subject, student, Float.parseFloat(txtGrade.getText()));
+        
+        school.addGrade(grade);
+        updateTable();
+    }//GEN-LAST:event_btnAddSubjectActionPerformed
+
+    private void btnClearAllSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllSubjectsActionPerformed
+        school.clearGrades();
+        updateTable();
+    }//GEN-LAST:event_btnClearAllSubjectsActionPerformed
+
+    private void btnListAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListAllActionPerformed
+        tableMode = 0;
+        updateTable();
+    }//GEN-LAST:event_btnListAllActionPerformed
+
+    private void btnListIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListIdActionPerformed
+        tableMode = 1;
+        updateTable();
+    }//GEN-LAST:event_btnListIdActionPerformed
+
+    private void btnListSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListSubjectCodeActionPerformed
+        tableMode = 2;
+        updateTable();
+    }//GEN-LAST:event_btnListSubjectCodeActionPerformed
+
+    private void updateTable () {
+        ArrayList<StudentGrade> grades;
+        switch (tableMode) {
+            default:
+            case 0:
+                grades = school.getAllGrades();
+                break;
+            case 1:
+                grades = school.getGradesById(Integer.parseInt(txtId.getText()));
+                break;
+            case 2:
+                grades = school.getGradesBySubject(txtCode.getText());
+                break;
+        }
+        
+        DefaultTableModel tableModel = (DefaultTableModel) tblGrades.getModel();
+        tableModel.setRowCount(0);
+        String[] n = new String[6];
+        
+        for (int i = 0; i < grades.size(); i++) {
+            n[0] = Integer.toString(grades.get(i).getStudent().getId());
+            n[1] = grades.get(i).getStudent().getName();
+            n[2] = grades.get(i).getSubject().getCode();
+            n[3] = grades.get(i).getSubject().getDescription();
+            n[4] = String.format("%.1f", grades.get(i).getSubject().getUnits());
+            n[5] = String.format("%.1f", grades.get(i).getGrade());
+            
+            tableModel.addRow(n);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -254,19 +383,22 @@ public class SchoolFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSubject;
-    private javax.swing.JButton btnClearSubjects;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton btnClearAllSubjects;
+    private javax.swing.JButton btnClearSelectedSubjects;
+    private javax.swing.JButton btnListAll;
+    private javax.swing.JButton btnListId;
+    private javax.swing.JButton btnListSubjectCode;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblCode;
+    private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblGrade;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblStudent;
+    private javax.swing.JLabel lblSubject;
+    private javax.swing.JLabel lblUnits;
+    private javax.swing.JPanel panelButtons;
+    private javax.swing.JTable tblGrades;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtGrade;

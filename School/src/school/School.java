@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class School {
     private ArrayList<StudentGrade> grades = new ArrayList<StudentGrade>();
+
+    public School() {}
     
     public void addGrade (StudentGrade grade) {
         grades.add(grade);
@@ -27,16 +29,16 @@ public class School {
     }
     
     public ArrayList<StudentGrade> getGradesById(int id) {
-        ArrayList<StudentGrade> idGrades = new ArrayList<StudentGrade>(); 
+        ArrayList<StudentGrade> idGrades = new ArrayList<>(); 
         for (int i = 0; i < grades.size(); i++) {
-            if (grades.get(i).getStudent().getId() == i)
+            if (grades.get(i).getStudent().getId() == id)
                 idGrades.add(grades.get(i));
         }
         return idGrades;
     }
     
     public ArrayList<StudentGrade> getGradesBySubject(String code) {
-        ArrayList<StudentGrade> subGrades = new ArrayList<StudentGrade>(); 
+        ArrayList<StudentGrade> subGrades = new ArrayList<>(); 
         for (int i = 0; i < grades.size(); i++) {
             if (grades.get(i).getSubject().getCode().equals(code))
                 subGrades.add(grades.get(i));
