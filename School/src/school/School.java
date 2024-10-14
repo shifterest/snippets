@@ -5,18 +5,42 @@
  */
 package school;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author delmoro-ke
  */
 public class School {
-    public 
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    private ArrayList<StudentGrade> grades = new ArrayList<StudentGrade>();
+    
+    public void addGrade (StudentGrade grade) {
+        grades.add(grade);
     }
     
+    public void clearGrades () {
+        grades.clear();
+    }
+
+    public ArrayList<StudentGrade> getAllGrades() {
+        return grades;
+    }
+    
+    public ArrayList<StudentGrade> getGradesById(int id) {
+        ArrayList<StudentGrade> idGrades = new ArrayList<StudentGrade>(); 
+        for (int i = 0; i < grades.size(); i++) {
+            if (grades.get(i).getStudent().getId() == i)
+                idGrades.add(grades.get(i));
+        }
+        return idGrades;
+    }
+    
+    public ArrayList<StudentGrade> getGradesBySubject(String code) {
+        ArrayList<StudentGrade> subGrades = new ArrayList<StudentGrade>(); 
+        for (int i = 0; i < grades.size(); i++) {
+            if (grades.get(i).getSubject().getCode().equals(code))
+                subGrades.add(grades.get(i));
+        }
+        return subGrades;
+    }
 }

@@ -15,13 +15,17 @@ public class StudentGrade {
     private final float grade;
 
     public StudentGrade(Subject subject, Student student, float grade) {
-        super(code, description, units);
+        this.subject = subject;
         this.student = student;
         this.grade = grade;
     }
-
+    
     public Student getStudent() {
         return student;
+    }
+    
+    public Subject getSubject() {
+        return subject;
     }
 
     public float getGrade() {
