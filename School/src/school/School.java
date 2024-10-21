@@ -23,6 +23,13 @@ public class School {
     public void clearGrades () {
         grades.clear();
     }
+    
+    public void removeGrade (StudentGrade grade) {
+        for (int i = 0; i < grades.size(); i++) {
+            if (grades.get(i) == grade)
+                grades.remove(i);
+        }
+    }
 
     public ArrayList<StudentGrade> getAllGrades() {
         return grades;

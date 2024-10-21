@@ -6,8 +6,12 @@
 package school;
 
 import java.util.ArrayList;
-import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -22,6 +26,9 @@ public class SchoolFrame extends javax.swing.JFrame {
      */
     public SchoolFrame() {
         initComponents();
+        ((AbstractDocument) txtId.getDocument()).setDocumentFilter(new IntFilter());
+        ((AbstractDocument) txtUnits.getDocument()).setDocumentFilter(new FloatFilter());
+        ((AbstractDocument) txtGrade.getDocument()).setDocumentFilter(new FloatFilter());
     }
 
     /**
@@ -56,6 +63,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         btnAddSubject = new javax.swing.JButton();
         txtCode = new javax.swing.JTextField();
         btnClearAllSubjects = new javax.swing.JButton();
+        btnClearTxt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,6 +91,7 @@ public class SchoolFrame extends javax.swing.JFrame {
             }
         });
         tblGrades.setColumnSelectionAllowed(true);
+        tblGrades.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblGrades);
         tblGrades.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (tblGrades.getColumnModel().getColumnCount() > 0) {
@@ -98,6 +107,11 @@ public class SchoolFrame extends javax.swing.JFrame {
         btnClearSelectedSubjects.setBackground(new java.awt.Color(200, 100, 100));
         btnClearSelectedSubjects.setForeground(new java.awt.Color(255, 255, 255));
         btnClearSelectedSubjects.setText("Clear selected");
+        btnClearSelectedSubjects.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearSelectedSubjectsActionPerformed(evt);
+            }
+        });
 
         btnListAll.setText("List all");
         btnListAll.addActionListener(new java.awt.event.ActionListener() {
@@ -158,6 +172,15 @@ public class SchoolFrame extends javax.swing.JFrame {
             }
         });
 
+        btnClearTxt.setBackground(new java.awt.Color(200, 100, 100));
+        btnClearTxt.setForeground(new java.awt.Color(255, 255, 255));
+        btnClearTxt.setText("Clear text fields");
+        btnClearTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearTxtActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
         panelButtons.setLayout(panelButtonsLayout);
         panelButtonsLayout.setHorizontalGroup(
@@ -170,14 +193,17 @@ public class SchoolFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnClearAllSubjects)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClearSelectedSubjects))
+                        .addComponent(btnClearSelectedSubjects)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelButtonsLayout.createSequentialGroup()
                         .addComponent(btnListAll)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnListId)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnListSubjectCode)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnListSubjectCode)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
+                        .addComponent(btnClearTxt)))
+                .addContainerGap())
             .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelButtonsLayout.createSequentialGroup()
                     .addContainerGap()
@@ -221,7 +247,8 @@ public class SchoolFrame extends javax.swing.JFrame {
                         .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnListAll)
                             .addComponent(btnListId)
-                            .addComponent(btnListSubjectCode))))
+                            .addComponent(btnListSubjectCode)
+                            .addComponent(btnClearTxt))))
                 .addContainerGap())
             .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelButtonsLayout.createSequentialGroup()
@@ -265,7 +292,7 @@ public class SchoolFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
                     .addComponent(panelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -287,8 +314,24 @@ public class SchoolFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCodeActionPerformed
 
     private void btnAddSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectActionPerformed
-        Student student = new Student (Integer.parseInt(txtId.getText()), txtName.getText());
-        Subject subject = new Subject (txtCode.getText(), txtDescription.getText(), Float.parseFloat(txtUnits.getText()));
+        if (!checkTxt()) {
+            JOptionPane.showMessageDialog(null, "All data must be entered!", "Can't add subject", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String code = txtCode.getText().trim();
+        int id = Integer.parseInt(txtId.getText());
+        
+        for (StudentGrade grade : school.getAllGrades()) {
+            if (grade.getStudent().getId() == id && grade.getSubject().getCode().equals(code)) {
+                JOptionPane.showMessageDialog(null, "You can't add multiple subjects with the same code for the same student!", "Can't add subject", JOptionPane.ERROR_MESSAGE);
+                txtCode.requestFocus();
+                return;
+            }
+        }
+        
+        Student student = new Student (Integer.parseInt(txtId.getText()), txtName.getText().trim());
+        Subject subject = new Subject (txtCode.getText().trim(), txtDescription.getText().trim(), Float.parseFloat(txtUnits.getText()));
         StudentGrade grade = new StudentGrade (subject, student, Float.parseFloat(txtGrade.getText()));
         
         school.addGrade(grade);
@@ -296,26 +339,81 @@ public class SchoolFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddSubjectActionPerformed
 
     private void btnClearAllSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllSubjectsActionPerformed
+        if (school.getAllGrades().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         school.clearGrades();
         updateTable();
     }//GEN-LAST:event_btnClearAllSubjectsActionPerformed
 
     private void btnListAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListAllActionPerformed
         tableMode = 0;
+        if (school.getAllGrades().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         updateTable();
     }//GEN-LAST:event_btnListAllActionPerformed
 
     private void btnListIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListIdActionPerformed
         tableMode = 1;
+        if (school.getAllGrades().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         updateTable();
     }//GEN-LAST:event_btnListIdActionPerformed
 
     private void btnListSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListSubjectCodeActionPerformed
         tableMode = 2;
+        if (school.getAllGrades().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         updateTable();
     }//GEN-LAST:event_btnListSubjectCodeActionPerformed
 
-    private void updateTable () {
+    private void btnClearSelectedSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSelectedSubjectsActionPerformed
+        DefaultTableModel tableModel = (DefaultTableModel) tblGrades.getModel();
+        ArrayList<StudentGrade> grades = school.getAllGrades();
+        int[] rows = tblGrades.getSelectedRows();
+        
+        if (rows.length == 0) {
+            JOptionPane.showMessageDialog(null, "No subjects are selected.", "Can't remove subject", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        for (int r : rows) {
+            int id = Integer.parseInt(tableModel.getValueAt(r, 0).toString());
+            String code = tableModel.getValueAt(r, 2).toString();
+            
+            for (int i = 0; i < grades.size(); i++) {
+                if (grades.get(i).getStudent().getId() == id && grades.get(i).getSubject().getCode().equals(code)) {
+                    school.removeGrade(grades.get(i));
+                }
+            }
+        }
+        
+        updateTable();
+    }//GEN-LAST:event_btnClearSelectedSubjectsActionPerformed
+
+    private void btnClearTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearTxtActionPerformed
+        txtId.setText("");
+        txtName.setText("");
+        txtCode.setText("");
+        txtDescription.setText("");
+        txtUnits.setText("");
+        txtGrade.setText("");
+        
+        txtId.requestFocus();
+    }//GEN-LAST:event_btnClearTxtActionPerformed
+
+    private boolean checkTxt() {
+        return !(txtId.getText().isEmpty() || txtName.getText().isEmpty() || txtCode.getText().isEmpty() || txtDescription.getText().isEmpty() || txtUnits.getText().isEmpty() || txtGrade.getText().isEmpty());
+    }
+    
+    private void updateTable () {        
         ArrayList<StudentGrade> grades;
         switch (tableMode) {
             default:
@@ -385,6 +483,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAddSubject;
     private javax.swing.JButton btnClearAllSubjects;
     private javax.swing.JButton btnClearSelectedSubjects;
+    private javax.swing.JButton btnClearTxt;
     private javax.swing.JButton btnListAll;
     private javax.swing.JButton btnListId;
     private javax.swing.JButton btnListSubjectCode;
@@ -407,3 +506,64 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtUnits;
     // End of variables declaration//GEN-END:variables
 }
+
+class IntFilter extends DocumentFilter {
+    @Override
+    public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        if (isInt(string)) {
+            super.insertString(fb, offset, string, attr);
+        }
+    }
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        if (isInt(text)) {
+            super.replace(fb, offset, length, text, attrs);
+        }
+    }
+
+    @Override
+    public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
+        super.remove(fb, offset, length);
+    }
+
+    private boolean isInt(String text) {
+        try {
+            Integer.valueOf (text);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+}
+
+class FloatFilter extends DocumentFilter {
+    @Override
+    public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        if (isFloat (string)) {
+            super.insertString(fb, offset, string, attr);
+        }
+    }
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        if (isFloat (text)) {
+            super.replace(fb, offset, length, text, attrs);
+        }
+    }
+
+    @Override
+    public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
+        super.remove(fb, offset, length);
+    }
+
+    private boolean isFloat (String text) {
+        try {
+            Float.valueOf (text);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+}
+
