@@ -27,8 +27,6 @@ public class SchoolFrame extends javax.swing.JFrame {
     public SchoolFrame() {
         initComponents();
         ((AbstractDocument) txtId.getDocument()).setDocumentFilter(new IntFilter());
-        ((AbstractDocument) txtUnits.getDocument()).setDocumentFilter(new FloatFilter());
-        ((AbstractDocument) txtGrade.getDocument()).setDocumentFilter(new FloatFilter());
     }
 
     /**
@@ -42,30 +40,75 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGrades = new javax.swing.JTable();
-        panelButtons = new javax.swing.JPanel();
-        lblCode = new javax.swing.JLabel();
-        btnClearSelectedSubjects = new javax.swing.JButton();
-        txtDescription = new javax.swing.JTextField();
-        btnListAll = new javax.swing.JButton();
-        lblDescription = new javax.swing.JLabel();
-        txtUnits = new javax.swing.JTextField();
-        btnListId = new javax.swing.JButton();
-        lblUnits = new javax.swing.JLabel();
-        btnListSubjectCode = new javax.swing.JButton();
-        txtGrade = new javax.swing.JTextField();
-        lblGrade = new javax.swing.JLabel();
+        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        panelInputs = new javax.swing.JPanel();
+        panelStudent = new javax.swing.JPanel();
         lblStudent = new javax.swing.JLabel();
-        lblSubject = new javax.swing.JLabel();
-        txtId = new javax.swing.JTextField();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        panelId = new javax.swing.JPanel();
         lblId = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        txtId = new javax.swing.JTextField();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        panelName = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
         txtName = new javax.swing.JTextField();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        panelButtons = new javax.swing.JPanel();
         btnAddSubject = new javax.swing.JButton();
-        txtCode = new javax.swing.JTextField();
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3));
+        panelList = new javax.swing.JPanel();
+        btnListAll = new javax.swing.JButton();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        btnListId = new javax.swing.JButton();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        btnListSubjectCode = new javax.swing.JButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3));
+        panelClear = new javax.swing.JPanel();
+        btnClearSelectedSubjects = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
         btnClearAllSubjects = new javax.swing.JButton();
+        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
         btnClearTxt = new javax.swing.JButton();
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
+        panelSubject = new javax.swing.JPanel();
+        lblSubject = new javax.swing.JLabel();
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        panelCode = new javax.swing.JPanel();
+        lblCode = new javax.swing.JLabel();
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        txtCode = new javax.swing.JTextField();
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        panelDescription = new javax.swing.JPanel();
+        lblDescription = new javax.swing.JLabel();
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        txtDescription = new javax.swing.JTextField();
+        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        panelUnits = new javax.swing.JPanel();
+        lblUnits = new javax.swing.JLabel();
+        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        comboUnits = new javax.swing.JComboBox<>();
+        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        panelGrade = new javax.swing.JPanel();
+        lblGrade = new javax.swing.JLabel();
+        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        comboGrade = new javax.swing.JComboBox<>();
+        filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        jSeparator1 = new javax.swing.JSeparator();
+        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        lblTotalGrade = new javax.swing.JLabel();
+        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(750, 525));
+        setMinimumSize(new java.awt.Dimension(750, 525));
+        setPreferredSize(new java.awt.Dimension(750, 525));
+        setResizable(false);
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
+
+        jScrollPane1.setAlignmentY(0.0F);
 
         tblGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,6 +133,8 @@ public class SchoolFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblGrades.setAlignmentX(0.0F);
+        tblGrades.setAlignmentY(0.0F);
         tblGrades.setColumnSelectionAllowed(true);
         tblGrades.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblGrades);
@@ -102,7 +147,120 @@ public class SchoolFrame extends javax.swing.JFrame {
             tblGrades.getColumnModel().getColumn(5).setPreferredWidth(15);
         }
 
-        lblCode.setText("Code");
+        getContentPane().add(jScrollPane1);
+
+        filler23.setAlignmentX(0.0F);
+        filler23.setAlignmentY(0.0F);
+        filler23.setAutoscrolls(true);
+        getContentPane().add(filler23);
+
+        panelInputs.setAlignmentY(0.0F);
+        panelInputs.setLayout(new javax.swing.BoxLayout(panelInputs, javax.swing.BoxLayout.LINE_AXIS));
+
+        panelStudent.setAlignmentY(0.0F);
+        panelStudent.setLayout(new javax.swing.BoxLayout(panelStudent, javax.swing.BoxLayout.PAGE_AXIS));
+
+        lblStudent.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStudent.setText("Student");
+        panelStudent.add(lblStudent);
+
+        filler1.setAlignmentX(0.0F);
+        panelStudent.add(filler1);
+
+        panelId.setAlignmentX(0.0F);
+        panelId.setLayout(new javax.swing.BoxLayout(panelId, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblId.setText("ID");
+        lblId.setMaximumSize(new java.awt.Dimension(40, 14));
+        lblId.setMinimumSize(new java.awt.Dimension(40, 14));
+        lblId.setPreferredSize(new java.awt.Dimension(40, 14));
+        panelId.add(lblId);
+        panelId.add(filler2);
+
+        txtId.setMaximumSize(new java.awt.Dimension(100, 25));
+        txtId.setMinimumSize(new java.awt.Dimension(100, 25));
+        txtId.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelId.add(txtId);
+
+        panelStudent.add(panelId);
+
+        filler5.setAlignmentX(0.0F);
+        panelStudent.add(filler5);
+
+        panelName.setAlignmentX(0.0F);
+        panelName.setLayout(new javax.swing.BoxLayout(panelName, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblName.setText("Name");
+        lblName.setMaximumSize(new java.awt.Dimension(40, 14));
+        lblName.setMinimumSize(new java.awt.Dimension(40, 14));
+        lblName.setPreferredSize(new java.awt.Dimension(40, 14));
+        panelName.add(lblName);
+        panelName.add(filler3);
+
+        txtName.setMaximumSize(new java.awt.Dimension(250, 25));
+        txtName.setMinimumSize(new java.awt.Dimension(250, 25));
+        txtName.setPreferredSize(new java.awt.Dimension(250, 25));
+        panelName.add(txtName);
+
+        panelStudent.add(panelName);
+
+        filler4.setAlignmentX(0.0F);
+        panelStudent.add(filler4);
+
+        panelButtons.setAlignmentY(0.0F);
+        panelButtons.setLayout(new javax.swing.BoxLayout(panelButtons, javax.swing.BoxLayout.PAGE_AXIS));
+
+        btnAddSubject.setText("Add subject");
+        btnAddSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSubjectActionPerformed(evt);
+            }
+        });
+        panelButtons.add(btnAddSubject);
+
+        filler20.setAlignmentX(0.0F);
+        filler20.setAlignmentY(0.0F);
+        panelButtons.add(filler20);
+
+        panelList.setAlignmentX(0.0F);
+        panelList.setAlignmentY(0.0F);
+        panelList.setLayout(new javax.swing.BoxLayout(panelList, javax.swing.BoxLayout.LINE_AXIS));
+
+        btnListAll.setText("List all");
+        btnListAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListAllActionPerformed(evt);
+            }
+        });
+        panelList.add(btnListAll);
+        panelList.add(filler9);
+
+        btnListId.setText("List by ID");
+        btnListId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListIdActionPerformed(evt);
+            }
+        });
+        panelList.add(btnListId);
+        panelList.add(filler10);
+
+        btnListSubjectCode.setText("List by subject code");
+        btnListSubjectCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListSubjectCodeActionPerformed(evt);
+            }
+        });
+        panelList.add(btnListSubjectCode);
+
+        panelButtons.add(panelList);
+
+        filler6.setAlignmentX(0.0F);
+        filler6.setAlignmentY(0.0F);
+        panelButtons.add(filler6);
+
+        panelClear.setAlignmentX(0.0F);
+        panelClear.setAlignmentY(0.0F);
+        panelClear.setLayout(new javax.swing.BoxLayout(panelClear, javax.swing.BoxLayout.LINE_AXIS));
 
         btnClearSelectedSubjects.setBackground(new java.awt.Color(200, 100, 100));
         btnClearSelectedSubjects.setForeground(new java.awt.Color(255, 255, 255));
@@ -112,56 +270,8 @@ public class SchoolFrame extends javax.swing.JFrame {
                 btnClearSelectedSubjectsActionPerformed(evt);
             }
         });
-
-        btnListAll.setText("List all");
-        btnListAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListAllActionPerformed(evt);
-            }
-        });
-
-        lblDescription.setText("Description");
-
-        btnListId.setText("List by ID");
-        btnListId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListIdActionPerformed(evt);
-            }
-        });
-
-        lblUnits.setText("Units");
-
-        btnListSubjectCode.setText("List by subject code");
-        btnListSubjectCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListSubjectCodeActionPerformed(evt);
-            }
-        });
-
-        lblGrade.setText("Grade");
-
-        lblStudent.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblStudent.setText("Student");
-
-        lblSubject.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblSubject.setText("Subject");
-
-        lblId.setText("ID");
-
-        lblName.setText("Name");
-
-        btnAddSubject.setText("Add subject");
-        btnAddSubject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSubjectActionPerformed(evt);
-            }
-        });
-
-        txtCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodeActionPerformed(evt);
-            }
-        });
+        panelClear.add(btnClearSelectedSubjects);
+        panelClear.add(filler8);
 
         btnClearAllSubjects.setBackground(new java.awt.Color(200, 100, 100));
         btnClearAllSubjects.setForeground(new java.awt.Color(255, 255, 255));
@@ -171,6 +281,10 @@ public class SchoolFrame extends javax.swing.JFrame {
                 btnClearAllSubjectsActionPerformed(evt);
             }
         });
+        panelClear.add(btnClearAllSubjects);
+
+        filler19.setAlignmentX(0.0F);
+        panelClear.add(filler19);
 
         btnClearTxt.setBackground(new java.awt.Color(200, 100, 100));
         btnClearTxt.setForeground(new java.awt.Color(255, 255, 255));
@@ -180,131 +294,159 @@ public class SchoolFrame extends javax.swing.JFrame {
                 btnClearTxtActionPerformed(evt);
             }
         });
+        panelClear.add(btnClearTxt);
 
-        javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
-        panelButtons.setLayout(panelButtonsLayout);
-        panelButtonsLayout.setHorizontalGroup(
-            panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelButtonsLayout.createSequentialGroup()
-                        .addComponent(btnAddSubject)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClearAllSubjects)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClearSelectedSubjects)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelButtonsLayout.createSequentialGroup()
-                        .addComponent(btnListAll)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnListId)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnListSubjectCode)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
-                        .addComponent(btnClearTxt)))
-                .addContainerGap())
-            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelButtonsLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblName)
-                        .addComponent(lblId)
-                        .addComponent(lblStudent))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelButtonsLayout.createSequentialGroup()
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblDescription)
-                                .addComponent(lblCode)
-                                .addComponent(lblUnits)
-                                .addComponent(lblGrade))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtGrade, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtUnits, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addComponent(lblSubject))
-                    .addContainerGap()))
-        );
-        panelButtonsLayout.setVerticalGroup(
-            panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelButtonsLayout.createSequentialGroup()
-                .addContainerGap(96, Short.MAX_VALUE)
-                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAddSubject)
-                        .addComponent(btnClearAllSubjects)
-                        .addComponent(btnClearSelectedSubjects))
-                    .addGroup(panelButtonsLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnListAll)
-                            .addComponent(btnListId)
-                            .addComponent(btnListSubjectCode)
-                            .addComponent(btnClearTxt))))
-                .addContainerGap())
-            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelButtonsLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblStudent)
-                        .addComponent(lblSubject))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelButtonsLayout.createSequentialGroup()
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblId))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblName)
-                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(panelButtonsLayout.createSequentialGroup()
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblCode))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblDescription))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblUnits))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblGrade))))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
+        panelButtons.add(panelClear);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
-                    .addComponent(panelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        panelStudent.add(panelButtons);
+
+        panelInputs.add(panelStudent);
+
+        filler21.setAlignmentX(0.0F);
+        filler21.setAlignmentY(0.0F);
+        filler21.setAutoscrolls(true);
+        panelInputs.add(filler21);
+
+        panelSubject.setAlignmentY(0.0F);
+        panelSubject.setLayout(new javax.swing.BoxLayout(panelSubject, javax.swing.BoxLayout.PAGE_AXIS));
+
+        lblSubject.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSubject.setText("Subject");
+        panelSubject.add(lblSubject);
+
+        filler11.setAlignmentX(0.0F);
+        panelSubject.add(filler11);
+
+        panelCode.setAlignmentX(0.0F);
+        panelCode.setLayout(new javax.swing.BoxLayout(panelCode, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblCode.setText("Code");
+        lblCode.setMaximumSize(new java.awt.Dimension(80, 14));
+        lblCode.setMinimumSize(new java.awt.Dimension(80, 14));
+        lblCode.setName(""); // NOI18N
+        lblCode.setPreferredSize(new java.awt.Dimension(80, 14));
+        panelCode.add(lblCode);
+
+        filler12.setAlignmentX(0.0F);
+        panelCode.add(filler12);
+
+        txtCode.setAlignmentX(0.0F);
+        txtCode.setMaximumSize(new java.awt.Dimension(100, 25));
+        txtCode.setMinimumSize(new java.awt.Dimension(100, 25));
+        txtCode.setPreferredSize(new java.awt.Dimension(100, 25));
+        txtCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodeActionPerformed(evt);
+            }
+        });
+        panelCode.add(txtCode);
+
+        panelSubject.add(panelCode);
+
+        filler14.setAlignmentX(0.0F);
+        panelSubject.add(filler14);
+
+        panelDescription.setAlignmentX(0.0F);
+        panelDescription.setLayout(new javax.swing.BoxLayout(panelDescription, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblDescription.setText("Description");
+        lblDescription.setMaximumSize(new java.awt.Dimension(80, 14));
+        lblDescription.setMinimumSize(new java.awt.Dimension(80, 14));
+        lblDescription.setPreferredSize(new java.awt.Dimension(80, 14));
+        panelDescription.add(lblDescription);
+
+        filler13.setAlignmentX(0.0F);
+        panelDescription.add(filler13);
+
+        txtDescription.setAlignmentX(0.0F);
+        txtDescription.setMaximumSize(new java.awt.Dimension(250, 25));
+        txtDescription.setMinimumSize(new java.awt.Dimension(250, 25));
+        txtDescription.setPreferredSize(new java.awt.Dimension(250, 25));
+        panelDescription.add(txtDescription);
+
+        panelSubject.add(panelDescription);
+
+        filler15.setAlignmentX(0.0F);
+        panelSubject.add(filler15);
+
+        panelUnits.setAlignmentX(0.0F);
+        panelUnits.setLayout(new javax.swing.BoxLayout(panelUnits, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblUnits.setText("Units");
+        lblUnits.setMaximumSize(new java.awt.Dimension(80, 14));
+        lblUnits.setMinimumSize(new java.awt.Dimension(80, 14));
+        lblUnits.setPreferredSize(new java.awt.Dimension(80, 14));
+        panelUnits.add(lblUnits);
+
+        filler16.setAlignmentX(0.0F);
+        panelUnits.add(filler16);
+
+        comboUnits.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1.0", "2.0", "3.0", "4.0", "5.0", "6.0" }));
+        comboUnits.setAlignmentX(0.0F);
+        comboUnits.setMaximumSize(new java.awt.Dimension(50, 25));
+        comboUnits.setMinimumSize(new java.awt.Dimension(50, 25));
+        comboUnits.setName(""); // NOI18N
+        comboUnits.setPreferredSize(new java.awt.Dimension(50, 25));
+        panelUnits.add(comboUnits);
+
+        panelSubject.add(panelUnits);
+
+        filler17.setAlignmentX(0.0F);
+        panelSubject.add(filler17);
+
+        panelGrade.setAlignmentX(0.0F);
+        panelGrade.setAlignmentY(0.0F);
+        panelGrade.setLayout(new javax.swing.BoxLayout(panelGrade, javax.swing.BoxLayout.LINE_AXIS));
+
+        lblGrade.setText("Grade");
+        lblGrade.setMaximumSize(new java.awt.Dimension(80, 14));
+        lblGrade.setMinimumSize(new java.awt.Dimension(80, 14));
+        lblGrade.setPreferredSize(new java.awt.Dimension(80, 14));
+        panelGrade.add(lblGrade);
+
+        filler18.setAlignmentX(0.0F);
+        panelGrade.add(filler18);
+
+        comboGrade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1.0", "1.25", "1.5", "1.75", "2.0", "2.25", "2.5", "2.75", "3.0", "5.0" }));
+        comboGrade.setAlignmentX(0.0F);
+        comboGrade.setMaximumSize(new java.awt.Dimension(50, 25));
+        comboGrade.setMinimumSize(new java.awt.Dimension(50, 25));
+        comboGrade.setPreferredSize(new java.awt.Dimension(50, 25));
+        panelGrade.add(comboGrade);
+
+        panelSubject.add(panelGrade);
+
+        filler25.setAlignmentX(0.0F);
+        panelSubject.add(filler25);
+
+        jSeparator1.setAlignmentX(0.0F);
+        jSeparator1.setMaximumSize(new java.awt.Dimension(350, 2));
+        jSeparator1.setMinimumSize(new java.awt.Dimension(350, 2));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(350, 2));
+        panelSubject.add(jSeparator1);
+
+        filler26.setAlignmentX(0.0F);
+        panelSubject.add(filler26);
+
+        lblTotalGrade.setText("Total Grade:");
+        lblTotalGrade.setMaximumSize(new java.awt.Dimension(80, 14));
+        lblTotalGrade.setMinimumSize(new java.awt.Dimension(80, 14));
+        lblTotalGrade.setPreferredSize(new java.awt.Dimension(80, 14));
+        panelSubject.add(lblTotalGrade);
+
+        panelInputs.add(panelSubject);
+
+        getContentPane().add(panelInputs);
+
+        filler22.setAlignmentX(0.0F);
+        filler22.setAlignmentY(0.0F);
+        filler22.setAutoscrolls(true);
+        getContentPane().add(filler22);
+
+        filler24.setAlignmentX(0.0F);
+        filler24.setAlignmentY(0.0F);
+        filler24.setAutoscrolls(true);
+        getContentPane().add(filler24);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -313,30 +455,14 @@ public class SchoolFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodeActionPerformed
 
-    private void btnAddSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectActionPerformed
-        if (!checkTxt()) {
-            JOptionPane.showMessageDialog(null, "All data must be entered!", "Can't add subject", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    private void btnClearTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearTxtActionPerformed
+        txtId.setText("");
+        txtName.setText("");
+        txtCode.setText("");
+        txtDescription.setText("");
         
-        String code = txtCode.getText().trim();
-        int id = Integer.parseInt(txtId.getText());
-        
-        for (StudentGrade grade : school.getAllGrades()) {
-            if (grade.getStudent().getId() == id && grade.getSubject().getCode().equals(code)) {
-                JOptionPane.showMessageDialog(null, "You can't add multiple subjects with the same code for the same student!", "Can't add subject", JOptionPane.ERROR_MESSAGE);
-                txtCode.requestFocus();
-                return;
-            }
-        }
-        
-        Student student = new Student (Integer.parseInt(txtId.getText()), txtName.getText().trim());
-        Subject subject = new Subject (txtCode.getText().trim(), txtDescription.getText().trim(), Float.parseFloat(txtUnits.getText()));
-        StudentGrade grade = new StudentGrade (subject, student, Float.parseFloat(txtGrade.getText()));
-        
-        school.addGrade(grade);
-        updateTable();
-    }//GEN-LAST:event_btnAddSubjectActionPerformed
+        txtId.requestFocus();
+    }//GEN-LAST:event_btnClearTxtActionPerformed
 
     private void btnClearAllSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllSubjectsActionPerformed
         if (school.getAllGrades().isEmpty()) {
@@ -344,26 +470,33 @@ public class SchoolFrame extends javax.swing.JFrame {
             return;
         }
         school.clearGrades();
-        updateTable();
+        updateInfo();
     }//GEN-LAST:event_btnClearAllSubjectsActionPerformed
 
-    private void btnListAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListAllActionPerformed
-        tableMode = 0;
-        if (school.getAllGrades().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+    private void btnAddSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubjectActionPerformed
+        if (!checkTxt()) {
+            JOptionPane.showMessageDialog(null, "All data must be entered!", "Can't add subject", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        updateTable();
-    }//GEN-LAST:event_btnListAllActionPerformed
 
-    private void btnListIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListIdActionPerformed
-        tableMode = 1;
-        if (school.getAllGrades().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
-            return;
+        String code = txtCode.getText().trim();
+        int id = Integer.parseInt(txtId.getText());
+
+        for (StudentGrade grade : school.getAllGrades()) {
+            if (grade.getStudent().getId() == id && grade.getSubject().getCode().equals(code)) {
+                JOptionPane.showMessageDialog(null, "You can't add multiple subjects with the same code for the same student!", "Can't add subject", JOptionPane.ERROR_MESSAGE);
+                txtCode.requestFocus();
+                return;
+            }
         }
-        updateTable();
-    }//GEN-LAST:event_btnListIdActionPerformed
+
+        Student student = new Student (Integer.parseInt(txtId.getText()), txtName.getText().trim());
+        Subject subject = new Subject (txtCode.getText().trim(), txtDescription.getText().trim(), Float.parseFloat(comboUnits.getSelectedItem().toString()));
+        StudentGrade grade = new StudentGrade (subject, student, Float.parseFloat(comboGrade.getSelectedItem().toString()));
+
+        school.addGrade(grade);
+        updateInfo();
+    }//GEN-LAST:event_btnAddSubjectActionPerformed
 
     private void btnListSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListSubjectCodeActionPerformed
         tableMode = 2;
@@ -371,14 +504,32 @@ public class SchoolFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        updateTable();
+        updateInfo();
     }//GEN-LAST:event_btnListSubjectCodeActionPerformed
+
+    private void btnListIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListIdActionPerformed
+        tableMode = 1;
+        if (school.getAllGrades().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        updateInfo();
+    }//GEN-LAST:event_btnListIdActionPerformed
+
+    private void btnListAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListAllActionPerformed
+        tableMode = 0;
+        if (school.getAllGrades().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "The grades table is empty.", "Table is empty", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        updateInfo();
+    }//GEN-LAST:event_btnListAllActionPerformed
 
     private void btnClearSelectedSubjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSelectedSubjectsActionPerformed
         DefaultTableModel tableModel = (DefaultTableModel) tblGrades.getModel();
         ArrayList<StudentGrade> grades = school.getAllGrades();
         int[] rows = tblGrades.getSelectedRows();
-        
+
         if (rows.length == 0) {
             JOptionPane.showMessageDialog(null, "No subjects are selected.", "Can't remove subject", JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -387,34 +538,24 @@ public class SchoolFrame extends javax.swing.JFrame {
         for (int r : rows) {
             int id = Integer.parseInt(tableModel.getValueAt(r, 0).toString());
             String code = tableModel.getValueAt(r, 2).toString();
-            
+
             for (int i = 0; i < grades.size(); i++) {
                 if (grades.get(i).getStudent().getId() == id && grades.get(i).getSubject().getCode().equals(code)) {
                     school.removeGrade(grades.get(i));
                 }
             }
         }
-        
-        updateTable();
+
+        updateInfo();
     }//GEN-LAST:event_btnClearSelectedSubjectsActionPerformed
 
-    private void btnClearTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearTxtActionPerformed
-        txtId.setText("");
-        txtName.setText("");
-        txtCode.setText("");
-        txtDescription.setText("");
-        txtUnits.setText("");
-        txtGrade.setText("");
-        
-        txtId.requestFocus();
-    }//GEN-LAST:event_btnClearTxtActionPerformed
-
     private boolean checkTxt() {
-        return !(txtId.getText().isEmpty() || txtName.getText().isEmpty() || txtCode.getText().isEmpty() || txtDescription.getText().isEmpty() || txtUnits.getText().isEmpty() || txtGrade.getText().isEmpty());
+        return !(txtId.getText().isEmpty() || txtName.getText().isEmpty() || txtCode.getText().isEmpty() || txtDescription.getText().isEmpty());
     }
     
-    private void updateTable () {        
+    private void updateInfo() {        
         ArrayList<StudentGrade> grades;
+        ArrayList<ArrayList<Object>> totalGrades = new ArrayList<>();
         switch (tableMode) {
             default:
             case 0:
@@ -441,6 +582,12 @@ public class SchoolFrame extends javax.swing.JFrame {
             n[5] = String.format("%.1f", grades.get(i).getGrade());
             
             tableModel.addRow(n);
+            
+            for (ArrayList<Object> totalGrade : totalGrades) {
+                if (totalGrade.get(0).equals(grades.get(i).getStudent().getId())) {
+                    totalGrade.set(1, totalGrade.get(1) + (grades.get(i).getGrade() * grades.get(i).getSubject().getUnits()));
+                }
+            }
         }
     }
     
@@ -487,7 +634,35 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnListAll;
     private javax.swing.JButton btnListId;
     private javax.swing.JButton btnListSubjectCode;
+    private javax.swing.JComboBox<String> comboGrade;
+    private javax.swing.JComboBox<String> comboUnits;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
+    private javax.swing.Box.Filler filler12;
+    private javax.swing.Box.Filler filler13;
+    private javax.swing.Box.Filler filler14;
+    private javax.swing.Box.Filler filler15;
+    private javax.swing.Box.Filler filler16;
+    private javax.swing.Box.Filler filler17;
+    private javax.swing.Box.Filler filler18;
+    private javax.swing.Box.Filler filler19;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler20;
+    private javax.swing.Box.Filler filler21;
+    private javax.swing.Box.Filler filler22;
+    private javax.swing.Box.Filler filler23;
+    private javax.swing.Box.Filler filler24;
+    private javax.swing.Box.Filler filler25;
+    private javax.swing.Box.Filler filler26;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblCode;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblGrade;
@@ -495,15 +670,25 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblStudent;
     private javax.swing.JLabel lblSubject;
+    private javax.swing.JLabel lblTotalGrade;
     private javax.swing.JLabel lblUnits;
     private javax.swing.JPanel panelButtons;
+    private javax.swing.JPanel panelClear;
+    private javax.swing.JPanel panelCode;
+    private javax.swing.JPanel panelDescription;
+    private javax.swing.JPanel panelGrade;
+    private javax.swing.JPanel panelId;
+    private javax.swing.JPanel panelInputs;
+    private javax.swing.JPanel panelList;
+    private javax.swing.JPanel panelName;
+    private javax.swing.JPanel panelStudent;
+    private javax.swing.JPanel panelSubject;
+    private javax.swing.JPanel panelUnits;
     private javax.swing.JTable tblGrades;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtDescription;
-    private javax.swing.JTextField txtGrade;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtUnits;
     // End of variables declaration//GEN-END:variables
 }
 
@@ -530,36 +715,6 @@ class IntFilter extends DocumentFilter {
     private boolean isInt(String text) {
         try {
             Integer.valueOf (text);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-}
-
-class FloatFilter extends DocumentFilter {
-    @Override
-    public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-        if (isFloat (string)) {
-            super.insertString(fb, offset, string, attr);
-        }
-    }
-
-    @Override
-    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-        if (isFloat (text)) {
-            super.replace(fb, offset, length, text, attrs);
-        }
-    }
-
-    @Override
-    public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
-        super.remove(fb, offset, length);
-    }
-
-    private boolean isFloat (String text) {
-        try {
-            Float.valueOf (text);
             return true;
         } catch (NumberFormatException e) {
             return false;
