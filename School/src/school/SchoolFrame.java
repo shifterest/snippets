@@ -6,6 +6,7 @@
 package school;
 
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
@@ -66,9 +67,9 @@ public class SchoolFrame extends javax.swing.JFrame {
         btnListSubjectCode = new javax.swing.JButton();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3));
         panelClear = new javax.swing.JPanel();
-        btnClearSelectedSubjects = new javax.swing.JButton();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
         btnClearAllSubjects = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        btnClearSelectedSubjects = new javax.swing.JButton();
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
         btnClearTxt = new javax.swing.JButton();
         filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
@@ -95,17 +96,19 @@ public class SchoolFrame extends javax.swing.JFrame {
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
         comboGrade = new javax.swing.JComboBox<>();
         filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
-        jSeparator1 = new javax.swing.JSeparator();
-        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
+        panelTotalGrades = new javax.swing.JPanel();
         lblTotalGrade = new javax.swing.JLabel();
+        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listTotalGrades = new javax.swing.JList(new DefaultListModel());
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
         filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(750, 525));
-        setMinimumSize(new java.awt.Dimension(750, 525));
-        setPreferredSize(new java.awt.Dimension(750, 525));
-        setResizable(false);
+        setTitle("School System");
+        setMinimumSize(new java.awt.Dimension(1000, 500));
+        setPreferredSize(new java.awt.Dimension(1000, 500));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
         jScrollPane1.setAlignmentY(0.0F);
@@ -210,6 +213,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelButtons.setAlignmentY(0.0F);
         panelButtons.setLayout(new javax.swing.BoxLayout(panelButtons, javax.swing.BoxLayout.PAGE_AXIS));
 
+        btnAddSubject.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnAddSubject.setText("Add subject");
         btnAddSubject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,6 +230,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelList.setAlignmentY(0.0F);
         panelList.setLayout(new javax.swing.BoxLayout(panelList, javax.swing.BoxLayout.LINE_AXIS));
 
+        btnListAll.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnListAll.setText("List all");
         btnListAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -262,6 +267,18 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelClear.setAlignmentY(0.0F);
         panelClear.setLayout(new javax.swing.BoxLayout(panelClear, javax.swing.BoxLayout.LINE_AXIS));
 
+        btnClearAllSubjects.setBackground(new java.awt.Color(200, 100, 100));
+        btnClearAllSubjects.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnClearAllSubjects.setForeground(new java.awt.Color(255, 255, 255));
+        btnClearAllSubjects.setText("Clear all");
+        btnClearAllSubjects.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearAllSubjectsActionPerformed(evt);
+            }
+        });
+        panelClear.add(btnClearAllSubjects);
+        panelClear.add(filler8);
+
         btnClearSelectedSubjects.setBackground(new java.awt.Color(200, 100, 100));
         btnClearSelectedSubjects.setForeground(new java.awt.Color(255, 255, 255));
         btnClearSelectedSubjects.setText("Clear selected");
@@ -271,17 +288,6 @@ public class SchoolFrame extends javax.swing.JFrame {
             }
         });
         panelClear.add(btnClearSelectedSubjects);
-        panelClear.add(filler8);
-
-        btnClearAllSubjects.setBackground(new java.awt.Color(200, 100, 100));
-        btnClearAllSubjects.setForeground(new java.awt.Color(255, 255, 255));
-        btnClearAllSubjects.setText("Clear subjects");
-        btnClearAllSubjects.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearAllSubjectsActionPerformed(evt);
-            }
-        });
-        panelClear.add(btnClearAllSubjects);
 
         filler19.setAlignmentX(0.0F);
         panelClear.add(filler19);
@@ -419,22 +425,42 @@ public class SchoolFrame extends javax.swing.JFrame {
         filler25.setAlignmentX(0.0F);
         panelSubject.add(filler25);
 
-        jSeparator1.setAlignmentX(0.0F);
-        jSeparator1.setMaximumSize(new java.awt.Dimension(350, 2));
-        jSeparator1.setMinimumSize(new java.awt.Dimension(350, 2));
-        jSeparator1.setPreferredSize(new java.awt.Dimension(350, 2));
-        panelSubject.add(jSeparator1);
+        panelInputs.add(panelSubject);
 
-        filler26.setAlignmentX(0.0F);
-        panelSubject.add(filler26);
+        filler28.setAlignmentX(0.0F);
+        filler28.setAlignmentY(0.0F);
+        filler28.setAutoscrolls(true);
+        panelInputs.add(filler28);
 
-        lblTotalGrade.setText("Total Grade:");
+        panelTotalGrades.setAlignmentX(0.0F);
+        panelTotalGrades.setAlignmentY(0.0F);
+        panelTotalGrades.setLayout(new javax.swing.BoxLayout(panelTotalGrades, javax.swing.BoxLayout.PAGE_AXIS));
+
+        lblTotalGrade.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        lblTotalGrade.setText("Total grades");
+        lblTotalGrade.setAlignmentY(0.0F);
         lblTotalGrade.setMaximumSize(new java.awt.Dimension(80, 14));
         lblTotalGrade.setMinimumSize(new java.awt.Dimension(80, 14));
         lblTotalGrade.setPreferredSize(new java.awt.Dimension(80, 14));
-        panelSubject.add(lblTotalGrade);
+        panelTotalGrades.add(lblTotalGrade);
 
-        panelInputs.add(panelSubject);
+        filler27.setAlignmentX(0.0F);
+        panelTotalGrades.add(filler27);
+
+        jScrollPane2.setAlignmentX(0.0F);
+        jScrollPane2.setAlignmentY(0.0F);
+        jScrollPane2.setMaximumSize(new java.awt.Dimension(250, 125));
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(250, 125));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(250, 125));
+
+        listTotalGrades.setMaximumSize(new java.awt.Dimension(45, 90));
+        listTotalGrades.setMinimumSize(new java.awt.Dimension(45, 90));
+        listTotalGrades.setPreferredSize(new java.awt.Dimension(45, 90));
+        jScrollPane2.setViewportView(listTotalGrades);
+
+        panelTotalGrades.add(jScrollPane2);
+
+        panelInputs.add(panelTotalGrades);
 
         getContentPane().add(panelInputs);
 
@@ -555,7 +581,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     
     private void updateInfo() {        
         ArrayList<StudentGrade> grades;
-        ArrayList<ArrayList<Object>> totalGrades = new ArrayList<>();
+        ArrayList<TotalGradeInfo> totalGrades = new ArrayList<>();
         switch (tableMode) {
             default:
             case 0:
@@ -569,25 +595,49 @@ public class SchoolFrame extends javax.swing.JFrame {
                 break;
         }
         
-        DefaultTableModel tableModel = (DefaultTableModel) tblGrades.getModel();
-        tableModel.setRowCount(0);
+        DefaultTableModel tblModel = (DefaultTableModel) tblGrades.getModel();
+        DefaultListModel listModel = (DefaultListModel) listTotalGrades.getModel();
+        tblModel.setRowCount(0);
+        listModel.setSize(0);
         String[] n = new String[6];
         
         for (int i = 0; i < grades.size(); i++) {
-            n[0] = Integer.toString(grades.get(i).getStudent().getId());
-            n[1] = grades.get(i).getStudent().getName();
+            int id = grades.get(i).getStudent().getId();
+            String name = grades.get(i).getStudent().getName();
+            float grade = grades.get(i).getGrade();
+            float units = grades.get(i).getSubject().getUnits();
+            
+            n[0] = Integer.toString(id);
+            n[1] = name;
             n[2] = grades.get(i).getSubject().getCode();
             n[3] = grades.get(i).getSubject().getDescription();
-            n[4] = String.format("%.1f", grades.get(i).getSubject().getUnits());
-            n[5] = String.format("%.1f", grades.get(i).getGrade());
+            n[4] = String.format("%.1f", units);
+            n[5] = String.format("%.1f", grade);
             
-            tableModel.addRow(n);
+            tblModel.addRow(n);
+
+            boolean studentFound = false;
             
-            for (ArrayList<Object> totalGrade : totalGrades) {
-                if (totalGrade.get(0).equals(grades.get(i).getStudent().getId())) {
-                    totalGrade.set(1, totalGrade.get(1) + (grades.get(i).getGrade() * grades.get(i).getSubject().getUnits()));
+            for (TotalGradeInfo totalGrade : totalGrades) {
+                if (totalGrade.getId() == id) {
+                    totalGrade.addWeightedGrade(grade * units);
+                    totalGrade.addUnits(units);
+                    studentFound = true;
+                    break;
                 }
             }
+            
+            if (!studentFound) {
+                TotalGradeInfo newTotalGrade = new TotalGradeInfo(id, name);
+                newTotalGrade.addWeightedGrade(grade * units);
+                newTotalGrade.addUnits(units);
+                totalGrades.add(newTotalGrade);
+            }
+        }
+        
+        for (TotalGradeInfo totalGrade : totalGrades) {
+            String data = String.format("%s (%s): %.1f", totalGrade.getName(), totalGrade.getId(), totalGrade.getTotalGrade());
+            listModel.addElement(data);
         }
     }
     
@@ -654,7 +704,8 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler24;
     private javax.swing.Box.Filler filler25;
-    private javax.swing.Box.Filler filler26;
+    private javax.swing.Box.Filler filler27;
+    private javax.swing.Box.Filler filler28;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
@@ -662,7 +713,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCode;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblGrade;
@@ -672,6 +723,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblSubject;
     private javax.swing.JLabel lblTotalGrade;
     private javax.swing.JLabel lblUnits;
+    private javax.swing.JList<String> listTotalGrades;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelClear;
     private javax.swing.JPanel panelCode;
@@ -683,6 +735,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panelName;
     private javax.swing.JPanel panelStudent;
     private javax.swing.JPanel panelSubject;
+    private javax.swing.JPanel panelTotalGrades;
     private javax.swing.JPanel panelUnits;
     private javax.swing.JTable tblGrades;
     private javax.swing.JTextField txtCode;
@@ -690,6 +743,51 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
+}
+
+class TotalGradeInfo {
+    private final int id;
+    private final String name;
+    private float weightedGrade;
+    private float units;
+    
+    public TotalGradeInfo (int id, String name) {
+        this.id = id;
+        this.name = name;
+        weightedGrade = 0;
+        units = 0;
+    }
+
+    public void addWeightedGrade (float grade) {
+        this.weightedGrade += grade;
+    }
+
+    public void addUnits (float units) {
+        this.units += units;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public float getTotalGrade() {
+        float total = weightedGrade / units;
+        
+        if (total > 1.25) return 1f;
+        else if (total > 1.5) return 1.25f;
+        else if (total > 1.75) return 1.5f;
+        else if (total > 2) return 1.75f;
+        else if (total > 2.25) return 2f;
+        else if (total > 2.5) return 2.25f;
+        else if (total > 2.75) return 2.5f;
+        else if (total > 3.0) return 2.75f;
+
+        return 5f;
+    }
 }
 
 class IntFilter extends DocumentFilter {
