@@ -39,8 +39,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        background = new javax.swing.JLabel();
         panelAll = new javax.swing.JPanel();
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 100), new java.awt.Dimension(100, 100), new java.awt.Dimension(100, 100));
         panelTable = new javax.swing.JPanel();
@@ -112,20 +111,16 @@ public class SchoolFrame extends javax.swing.JFrame {
         listTotalGrades = new javax.swing.JList(new DefaultListModel());
         filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
 
-        jLabel1.setText("jLabel1");
+        background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/school/bg.png"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("School System");
+        setBackground(new java.awt.Color(0, 0, 0));
         setMaximumSize(new java.awt.Dimension(1070, 635));
         setMinimumSize(new java.awt.Dimension(1070, 635));
         setPreferredSize(new java.awt.Dimension(1070, 635));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/school/bg.png"))); // NOI18N
-        jLabel2.setMaximumSize(new java.awt.Dimension(1050, 600));
-        jLabel2.setMinimumSize(new java.awt.Dimension(1050, 600));
-        jLabel2.setPreferredSize(new java.awt.Dimension(1050, 600));
-
-        panelAll.setOpaque(false);
+        panelAll.setBackground(new java.awt.Color(0, 0, 0));
         panelAll.setLayout(new javax.swing.BoxLayout(panelAll, javax.swing.BoxLayout.PAGE_AXIS));
 
         filler29.setAlignmentX(0.0F);
@@ -226,7 +221,6 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         txtId.setMaximumSize(new java.awt.Dimension(100, 25));
         txtId.setMinimumSize(new java.awt.Dimension(100, 25));
-        txtId.setOpaque(false);
         txtId.setPreferredSize(new java.awt.Dimension(100, 25));
         panelId.add(txtId);
 
@@ -249,7 +243,6 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         txtName.setMaximumSize(new java.awt.Dimension(250, 25));
         txtName.setMinimumSize(new java.awt.Dimension(250, 25));
-        txtName.setOpaque(false);
         txtName.setPreferredSize(new java.awt.Dimension(250, 25));
         panelName.add(txtName);
 
@@ -404,7 +397,6 @@ public class SchoolFrame extends javax.swing.JFrame {
         txtCode.setAlignmentX(0.0F);
         txtCode.setMaximumSize(new java.awt.Dimension(100, 25));
         txtCode.setMinimumSize(new java.awt.Dimension(100, 25));
-        txtCode.setOpaque(false);
         txtCode.setPreferredSize(new java.awt.Dimension(100, 25));
         txtCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -435,7 +427,6 @@ public class SchoolFrame extends javax.swing.JFrame {
         txtDescription.setAlignmentX(0.0F);
         txtDescription.setMaximumSize(new java.awt.Dimension(250, 25));
         txtDescription.setMinimumSize(new java.awt.Dimension(250, 25));
-        txtDescription.setOpaque(false);
         txtDescription.setPreferredSize(new java.awt.Dimension(250, 25));
         panelDescription.add(txtDescription);
 
@@ -463,7 +454,6 @@ public class SchoolFrame extends javax.swing.JFrame {
         comboUnits.setMaximumSize(new java.awt.Dimension(50, 25));
         comboUnits.setMinimumSize(new java.awt.Dimension(50, 25));
         comboUnits.setName(""); // NOI18N
-        comboUnits.setOpaque(false);
         comboUnits.setPreferredSize(new java.awt.Dimension(50, 25));
         panelUnits.add(comboUnits);
 
@@ -491,7 +481,6 @@ public class SchoolFrame extends javax.swing.JFrame {
         comboGrade.setAlignmentX(0.0F);
         comboGrade.setMaximumSize(new java.awt.Dimension(50, 25));
         comboGrade.setMinimumSize(new java.awt.Dimension(50, 25));
-        comboGrade.setOpaque(false);
         comboGrade.setPreferredSize(new java.awt.Dimension(50, 25));
         panelGrade.add(comboGrade);
 
@@ -553,16 +542,10 @@ public class SchoolFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelAll, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelAll, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -768,6 +751,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel background;
     private javax.swing.JButton btnAddSubject;
     private javax.swing.JButton btnClearAllSubjects;
     private javax.swing.JButton btnClearSelectedSubjects;
@@ -805,8 +789,6 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCode;
