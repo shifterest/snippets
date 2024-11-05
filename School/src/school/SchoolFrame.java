@@ -39,9 +39,16 @@ public class SchoolFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        panelAll = new javax.swing.JPanel();
+        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(100, 100), new java.awt.Dimension(100, 100), new java.awt.Dimension(100, 100));
+        panelTable = new javax.swing.JPanel();
+        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGrades = new javax.swing.JTable();
-        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
         panelInputs = new javax.swing.JPanel();
         panelStudent = new javax.swing.JPanel();
         lblStudent = new javax.swing.JLabel();
@@ -57,6 +64,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         txtName = new javax.swing.JTextField();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
         panelButtons = new javax.swing.JPanel();
+        panelAddUpdate = new javax.swing.JPanel();
         btnAddSubject = new javax.swing.JButton();
         filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3), new java.awt.Dimension(3, 3));
         panelList = new javax.swing.JPanel();
@@ -102,16 +110,39 @@ public class SchoolFrame extends javax.swing.JFrame {
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
         jScrollPane2 = new javax.swing.JScrollPane();
         listTotalGrades = new javax.swing.JList(new DefaultListModel());
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12), new java.awt.Dimension(12, 12));
-        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6), new java.awt.Dimension(6, 6));
+        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24), new java.awt.Dimension(24, 24));
+
+        jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("School System");
-        setMinimumSize(new java.awt.Dimension(1000, 500));
-        setPreferredSize(new java.awt.Dimension(1000, 500));
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
+        setMaximumSize(new java.awt.Dimension(1070, 635));
+        setMinimumSize(new java.awt.Dimension(1070, 635));
+        setPreferredSize(new java.awt.Dimension(1070, 635));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/school/bg.png"))); // NOI18N
+        jLabel2.setMaximumSize(new java.awt.Dimension(1050, 600));
+        jLabel2.setMinimumSize(new java.awt.Dimension(1050, 600));
+        jLabel2.setPreferredSize(new java.awt.Dimension(1050, 600));
+
+        panelAll.setOpaque(false);
+        panelAll.setLayout(new javax.swing.BoxLayout(panelAll, javax.swing.BoxLayout.PAGE_AXIS));
+
+        filler29.setAlignmentX(0.0F);
+        filler29.setAlignmentY(0.0F);
+        filler29.setAutoscrolls(true);
+        panelAll.add(filler29);
+
+        panelTable.setOpaque(false);
+        panelTable.setLayout(new javax.swing.BoxLayout(panelTable, javax.swing.BoxLayout.LINE_AXIS));
+
+        filler30.setAlignmentX(0.0F);
+        filler30.setAlignmentY(0.0F);
+        filler30.setAutoscrolls(true);
+        panelTable.add(filler30);
 
         jScrollPane1.setAlignmentY(0.0F);
+        jScrollPane1.setOpaque(false);
 
         tblGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,6 +170,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         tblGrades.setAlignmentX(0.0F);
         tblGrades.setAlignmentY(0.0F);
         tblGrades.setColumnSelectionAllowed(true);
+        tblGrades.setOpaque(false);
         tblGrades.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblGrades);
         tblGrades.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -150,20 +182,30 @@ public class SchoolFrame extends javax.swing.JFrame {
             tblGrades.getColumnModel().getColumn(5).setPreferredWidth(15);
         }
 
-        getContentPane().add(jScrollPane1);
+        panelTable.add(jScrollPane1);
 
-        filler23.setAlignmentX(0.0F);
-        filler23.setAlignmentY(0.0F);
-        filler23.setAutoscrolls(true);
-        getContentPane().add(filler23);
+        filler31.setAlignmentX(0.0F);
+        filler31.setAlignmentY(0.0F);
+        filler31.setAutoscrolls(true);
+        panelTable.add(filler31);
+
+        panelAll.add(panelTable);
+
+        filler32.setAlignmentX(0.0F);
+        filler32.setAlignmentY(0.0F);
+        filler32.setAutoscrolls(true);
+        panelAll.add(filler32);
 
         panelInputs.setAlignmentY(0.0F);
+        panelInputs.setOpaque(false);
         panelInputs.setLayout(new javax.swing.BoxLayout(panelInputs, javax.swing.BoxLayout.LINE_AXIS));
 
         panelStudent.setAlignmentY(0.0F);
+        panelStudent.setOpaque(false);
         panelStudent.setLayout(new javax.swing.BoxLayout(panelStudent, javax.swing.BoxLayout.PAGE_AXIS));
 
         lblStudent.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStudent.setForeground(new java.awt.Color(255, 255, 255));
         lblStudent.setText("Student");
         panelStudent.add(lblStudent);
 
@@ -171,8 +213,10 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelStudent.add(filler1);
 
         panelId.setAlignmentX(0.0F);
+        panelId.setOpaque(false);
         panelId.setLayout(new javax.swing.BoxLayout(panelId, javax.swing.BoxLayout.LINE_AXIS));
 
+        lblId.setForeground(new java.awt.Color(255, 255, 255));
         lblId.setText("ID");
         lblId.setMaximumSize(new java.awt.Dimension(40, 14));
         lblId.setMinimumSize(new java.awt.Dimension(40, 14));
@@ -182,6 +226,7 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         txtId.setMaximumSize(new java.awt.Dimension(100, 25));
         txtId.setMinimumSize(new java.awt.Dimension(100, 25));
+        txtId.setOpaque(false);
         txtId.setPreferredSize(new java.awt.Dimension(100, 25));
         panelId.add(txtId);
 
@@ -191,8 +236,10 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelStudent.add(filler5);
 
         panelName.setAlignmentX(0.0F);
+        panelName.setOpaque(false);
         panelName.setLayout(new javax.swing.BoxLayout(panelName, javax.swing.BoxLayout.LINE_AXIS));
 
+        lblName.setForeground(new java.awt.Color(255, 255, 255));
         lblName.setText("Name");
         lblName.setMaximumSize(new java.awt.Dimension(40, 14));
         lblName.setMinimumSize(new java.awt.Dimension(40, 14));
@@ -202,6 +249,7 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         txtName.setMaximumSize(new java.awt.Dimension(250, 25));
         txtName.setMinimumSize(new java.awt.Dimension(250, 25));
+        txtName.setOpaque(false);
         txtName.setPreferredSize(new java.awt.Dimension(250, 25));
         panelName.add(txtName);
 
@@ -211,16 +259,23 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelStudent.add(filler4);
 
         panelButtons.setAlignmentY(0.0F);
+        panelButtons.setOpaque(false);
         panelButtons.setLayout(new javax.swing.BoxLayout(panelButtons, javax.swing.BoxLayout.PAGE_AXIS));
 
-        btnAddSubject.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        panelAddUpdate.setAlignmentX(0.0F);
+        panelAddUpdate.setOpaque(false);
+        panelAddUpdate.setLayout(new javax.swing.BoxLayout(panelAddUpdate, javax.swing.BoxLayout.LINE_AXIS));
+
+        btnAddSubject.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
         btnAddSubject.setText("Add subject");
         btnAddSubject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddSubjectActionPerformed(evt);
             }
         });
-        panelButtons.add(btnAddSubject);
+        panelAddUpdate.add(btnAddSubject);
+
+        panelButtons.add(panelAddUpdate);
 
         filler20.setAlignmentX(0.0F);
         filler20.setAlignmentY(0.0F);
@@ -228,9 +283,10 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         panelList.setAlignmentX(0.0F);
         panelList.setAlignmentY(0.0F);
+        panelList.setOpaque(false);
         panelList.setLayout(new javax.swing.BoxLayout(panelList, javax.swing.BoxLayout.LINE_AXIS));
 
-        btnListAll.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnListAll.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
         btnListAll.setText("List all");
         btnListAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -240,6 +296,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelList.add(btnListAll);
         panelList.add(filler9);
 
+        btnListId.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         btnListId.setText("List by ID");
         btnListId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,6 +306,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelList.add(btnListId);
         panelList.add(filler10);
 
+        btnListSubjectCode.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         btnListSubjectCode.setText("List by subject code");
         btnListSubjectCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -265,10 +323,11 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         panelClear.setAlignmentX(0.0F);
         panelClear.setAlignmentY(0.0F);
+        panelClear.setOpaque(false);
         panelClear.setLayout(new javax.swing.BoxLayout(panelClear, javax.swing.BoxLayout.LINE_AXIS));
 
         btnClearAllSubjects.setBackground(new java.awt.Color(200, 100, 100));
-        btnClearAllSubjects.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnClearAllSubjects.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
         btnClearAllSubjects.setForeground(new java.awt.Color(255, 255, 255));
         btnClearAllSubjects.setText("Clear all");
         btnClearAllSubjects.addActionListener(new java.awt.event.ActionListener() {
@@ -280,6 +339,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelClear.add(filler8);
 
         btnClearSelectedSubjects.setBackground(new java.awt.Color(200, 100, 100));
+        btnClearSelectedSubjects.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         btnClearSelectedSubjects.setForeground(new java.awt.Color(255, 255, 255));
         btnClearSelectedSubjects.setText("Clear selected");
         btnClearSelectedSubjects.addActionListener(new java.awt.event.ActionListener() {
@@ -293,6 +353,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelClear.add(filler19);
 
         btnClearTxt.setBackground(new java.awt.Color(200, 100, 100));
+        btnClearTxt.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         btnClearTxt.setForeground(new java.awt.Color(255, 255, 255));
         btnClearTxt.setText("Clear text fields");
         btnClearTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -314,9 +375,11 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelInputs.add(filler21);
 
         panelSubject.setAlignmentY(0.0F);
+        panelSubject.setOpaque(false);
         panelSubject.setLayout(new javax.swing.BoxLayout(panelSubject, javax.swing.BoxLayout.PAGE_AXIS));
 
         lblSubject.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSubject.setForeground(new java.awt.Color(255, 255, 255));
         lblSubject.setText("Subject");
         panelSubject.add(lblSubject);
 
@@ -324,8 +387,10 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelSubject.add(filler11);
 
         panelCode.setAlignmentX(0.0F);
+        panelCode.setOpaque(false);
         panelCode.setLayout(new javax.swing.BoxLayout(panelCode, javax.swing.BoxLayout.LINE_AXIS));
 
+        lblCode.setForeground(new java.awt.Color(255, 255, 255));
         lblCode.setText("Code");
         lblCode.setMaximumSize(new java.awt.Dimension(80, 14));
         lblCode.setMinimumSize(new java.awt.Dimension(80, 14));
@@ -339,6 +404,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         txtCode.setAlignmentX(0.0F);
         txtCode.setMaximumSize(new java.awt.Dimension(100, 25));
         txtCode.setMinimumSize(new java.awt.Dimension(100, 25));
+        txtCode.setOpaque(false);
         txtCode.setPreferredSize(new java.awt.Dimension(100, 25));
         txtCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,8 +419,10 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelSubject.add(filler14);
 
         panelDescription.setAlignmentX(0.0F);
+        panelDescription.setOpaque(false);
         panelDescription.setLayout(new javax.swing.BoxLayout(panelDescription, javax.swing.BoxLayout.LINE_AXIS));
 
+        lblDescription.setForeground(new java.awt.Color(255, 255, 255));
         lblDescription.setText("Description");
         lblDescription.setMaximumSize(new java.awt.Dimension(80, 14));
         lblDescription.setMinimumSize(new java.awt.Dimension(80, 14));
@@ -367,6 +435,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         txtDescription.setAlignmentX(0.0F);
         txtDescription.setMaximumSize(new java.awt.Dimension(250, 25));
         txtDescription.setMinimumSize(new java.awt.Dimension(250, 25));
+        txtDescription.setOpaque(false);
         txtDescription.setPreferredSize(new java.awt.Dimension(250, 25));
         panelDescription.add(txtDescription);
 
@@ -376,8 +445,10 @@ public class SchoolFrame extends javax.swing.JFrame {
         panelSubject.add(filler15);
 
         panelUnits.setAlignmentX(0.0F);
+        panelUnits.setOpaque(false);
         panelUnits.setLayout(new javax.swing.BoxLayout(panelUnits, javax.swing.BoxLayout.LINE_AXIS));
 
+        lblUnits.setForeground(new java.awt.Color(255, 255, 255));
         lblUnits.setText("Units");
         lblUnits.setMaximumSize(new java.awt.Dimension(80, 14));
         lblUnits.setMinimumSize(new java.awt.Dimension(80, 14));
@@ -392,6 +463,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         comboUnits.setMaximumSize(new java.awt.Dimension(50, 25));
         comboUnits.setMinimumSize(new java.awt.Dimension(50, 25));
         comboUnits.setName(""); // NOI18N
+        comboUnits.setOpaque(false);
         comboUnits.setPreferredSize(new java.awt.Dimension(50, 25));
         panelUnits.add(comboUnits);
 
@@ -402,8 +474,10 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         panelGrade.setAlignmentX(0.0F);
         panelGrade.setAlignmentY(0.0F);
+        panelGrade.setOpaque(false);
         panelGrade.setLayout(new javax.swing.BoxLayout(panelGrade, javax.swing.BoxLayout.LINE_AXIS));
 
+        lblGrade.setForeground(new java.awt.Color(255, 255, 255));
         lblGrade.setText("Grade");
         lblGrade.setMaximumSize(new java.awt.Dimension(80, 14));
         lblGrade.setMinimumSize(new java.awt.Dimension(80, 14));
@@ -417,6 +491,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         comboGrade.setAlignmentX(0.0F);
         comboGrade.setMaximumSize(new java.awt.Dimension(50, 25));
         comboGrade.setMinimumSize(new java.awt.Dimension(50, 25));
+        comboGrade.setOpaque(false);
         comboGrade.setPreferredSize(new java.awt.Dimension(50, 25));
         panelGrade.add(comboGrade);
 
@@ -434,10 +509,12 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         panelTotalGrades.setAlignmentX(0.0F);
         panelTotalGrades.setAlignmentY(0.0F);
+        panelTotalGrades.setOpaque(false);
         panelTotalGrades.setLayout(new javax.swing.BoxLayout(panelTotalGrades, javax.swing.BoxLayout.PAGE_AXIS));
 
-        lblTotalGrade.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        lblTotalGrade.setText("Total grades");
+        lblTotalGrade.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTotalGrade.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalGrade.setText("Summary");
         lblTotalGrade.setAlignmentY(0.0F);
         lblTotalGrade.setMaximumSize(new java.awt.Dimension(80, 14));
         lblTotalGrade.setMinimumSize(new java.awt.Dimension(80, 14));
@@ -449,12 +526,14 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         jScrollPane2.setAlignmentX(0.0F);
         jScrollPane2.setAlignmentY(0.0F);
-        jScrollPane2.setMaximumSize(new java.awt.Dimension(250, 125));
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(250, 125));
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(250, 125));
+        jScrollPane2.setMaximumSize(new java.awt.Dimension(300, 125));
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(300, 125));
+        jScrollPane2.setOpaque(false);
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(300, 125));
 
         listTotalGrades.setMaximumSize(new java.awt.Dimension(45, 90));
         listTotalGrades.setMinimumSize(new java.awt.Dimension(45, 90));
+        listTotalGrades.setOpaque(false);
         listTotalGrades.setPreferredSize(new java.awt.Dimension(45, 90));
         jScrollPane2.setViewportView(listTotalGrades);
 
@@ -462,17 +541,29 @@ public class SchoolFrame extends javax.swing.JFrame {
 
         panelInputs.add(panelTotalGrades);
 
-        getContentPane().add(panelInputs);
+        panelAll.add(panelInputs);
 
-        filler22.setAlignmentX(0.0F);
-        filler22.setAlignmentY(0.0F);
-        filler22.setAutoscrolls(true);
-        getContentPane().add(filler22);
+        filler33.setAlignmentX(0.0F);
+        filler33.setAlignmentY(0.0F);
+        filler33.setAutoscrolls(true);
+        panelAll.add(filler33);
 
-        filler24.setAlignmentX(0.0F);
-        filler24.setAlignmentY(0.0F);
-        filler24.setAutoscrolls(true);
-        getContentPane().add(filler24);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelAll, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelAll, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -611,8 +702,8 @@ public class SchoolFrame extends javax.swing.JFrame {
             n[1] = name;
             n[2] = grades.get(i).getSubject().getCode();
             n[3] = grades.get(i).getSubject().getDescription();
-            n[4] = String.format("%.1f", units);
-            n[5] = String.format("%.1f", grade);
+            n[4] = String.format("%.2f", units);
+            n[5] = String.format("%.2f", grade);
             
             tblModel.addRow(n);
 
@@ -636,7 +727,7 @@ public class SchoolFrame extends javax.swing.JFrame {
         }
         
         for (TotalGradeInfo totalGrade : totalGrades) {
-            String data = String.format("%s (%s): %.1f", totalGrade.getName(), totalGrade.getId(), totalGrade.getTotalGrade());
+            String data = String.format("%s (%s) - Average: %.2f, Units: %.2f", totalGrade.getName(), totalGrade.getId(), totalGrade.getTotalGrade(), totalGrade.getUnits());
             listModel.addElement(data);
         }
     }
@@ -700,18 +791,22 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler20;
     private javax.swing.Box.Filler filler21;
-    private javax.swing.Box.Filler filler22;
-    private javax.swing.Box.Filler filler23;
-    private javax.swing.Box.Filler filler24;
     private javax.swing.Box.Filler filler25;
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler28;
+    private javax.swing.Box.Filler filler29;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler30;
+    private javax.swing.Box.Filler filler31;
+    private javax.swing.Box.Filler filler32;
+    private javax.swing.Box.Filler filler33;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCode;
@@ -724,6 +819,8 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblTotalGrade;
     private javax.swing.JLabel lblUnits;
     private javax.swing.JList<String> listTotalGrades;
+    private javax.swing.JPanel panelAddUpdate;
+    private javax.swing.JPanel panelAll;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelClear;
     private javax.swing.JPanel panelCode;
@@ -735,6 +832,7 @@ public class SchoolFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panelName;
     private javax.swing.JPanel panelStudent;
     private javax.swing.JPanel panelSubject;
+    private javax.swing.JPanel panelTable;
     private javax.swing.JPanel panelTotalGrades;
     private javax.swing.JPanel panelUnits;
     private javax.swing.JTable tblGrades;
@@ -775,18 +873,11 @@ class TotalGradeInfo {
     }
 
     public float getTotalGrade() {
-        float total = weightedGrade / units;
-        
-        if (total > 1.25) return 1f;
-        else if (total > 1.5) return 1.25f;
-        else if (total > 1.75) return 1.5f;
-        else if (total > 2) return 1.75f;
-        else if (total > 2.25) return 2f;
-        else if (total > 2.5) return 2.25f;
-        else if (total > 2.75) return 2.5f;
-        else if (total > 3.0) return 2.75f;
-
-        return 5f;
+        return weightedGrade / units;
+    }
+    
+    public float getUnits () {
+        return units;
     }
 }
 
@@ -811,6 +902,7 @@ class IntFilter extends DocumentFilter {
     }
 
     private boolean isInt(String text) {
+        if (text.trim().isEmpty()) return true;
         try {
             Integer.valueOf (text);
             return true;
