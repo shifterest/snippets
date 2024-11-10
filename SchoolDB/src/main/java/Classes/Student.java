@@ -4,36 +4,96 @@
  */
 package Classes;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
+import java.util.ArrayList;
+import org.bson.Document;
+
 /**
  *
  * @author Delmoro-Ke
  */
 public class Student {
-    private int studentID;
+    private Integer studentID;
     private String studentName;
     private String course;
-    private int yearLevel;
+    private Integer yearLevel;
 
-    public Student(int studentID, String studentName, String course, int yearLevel) {
+    public Student(Integer studentID, String studentName, String course, Integer yearLevel) {
         this.studentID = studentID;
         this.studentName = studentName;
         this.course = course;
         this.yearLevel = yearLevel;
     }
+    
+    public static Student fromDocument (Document doc) {
+        if (doc == null) return null;
+        
+        Integer studentID = doc.getInteger("StudentID");
+        String studentName = doc.getString("StudentName");
+        String course = doc.getString("Course");
+        Integer yearLevel = doc.getInteger("YearLevel");
+        
+        return new Student (studentID, studentName, course, yearLevel);
+    }
+    
+    public Document toDocument() {
+        Document doc = new Document();
+        
+        doc.append ("StudentID", this.studentID);
+        doc.append ("StudentName", this.studentName);
+        doc.append ("Course", this.course);
+        doc.append ("YearLevel", this.yearLevel);
+        
+        return doc;
+    }
+    
+    public static ArrayList<Student> getStudents (MongoDatabase database) {
+        MongoCollection<Document> collection = database.getCollection("Student");
+        ArrayList<Student> students = new ArrayList<>();
+        
+        for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
+            Integer studentID = doc.getInteger("StudentID");
+            String studentName = doc.getString("StudentName");
+            String course = doc.getString("Course");
+            Integer yearLevel = doc.getInteger("YearLevel");
+            
+            if (studentID == null || studentName == null) continue;
+            students.add (new Student (studentID, studentName, course, yearLevel));
+        }
+        
+        return students;
+    }
+    
+    public static ArrayList<String> getStudentNames (MongoDatabase database) {
+        MongoCollection<Document> collection = database.getCollection("Student");
+        ArrayList<String> studentNames = new ArrayList<>();
+        
+        for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
+            String studentName = doc.getString("StudentName");
+            
+            if (studentName == null) continue;
+            studentNames.add (studentName);
+        }
+        
+        return studentNames;
+    }
+    
 
-    public int getYearLevel() {
+    public Integer getYearLevel() {
         return yearLevel;
     }
 
-    public void setYearLevel(int yearLevel) {
+    public void setYearLevel(Integer yearLevel) {
         this.yearLevel = yearLevel;
     }
 
-    public int getStudentID() {
+    public Integer getStudentID() {
         return studentID;
     }
 
-    public void setStudentID(int studentID) {
+    public void setStudentID(Integer studentID) {
         this.studentID = studentID;
     }
 

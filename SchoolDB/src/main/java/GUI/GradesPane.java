@@ -4,17 +4,50 @@
  */
 package GUI;
 
+import Classes.Enrollment;
+import Classes.Student;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Delmoro-Ke
  */
 public class GradesPane extends javax.swing.JPanel {
-
+    MongoDatabase db;
     /**
      * Creates new form GradesPane
      */
     public GradesPane() {
         initComponents();
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            db = client.getDatabase ("Enrollment");
+            populateCombo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void populateCombo() {
+        comboStudentName.removeAllItems();
+        ArrayList<String> names = Student.getStudentNames(db);
+        for (String name : names) {
+            comboStudentName.addItem(name);
+        }
+    }
+    
+    private void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) tableStudents.getModel();
+        model.setRowCount(0);
+        
+        ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
+        for (Enrollment e : enrollments) {
+            if (e.getStudentId() == )
+        }
     }
 
     /**
@@ -32,14 +65,29 @@ public class GradesPane extends javax.swing.JPanel {
         tableStudents = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(204, 255, 204));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
 
+        panelStudentName.setMaximumSize(new java.awt.Dimension(32767, 40));
+        panelStudentName.setMinimumSize(new java.awt.Dimension(339, 40));
+        panelStudentName.setOpaque(false);
+        panelStudentName.setPreferredSize(new java.awt.Dimension(539, 40));
+
         lblStudentName.setText("Student name");
+        lblStudentName.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblStudentName.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblStudentName.setPreferredSize(new java.awt.Dimension(100, 25));
         panelStudentName.add(lblStudentName);
 
-        comboStudentName.setMinimumSize(new java.awt.Dimension(250, 22));
+        comboStudentName.setMaximumSize(new java.awt.Dimension(250, 30));
+        comboStudentName.setMinimumSize(new java.awt.Dimension(250, 30));
         comboStudentName.setName(""); // NOI18N
-        comboStudentName.setPreferredSize(new java.awt.Dimension(250, 22));
+        comboStudentName.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboStudentName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboStudentNameActionPerformed(evt);
+            }
+        });
         panelStudentName.add(comboStudentName);
 
         add(panelStudentName);
@@ -65,6 +113,10 @@ public class GradesPane extends javax.swing.JPanel {
 
         add(tableStudents);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboStudentNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

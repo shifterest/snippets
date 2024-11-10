@@ -9,7 +9,7 @@ package GUI;
  * @author Delmoro-Ke
  */
 public class SchoolDB extends javax.swing.JFrame {
-
+    GradesPane gradespane = new GradesPane();
     /**
      * Creates new form SchoolDB
      */
@@ -27,19 +27,20 @@ public class SchoolDB extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        gradesPane2 = new GUI.GradesPane();
+        encodingPane1 = new GUI.EncodingPane();
+        enrollmentPane2 = new GUI.EnrollmentPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(640, 480));
+        setPreferredSize(new java.awt.Dimension(640, 480));
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        jTabbedPane1.addTab("Grades", gradesPane2);
+        jTabbedPane1.addTab("Encoding", encodingPane1);
+        jTabbedPane1.addTab("Enrollment", enrollmentPane2);
+
+        getContentPane().add(jTabbedPane1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -80,6 +81,9 @@ public class SchoolDB extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private GUI.EncodingPane encodingPane1;
+    private GUI.EnrollmentPane enrollmentPane2;
+    private GUI.GradesPane gradesPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
