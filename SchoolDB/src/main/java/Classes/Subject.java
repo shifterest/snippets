@@ -4,6 +4,13 @@
  */
 package Classes;
 
+import static Classes.Student.fromDocument;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
+import java.util.ArrayList;
+import org.bson.Document;
+
 /**
  *
  * @author Delmoro-Ke
@@ -17,6 +24,77 @@ public class Subject {
         this.subjectCode = subjectCode;
         this.description = description;
         this.units = units;
+    }
+    
+    public static Subject fromDocument (Document doc) {
+        if (doc == null) return null;
+        
+        String subjectCode = doc.getString ("SubjectCode");
+        String description = doc.getString ("Description");
+        double units = doc.getDouble ("Units");
+        
+        return new Subject (subjectCode, description, units);
+    }
+    
+    public Document toDocument() {
+        Document doc = new Document();
+        
+        doc.append ("SubjectCode", this.subjectCode);
+        doc.append ("Description", this.description);
+        doc.append ("Units", this.units);
+        
+        return doc;
+    }
+    
+    public static ArrayList<Subject> getSubjects (MongoDatabase database) {
+        MongoCollection<Document> collection = database.getCollection("Subject");
+        ArrayList<Subject> subjects = new ArrayList<>();
+
+        for (Document doc : collection.find().sort(Sorts.ascending("SubjectCode"))) {
+            String subjectCode = doc.getString("SubjectCode");
+            String description = doc.getString("Description");
+            double units = doc.getDouble("Units");
+
+            if (subjectCode == null) continue;
+            subjects.add(new Subject (subjectCode, description, units));
+        }
+
+        return subjects;
+    }
+    
+    public static ArrayList<String> getSubjectCodes (MongoDatabase database) {
+        MongoCollection<Document> collection = database.getCollection("Subject");
+        ArrayList<String> subjectCodes = new ArrayList<>();
+        
+        for (Document doc : collection.find().sort(Sorts.ascending("SubjectCode"))) {
+            String subjectCode = doc.getString("SubjectCode");
+            
+            if (subjectCode == null) continue;
+            subjectCodes.add (subjectCode);
+        }
+        
+        return subjectCodes;
+    }
+    
+    public static ArrayList<String> getSubjectDescriptions (MongoDatabase database) {
+        MongoCollection<Document> collection = database.getCollection("Subject");
+        ArrayList<String> subjectDescs = new ArrayList<>();
+        
+        for (Document doc : collection.find().sort(Sorts.ascending("SubjectDescription"))) {
+            String subjectDesc = doc.getString("SubjectDescription");
+            
+            if (subjectDesc == null) continue;
+            subjectDescs.add (subjectDesc);
+        }
+        
+        return subjectDescs;
+    }
+    
+    public static Subject getSubjectByCode (MongoDatabase database, String code) {
+        MongoCollection<Document> collection = database.getCollection("Subject");
+        Document query = new Document ("SubjectCode", code);
+        
+        return fromDocument (collection.find(query).first());
     }
 
     public double getUnits() {

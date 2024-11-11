@@ -4,6 +4,18 @@
  */
 package GUI;
 
+import Classes.Enrollment;
+import Classes.Student;
+import Classes.Subject;
+import Utilities.IntFilter;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
+import javax.swing.text.AbstractDocument;
+import org.bson.Document;
+
 /**
  *
  * @author Delmoro-Ke
@@ -15,6 +27,83 @@ public class EncodingPane extends javax.swing.JPanel {
      */
     public EncodingPane() {
         initComponents();
+        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter (new IntFilter());
+        
+        populateComboStudent();
+        populateComboCode();
+        populateComboDescription();
+    }
+    
+    private void insertEnrollment() {
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            MongoCollection<Document> collection = db.getCollection("Enrollment");
+        
+            Enrollment enrollment = new Enrollment (
+                0,
+                Integer.parseInt(txtStudentId.getText()),
+                comboSubjectCode.getSelectedItem().toString(),
+                Double.parseDouble(comboGrade.getSelectedItem().toString())
+            );
+            
+            collection.insertOne(enrollment.toDocument());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void populateComboStudent() {
+        Object curr = comboStudentName.getSelectedItem();
+        comboStudentName.removeAllItems();
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            
+            ArrayList<String> names = Student.getStudentNames(db);
+            for (String name : names) {
+                comboStudentName.addItem(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        comboStudentName.setSelectedItem(curr);
+    }
+    
+    private void populateComboCode() {
+        Object curr = comboSubjectCode.getSelectedItem();
+        comboSubjectCode.removeAllItems();
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            
+            ArrayList<String> codes = Subject.getSubjectCodes(db);
+            for (String code : codes) {
+                comboSubjectCode.addItem(code);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        comboSubjectCode.setSelectedItem(curr);
+    }
+    
+    private void populateComboDescription() {
+        Object curr = comboSubjectDescription.getSelectedItem();
+        comboSubjectDescription.removeAllItems();
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            
+            ArrayList<String> descs = Subject.getSubjectDescriptions(db);
+            for (String desc : descs) {
+                comboSubjectDescription.addItem(desc);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        comboSubjectDescription.setSelectedItem(curr);
     }
 
     /**
@@ -29,7 +118,7 @@ public class EncodingPane extends javax.swing.JPanel {
         panelInputs = new javax.swing.JPanel();
         panelStudentID = new javax.swing.JPanel();
         lblStudentID = new javax.swing.JLabel();
-        txtStudentID = new javax.swing.JTextField();
+        txtStudentId = new javax.swing.JTextField();
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
         comboStudentName = new javax.swing.JComboBox<>();
@@ -43,7 +132,7 @@ public class EncodingPane extends javax.swing.JPanel {
         panelGrade = new javax.swing.JPanel();
         lblGrade = new javax.swing.JLabel();
         comboGrade = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setLayout(new java.awt.GridBagLayout());
@@ -65,15 +154,10 @@ public class EncodingPane extends javax.swing.JPanel {
         lblStudentID.setPreferredSize(new java.awt.Dimension(110, 25));
         panelStudentID.add(lblStudentID);
 
-        txtStudentID.setMaximumSize(new java.awt.Dimension(250, 30));
-        txtStudentID.setMinimumSize(new java.awt.Dimension(250, 30));
-        txtStudentID.setPreferredSize(new java.awt.Dimension(250, 30));
-        txtStudentID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStudentIDActionPerformed(evt);
-            }
-        });
-        panelStudentID.add(txtStudentID);
+        txtStudentId.setMaximumSize(new java.awt.Dimension(250, 30));
+        txtStudentId.setMinimumSize(new java.awt.Dimension(250, 30));
+        txtStudentId.setPreferredSize(new java.awt.Dimension(250, 30));
+        panelStudentID.add(txtStudentId);
 
         panelInputs.add(panelStudentID);
 
@@ -89,6 +173,11 @@ public class EncodingPane extends javax.swing.JPanel {
         comboStudentName.setMinimumSize(new java.awt.Dimension(250, 30));
         comboStudentName.setName(""); // NOI18N
         comboStudentName.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboStudentName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboStudentNameActionPerformed(evt);
+            }
+        });
         panelStudentName.add(comboStudentName);
 
         panelInputs.add(panelStudentName);
@@ -147,28 +236,49 @@ public class EncodingPane extends javax.swing.JPanel {
         comboGrade.setPreferredSize(new java.awt.Dimension(185, 30));
         panelGrade.add(comboGrade);
 
-        jButton1.setText("Save");
-        jButton1.setMaximumSize(new java.awt.Dimension(60, 30));
-        jButton1.setMinimumSize(new java.awt.Dimension(60, 30));
-        jButton1.setPreferredSize(new java.awt.Dimension(60, 30));
-        panelGrade.add(jButton1);
+        btnSave.setText("Save");
+        btnSave.setMaximumSize(new java.awt.Dimension(60, 30));
+        btnSave.setMinimumSize(new java.awt.Dimension(60, 30));
+        btnSave.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        panelGrade.add(btnSave);
 
         panelInputs.add(panelGrade);
 
         add(panelInputs, new java.awt.GridBagConstraints());
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtStudentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentIDActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        insertEnrollment();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
+        if (comboStudentName.getSelectedItem() == null) return;
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+        
+            txtStudentId.setText(String.valueOf(
+                Student.getStudentByName(
+                    db, comboStudentName.getSelectedItem().toString()
+                ).getStudentId()
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_comboStudentNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> comboGrade;
     private javax.swing.JComboBox<String> comboStudentName;
     private javax.swing.JComboBox<String> comboSubjectCode;
     private javax.swing.JComboBox<String> comboSubjectDescription;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblGrade;
     private javax.swing.JLabel lblStudentID;
     private javax.swing.JLabel lblStudentName;
@@ -181,6 +291,6 @@ public class EncodingPane extends javax.swing.JPanel {
     private javax.swing.JPanel panelSubjectCode;
     private javax.swing.JPanel panelSubjectDescription;
     private javax.swing.JSeparator separator;
-    private javax.swing.JTextField txtStudentID;
+    private javax.swing.JTextField txtStudentId;
     // End of variables declaration//GEN-END:variables
 }

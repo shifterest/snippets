@@ -15,12 +15,12 @@ import org.bson.Document;
  * @author Delmoro-Ke
  */
 public class Enrollment {
-    private Integer enrollmentId;
-    private Integer studentId;
+    private int enrollmentId;
+    private int studentId;
     private String subjectCode;
-    private Double grade;
+    private double grade;
 
-    public Enrollment(int enrollmentId, int studentId, String subjectCode, Double grade) {
+    public Enrollment(int enrollmentId, int studentId, String subjectCode, double grade) {
         this.enrollmentId = enrollmentId;
         this.studentId = studentId;
         this.subjectCode = subjectCode;
@@ -30,10 +30,10 @@ public class Enrollment {
     public static Enrollment fromDocument (Document doc) {
         if (doc == null) return null;
         
-        Integer enrollmentId = doc.getInteger ("EnrollmentID");
-        Integer studentId = doc.getInteger ("StudentID");
+        int enrollmentId = doc.getInteger ("EnrollmentID");
+        int studentId = doc.getInteger ("StudentID");
         String subjectCode = doc.getString ("SubjectCode");
-        Double grade = doc.getDouble ("Grade");
+        double grade = doc.getDouble ("Grade");
         
         return new Enrollment (enrollmentId, studentId, subjectCode, grade);
     }
@@ -57,7 +57,7 @@ public class Enrollment {
             Integer enrollmentId = doc.getInteger ("EnrollmentID");
             Integer studentId = doc.getInteger ("StudentID");
             String subjectCode = doc.getString ("SubjectCode");
-            Double grade = doc.getDouble ("Grade");
+            double grade = doc.getDouble ("Grade");
             
             if (enrollmentId == null || studentId == null) continue;
             enrollments.add (new Enrollment (enrollmentId, studentId, subjectCode, grade));
@@ -66,27 +66,27 @@ public class Enrollment {
         return enrollments;
     }
 
-    public Double getGrade() {
+    public double getGrade() {
         return grade;
     }
 
-    public void setGrade(Double grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
     }
 
-    public Integer getEnrollmentId() {
+    public int getEnrollmentId() {
         return enrollmentId;
     }
 
-    public void setEnrollmentId(Integer enrollmentId) {
+    public void setEnrollmentId(int enrollmentId) {
         this.enrollmentId = enrollmentId;
     }
 
-    public Integer getStudentId() {
+    public int getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Integer studentId) {
+    public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
 

@@ -15,13 +15,13 @@ import org.bson.Document;
  * @author Delmoro-Ke
  */
 public class Student {
-    private Integer studentID;
+    private int studentId;
     private String studentName;
     private String course;
-    private Integer yearLevel;
+    private int yearLevel;
 
-    public Student(Integer studentID, String studentName, String course, Integer yearLevel) {
-        this.studentID = studentID;
+    public Student(Integer studentId, String studentName, String course, Integer yearLevel) {
+        this.studentId = studentId;
         this.studentName = studentName;
         this.course = course;
         this.yearLevel = yearLevel;
@@ -30,10 +30,10 @@ public class Student {
     public static Student fromDocument (Document doc) {
         if (doc == null) return null;
         
-        Integer studentID = doc.getInteger("StudentID");
+        int studentID = doc.getInteger("StudentID");
         String studentName = doc.getString("StudentName");
         String course = doc.getString("Course");
-        Integer yearLevel = doc.getInteger("YearLevel");
+        int yearLevel = doc.getInteger("YearLevel");
         
         return new Student (studentID, studentName, course, yearLevel);
     }
@@ -41,7 +41,7 @@ public class Student {
     public Document toDocument() {
         Document doc = new Document();
         
-        doc.append ("StudentID", this.studentID);
+        doc.append ("StudentID", this.studentId);
         doc.append ("StudentName", this.studentName);
         doc.append ("Course", this.course);
         doc.append ("YearLevel", this.yearLevel);
@@ -52,15 +52,15 @@ public class Student {
     public static ArrayList<Student> getStudents (MongoDatabase database) {
         MongoCollection<Document> collection = database.getCollection("Student");
         ArrayList<Student> students = new ArrayList<>();
-        
+
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
-            Integer studentID = doc.getInteger("StudentID");
+            Integer studentId = doc.getInteger("StudentID");
             String studentName = doc.getString("StudentName");
             String course = doc.getString("Course");
-            Integer yearLevel = doc.getInteger("YearLevel");
+            int yearLevel = doc.getInteger("YearLevel");
             
-            if (studentID == null || studentName == null) continue;
-            students.add (new Student (studentID, studentName, course, yearLevel));
+            if (studentId == null || studentName == null) continue;
+            students.add (new Student (studentId, studentName, course, yearLevel));
         }
         
         return students;
@@ -80,21 +80,45 @@ public class Student {
         return studentNames;
     }
     
+    public static Student getStudentById (MongoDatabase database, int id) {
+        MongoCollection<Document> collection = database.getCollection("Student");
+        Document query = new Document ("StudentID", id);
+        
+        return fromDocument (collection.find(query).first());
+    }
+    
+    public static Student getStudentByName (MongoDatabase database, String name) {
+        MongoCollection<Document> collection = database.getCollection("Student");
+        Document query = new Document ("StudentName", name);
+        
+        return fromDocument (collection.find(query).first());
+    }
+    
+    public String getYearLevelString() {
+        return switch (yearLevel) {
+            case 1 -> "First year";
+            case 2 -> "Second year";
+            case 3 -> "Third year";
+            case 4 -> "Fourth year";
+            case 5 -> "Fifth year";
+            default -> "Invalid year";
+        };
+    }
 
-    public Integer getYearLevel() {
+    public int getYearLevel() {
         return yearLevel;
     }
 
-    public void setYearLevel(Integer yearLevel) {
+    public void setYearLevel(int yearLevel) {
         this.yearLevel = yearLevel;
     }
 
-    public Integer getStudentID() {
-        return studentID;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setStudentID(Integer studentID) {
-        this.studentID = studentID;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
     public String getStudentName() {

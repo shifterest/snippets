@@ -4,17 +4,82 @@
  */
 package GUI;
 
+import Classes.Student;
+import Utilities.IntFilter;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import org.bson.Document;
+
 /**
  *
  * @author Delmoro-Ke
  */
 public class EnrollmentPane extends javax.swing.JPanel {
-
+    boolean courseFilter;
+    boolean yearLevelFilter;
+    
     /**
      * Creates new form EnrollmentPane
      */
     public EnrollmentPane() {
         initComponents();
+        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter (new IntFilter());
+        
+        populateTable();
+        courseFilter = false;
+        yearLevelFilter = false;
+    }
+    
+    private void insertStudent() {
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            MongoCollection<Document> collection = db.getCollection("Student");
+        
+            Student student = new Student (
+                Integer.valueOf(txtStudentId.getText()),
+                txtStudentName.getText(),
+                comboCourse.getSelectedItem().toString(),
+                comboYearLevel.getSelectedIndex() + 1
+            );
+            
+            collection.insertOne(student.toDocument());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) tableInfo.getModel();
+        model.setRowCount(0);
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");          
+            
+            ArrayList<Student> students = Student.getStudents(db);
+            for (Student s : students) {
+                if (courseFilter && !s.getCourse().equals(comboCourse.getSelectedItem().toString()))
+                    continue;
+                if (yearLevelFilter && !s.getYearLevelString().equals(comboYearLevel.getSelectedItem().toString()))
+                    continue;
+
+                String[] row = new String[] {
+                    Integer.toString(s.getStudentId()),
+                    s.getStudentName(),
+                    s.getCourse(),
+                    s.getYearLevelString()
+                };
+
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -29,7 +94,7 @@ public class EnrollmentPane extends javax.swing.JPanel {
         panelInputs = new javax.swing.JPanel();
         panelStudentID = new javax.swing.JPanel();
         lblStudentID = new javax.swing.JLabel();
-        txtStudentID = new javax.swing.JTextField();
+        txtStudentId = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
@@ -42,8 +107,8 @@ public class EnrollmentPane extends javax.swing.JPanel {
         lblYearLevel = new javax.swing.JLabel();
         comboYearLevel = new javax.swing.JComboBox<>();
         btnYearLevelFilter = new javax.swing.JButton();
-        tableInfo = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        scrollInfo = new javax.swing.JScrollPane();
+        tableInfo = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 204, 255));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
@@ -61,20 +126,20 @@ public class EnrollmentPane extends javax.swing.JPanel {
         lblStudentID.setPreferredSize(new java.awt.Dimension(100, 25));
         panelStudentID.add(lblStudentID);
 
-        txtStudentID.setMaximumSize(new java.awt.Dimension(215, 30));
-        txtStudentID.setMinimumSize(new java.awt.Dimension(215, 30));
-        txtStudentID.setPreferredSize(new java.awt.Dimension(215, 30));
-        txtStudentID.addActionListener(new java.awt.event.ActionListener() {
+        txtStudentId.setMaximumSize(new java.awt.Dimension(185, 30));
+        txtStudentId.setMinimumSize(new java.awt.Dimension(185, 30));
+        txtStudentId.setPreferredSize(new java.awt.Dimension(185, 30));
+        panelStudentID.add(txtStudentId);
+
+        btnAdd.setText("Add");
+        btnAdd.setMaximumSize(new java.awt.Dimension(60, 30));
+        btnAdd.setMinimumSize(new java.awt.Dimension(60, 30));
+        btnAdd.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStudentIDActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
-        panelStudentID.add(txtStudentID);
-
-        btnAdd.setText("+");
-        btnAdd.setMaximumSize(new java.awt.Dimension(30, 30));
-        btnAdd.setMinimumSize(new java.awt.Dimension(30, 30));
-        btnAdd.setPreferredSize(new java.awt.Dimension(30, 30));
         panelStudentID.add(btnAdd);
 
         panelInputs.add(panelStudentID);
@@ -90,11 +155,6 @@ public class EnrollmentPane extends javax.swing.JPanel {
         txtStudentName.setMaximumSize(new java.awt.Dimension(250, 30));
         txtStudentName.setMinimumSize(new java.awt.Dimension(250, 30));
         txtStudentName.setPreferredSize(new java.awt.Dimension(250, 30));
-        txtStudentName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStudentNameActionPerformed(evt);
-            }
-        });
         panelStudentName.add(txtStudentName);
 
         panelInputs.add(panelStudentName);
@@ -112,12 +172,22 @@ public class EnrollmentPane extends javax.swing.JPanel {
         comboCourse.setMinimumSize(new java.awt.Dimension(185, 30));
         comboCourse.setName(""); // NOI18N
         comboCourse.setPreferredSize(new java.awt.Dimension(185, 30));
+        comboCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCourseActionPerformed(evt);
+            }
+        });
         panelCourse.add(comboCourse);
 
         btnCourseFilter.setText("Filter");
         btnCourseFilter.setMaximumSize(new java.awt.Dimension(60, 30));
         btnCourseFilter.setMinimumSize(new java.awt.Dimension(60, 30));
         btnCourseFilter.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnCourseFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCourseFilterActionPerformed(evt);
+            }
+        });
         panelCourse.add(btnCourseFilter);
 
         panelInputs.add(panelCourse);
@@ -130,30 +200,40 @@ public class EnrollmentPane extends javax.swing.JPanel {
         lblYearLevel.setPreferredSize(new java.awt.Dimension(100, 25));
         panelYearLevel.add(lblYearLevel);
 
-        comboYearLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
+        comboYearLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First year", "Second year", "Third year", "Fourth year", "Fifth year" }));
         comboYearLevel.setToolTipText("");
         comboYearLevel.setMaximumSize(new java.awt.Dimension(185, 30));
         comboYearLevel.setMinimumSize(new java.awt.Dimension(185, 30));
         comboYearLevel.setName(""); // NOI18N
         comboYearLevel.setPreferredSize(new java.awt.Dimension(185, 30));
+        comboYearLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboYearLevelActionPerformed(evt);
+            }
+        });
         panelYearLevel.add(comboYearLevel);
 
         btnYearLevelFilter.setText("Filter");
         btnYearLevelFilter.setMaximumSize(new java.awt.Dimension(60, 30));
         btnYearLevelFilter.setMinimumSize(new java.awt.Dimension(60, 30));
         btnYearLevelFilter.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnYearLevelFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnYearLevelFilterActionPerformed(evt);
+            }
+        });
         panelYearLevel.add(btnYearLevelFilter);
 
         panelInputs.add(panelYearLevel);
 
         add(panelInputs);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Subject code", "Description", "Units", "Grade"
+                "Student ID", "Student name", "Course", "Year level"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -164,19 +244,42 @@ public class EnrollmentPane extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        tableInfo.setViewportView(jTable1);
+        tableInfo.getTableHeader().setReorderingAllowed(false);
+        scrollInfo.setViewportView(tableInfo);
 
-        add(tableInfo);
+        add(scrollInfo);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtStudentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentIDActionPerformed
+    private void btnCourseFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCourseFilterActionPerformed
+        courseFilter = !courseFilter;
+        if (courseFilter)
+            btnCourseFilter.setBackground(Color.YELLOW);
+        else
+            btnCourseFilter.setBackground(Color.WHITE);
+        populateTable();
+    }//GEN-LAST:event_btnCourseFilterActionPerformed
 
-    private void txtStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentNameActionPerformed
+    private void btnYearLevelFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnYearLevelFilterActionPerformed
+        yearLevelFilter = !yearLevelFilter;
+        if (yearLevelFilter)
+            btnYearLevelFilter.setBackground(Color.YELLOW);
+        else
+            btnYearLevelFilter.setBackground(Color.WHITE);
+        populateTable();
+    }//GEN-LAST:event_btnYearLevelFilterActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        insertStudent();
+        populateTable();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void comboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCourseActionPerformed
+        populateTable();
+    }//GEN-LAST:event_comboCourseActionPerformed
+
+    private void comboYearLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboYearLevelActionPerformed
+        populateTable();
+    }//GEN-LAST:event_comboYearLevelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -185,7 +288,6 @@ public class EnrollmentPane extends javax.swing.JPanel {
     private javax.swing.JButton btnYearLevelFilter;
     private javax.swing.JComboBox<String> comboCourse;
     private javax.swing.JComboBox<String> comboYearLevel;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblCourse;
     private javax.swing.JLabel lblStudentID;
     private javax.swing.JLabel lblStudentName;
@@ -195,8 +297,9 @@ public class EnrollmentPane extends javax.swing.JPanel {
     private javax.swing.JPanel panelStudentID;
     private javax.swing.JPanel panelStudentName;
     private javax.swing.JPanel panelYearLevel;
-    private javax.swing.JScrollPane tableInfo;
-    private javax.swing.JTextField txtStudentID;
+    private javax.swing.JScrollPane scrollInfo;
+    private javax.swing.JTable tableInfo;
+    private javax.swing.JTextField txtStudentId;
     private javax.swing.JTextField txtStudentName;
     // End of variables declaration//GEN-END:variables
 }

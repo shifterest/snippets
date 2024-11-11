@@ -6,10 +6,12 @@ package GUI;
 
 import Classes.Enrollment;
 import Classes.Student;
+import Classes.Subject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,36 +19,60 @@ import javax.swing.table.DefaultTableModel;
  * @author Delmoro-Ke
  */
 public class GradesPane extends javax.swing.JPanel {
-    MongoDatabase db;
     /**
      * Creates new form GradesPane
      */
     public GradesPane() {
         initComponents();
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            db = client.getDatabase ("Enrollment");
-            populateCombo();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        populateCombo();
+        populateTable();
     }
     
     private void populateCombo() {
+        Object curr = comboStudentName.getSelectedItem();
         comboStudentName.removeAllItems();
-        ArrayList<String> names = Student.getStudentNames(db);
-        for (String name : names) {
-            comboStudentName.addItem(name);
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            
+            ArrayList<String> names = Student.getStudentNames(db);
+            for (String name : names) {
+                comboStudentName.addItem(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        
+        comboStudentName.setSelectedItem(curr);
     }
     
     private void populateTable() {
         DefaultTableModel model = (DefaultTableModel) tableStudents.getModel();
         model.setRowCount(0);
         
-        ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
-        for (Enrollment e : enrollments) {
-            if (e.getStudentId() == )
+        if (comboStudentName.getSelectedItem() == null) return;
+        
+        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase ("Enrollment");
+            
+            Student student = Student.getStudentByName (db, comboStudentName.getSelectedItem().toString());
+            ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
+            for (Enrollment e : enrollments) {
+                if (Objects.equals(e.getStudentId(), student.getStudentId())) {
+                    Subject subject = Subject.getSubjectByCode (db, e.getSubjectCode());
+
+                    String[] row = new String[] {
+                        e.getSubjectCode(),
+                        subject.getDescription(),
+                        String.format("%.1f", subject.getUnits()),
+                        String.format("%.2f", e.getGrade())
+                    };
+
+                    model.addRow(row);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -62,8 +88,8 @@ public class GradesPane extends javax.swing.JPanel {
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
         comboStudentName = new javax.swing.JComboBox<>();
-        tableStudents = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        scrollStudents = new javax.swing.JScrollPane();
+        tableStudents = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(204, 255, 204));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
@@ -92,7 +118,7 @@ public class GradesPane extends javax.swing.JPanel {
 
         add(panelStudentName);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -108,22 +134,23 @@ public class GradesPane extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        tableStudents.setViewportView(jTable1);
+        tableStudents.getTableHeader().setReorderingAllowed(false);
+        scrollStudents.setViewportView(tableStudents);
 
-        add(tableStudents);
+        add(scrollStudents);
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
-        // TODO add your handling code here:
+        populateCombo();
+        populateTable();
     }//GEN-LAST:event_comboStudentNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboStudentName;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblStudentName;
     private javax.swing.JPanel panelStudentName;
-    private javax.swing.JScrollPane tableStudents;
+    private javax.swing.JScrollPane scrollStudents;
+    private javax.swing.JTable tableStudents;
     // End of variables declaration//GEN-END:variables
 }
