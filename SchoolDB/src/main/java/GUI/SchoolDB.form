@@ -51,11 +51,11 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="GUI.EnrollmentPane" name="enrollmentPane2">
+        <Component class="GUI.StudentPane" name="enrollmentPane2">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Enrollment">
-                <Property name="tabTitle" type="java.lang.String" value="Enrollment"/>
+              <JTabbedPaneConstraints tabName="Student">
+                <Property name="tabTitle" type="java.lang.String" value="Student"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

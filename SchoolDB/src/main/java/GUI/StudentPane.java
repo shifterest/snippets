@@ -5,13 +5,14 @@
 package GUI;
 
 import Classes.Student;
-import Utilities.IntFilter;
+import Utilities.StudentIDFilter;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import org.bson.Document;
@@ -20,16 +21,16 @@ import org.bson.Document;
  *
  * @author Delmoro-Ke
  */
-public class EnrollmentPane extends javax.swing.JPanel {
+public class StudentPane extends javax.swing.JPanel {
     boolean courseFilter;
     boolean yearLevelFilter;
     
     /**
      * Creates new form EnrollmentPane
      */
-    public EnrollmentPane() {
+    public StudentPane() {
         initComponents();
-        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter (new IntFilter());
+        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter (new StudentIDFilter());
         
         populateTable();
         courseFilter = false;
@@ -37,13 +38,26 @@ public class EnrollmentPane extends javax.swing.JPanel {
     }
     
     private void insertStudent() {
+        if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase ("Enrollment");
             MongoCollection<Document> collection = db.getCollection("Student");
+            
+            Document queryId = new Document("StudentID", Integer.parseInt(txtStudentId.getText()));
+            Document queryName = new Document("StudentID", txtStudentName.getText());
+            
+            if (collection.find(queryId).first() != null || collection.find(queryName).first() != null) {
+                JOptionPane.showMessageDialog(null, "Student already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         
             Student student = new Student (
-                Integer.valueOf(txtStudentId.getText()),
-                txtStudentName.getText(),
+                Integer.valueOf(txtStudentId.getText().trim()),
+                txtStudentName.getText().trim(),
                 comboCourse.getSelectedItem().toString(),
                 comboYearLevel.getSelectedIndex() + 1
             );

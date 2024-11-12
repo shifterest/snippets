@@ -7,11 +7,11 @@ package GUI;
 import Classes.Enrollment;
 import Classes.Student;
 import Classes.Subject;
+import Utilities.PopulateTable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
-import java.util.Objects;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,12 +25,13 @@ public class GradesPane extends javax.swing.JPanel {
     public GradesPane() {
         initComponents();
         populateCombo();
-        populateTable();
+        PopulateTable.populateGradeTable(tableGrades, comboStudentName);
     }
     
     private void populateCombo() {
         Object curr = comboStudentName.getSelectedItem();
         comboStudentName.removeAllItems();
+        comboStudentName.addItem(null);
         
         try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase ("Enrollment");
@@ -45,36 +46,6 @@ public class GradesPane extends javax.swing.JPanel {
         
         comboStudentName.setSelectedItem(curr);
     }
-    
-    private void populateTable() {
-        DefaultTableModel model = (DefaultTableModel) tableStudents.getModel();
-        model.setRowCount(0);
-        
-        if (comboStudentName.getSelectedItem() == null) return;
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-            
-            Student student = Student.getStudentByName (db, comboStudentName.getSelectedItem().toString());
-            ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
-            for (Enrollment e : enrollments) {
-                if (Objects.equals(e.getStudentId(), student.getStudentId())) {
-                    Subject subject = Subject.getSubjectByCode (db, e.getSubjectCode());
-
-                    String[] row = new String[] {
-                        e.getSubjectCode(),
-                        subject.getDescription(),
-                        String.format("%.1f", subject.getUnits()),
-                        String.format("%.2f", e.getGrade())
-                    };
-
-                    model.addRow(row);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -88,8 +59,8 @@ public class GradesPane extends javax.swing.JPanel {
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
         comboStudentName = new javax.swing.JComboBox<>();
-        scrollStudents = new javax.swing.JScrollPane();
-        tableStudents = new javax.swing.JTable();
+        scrollGrades = new javax.swing.JScrollPane();
+        tableGrades = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(204, 255, 204));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
@@ -118,7 +89,7 @@ public class GradesPane extends javax.swing.JPanel {
 
         add(panelStudentName);
 
-        tableStudents.setModel(new javax.swing.table.DefaultTableModel(
+        tableGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -134,15 +105,15 @@ public class GradesPane extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tableStudents.getTableHeader().setReorderingAllowed(false);
-        scrollStudents.setViewportView(tableStudents);
+        tableGrades.getTableHeader().setReorderingAllowed(false);
+        scrollGrades.setViewportView(tableGrades);
 
-        add(scrollStudents);
+        add(scrollGrades);
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
         populateCombo();
-        populateTable();
+        PopulateTable.populateGradeTable(tableGrades, comboStudentName);
     }//GEN-LAST:event_comboStudentNameActionPerformed
 
 
@@ -150,7 +121,7 @@ public class GradesPane extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> comboStudentName;
     private javax.swing.JLabel lblStudentName;
     private javax.swing.JPanel panelStudentName;
-    private javax.swing.JScrollPane scrollStudents;
-    private javax.swing.JTable tableStudents;
+    private javax.swing.JScrollPane scrollGrades;
+    private javax.swing.JTable tableGrades;
     // End of variables declaration//GEN-END:variables
 }

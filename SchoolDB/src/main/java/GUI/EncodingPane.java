@@ -7,12 +7,16 @@ package GUI;
 import Classes.Enrollment;
 import Classes.Student;
 import Classes.Subject;
-import Utilities.IntFilter;
+import Utilities.PopulateTable;
+import Utilities.StudentIDFilter;
+import Utilities.StudentIDListener;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import org.bson.Document;
 
@@ -27,38 +31,51 @@ public class EncodingPane extends javax.swing.JPanel {
      */
     public EncodingPane() {
         initComponents();
-        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter (new IntFilter());
-        
-        populateComboStudent();
-        populateComboCode();
-        populateComboDescription();
+        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter(new StudentIDFilter());
+        txtStudentId.getDocument().addDocumentListener(new StudentIDListener(comboStudentName));
+
+        populateComboStudentName();
+        populateComboSubjectCode();
+        populateComboSubjectDesc();
     }
-    
+
     private void insertEnrollment() {
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
+        if (txtStudentId.getText().isBlank() || comboStudentName.getSelectedItem() == null || comboSubjectCode.getSelectedItem() == null || comboSubjectDesc.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
             MongoCollection<Document> collection = db.getCollection("Enrollment");
-        
-            Enrollment enrollment = new Enrollment (
-                0,
-                Integer.parseInt(txtStudentId.getText()),
-                comboSubjectCode.getSelectedItem().toString(),
-                Double.parseDouble(comboGrade.getSelectedItem().toString())
-            );
+
+            Document query = new Document("StudentID", Integer.parseInt(txtStudentId.getText()))
+                    .append("SubjectCode", comboSubjectCode.getSelectedItem().toString());
             
+            if (collection.find(query).first() != null) {
+                JOptionPane.showMessageDialog(null, "Enrollment already exists for this student in this course!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } 
+
+            Enrollment enrollment = new Enrollment(
+                    Integer.parseInt(txtStudentId.getText().trim()),
+                    comboSubjectCode.getSelectedItem().toString(),
+                    Double.parseDouble(comboGrade.getSelectedItem().toString())
+            );
+
             collection.insertOne(enrollment.toDocument());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    private void populateComboStudent() {
+
+    private void populateComboStudentName() {
         Object curr = comboStudentName.getSelectedItem();
         comboStudentName.removeAllItems();
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-            
+        comboStudentName.addItem(null);
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
             ArrayList<String> names = Student.getStudentNames(db);
             for (String name : names) {
                 comboStudentName.addItem(name);
@@ -66,17 +83,18 @@ public class EncodingPane extends javax.swing.JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         comboStudentName.setSelectedItem(curr);
     }
-    
-    private void populateComboCode() {
+
+    private void populateComboSubjectCode() {
         Object curr = comboSubjectCode.getSelectedItem();
         comboSubjectCode.removeAllItems();
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-            
+        comboSubjectCode.addItem(null);
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
             ArrayList<String> codes = Subject.getSubjectCodes(db);
             for (String code : codes) {
                 comboSubjectCode.addItem(code);
@@ -84,26 +102,27 @@ public class EncodingPane extends javax.swing.JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         comboSubjectCode.setSelectedItem(curr);
     }
-    
-    private void populateComboDescription() {
-        Object curr = comboSubjectDescription.getSelectedItem();
-        comboSubjectDescription.removeAllItems();
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-            
-            ArrayList<String> descs = Subject.getSubjectDescriptions(db);
+
+    private void populateComboSubjectDesc() {
+        Object curr = comboSubjectDesc.getSelectedItem();
+        comboSubjectDesc.removeAllItems();
+        comboSubjectDesc.addItem(null);
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            ArrayList<String> descs = Subject.getSubjectDescs(db);
             for (String desc : descs) {
-                comboSubjectDescription.addItem(desc);
+                comboSubjectDesc.addItem(desc);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        comboSubjectDescription.setSelectedItem(curr);
+
+        comboSubjectDesc.setSelectedItem(curr);
     }
 
     /**
@@ -128,14 +147,16 @@ public class EncodingPane extends javax.swing.JPanel {
         comboSubjectCode = new javax.swing.JComboBox<>();
         panelSubjectDescription = new javax.swing.JPanel();
         lblSubjectDescription = new javax.swing.JLabel();
-        comboSubjectDescription = new javax.swing.JComboBox<>();
+        comboSubjectDesc = new javax.swing.JComboBox<>();
         panelGrade = new javax.swing.JPanel();
         lblGrade = new javax.swing.JLabel();
         comboGrade = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
+        scrollGrades = new javax.swing.JScrollPane();
+        tableGrades = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(204, 204, 255));
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
 
         panelInputs.setAlignmentX(0.0F);
         panelInputs.setAlignmentY(0.0F);
@@ -200,6 +221,11 @@ public class EncodingPane extends javax.swing.JPanel {
         comboSubjectCode.setMinimumSize(new java.awt.Dimension(250, 30));
         comboSubjectCode.setName(""); // NOI18N
         comboSubjectCode.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboSubjectCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSubjectCodeActionPerformed(evt);
+            }
+        });
         panelSubjectCode.add(comboSubjectCode);
 
         panelInputs.add(panelSubjectCode);
@@ -212,11 +238,16 @@ public class EncodingPane extends javax.swing.JPanel {
         lblSubjectDescription.setPreferredSize(new java.awt.Dimension(110, 25));
         panelSubjectDescription.add(lblSubjectDescription);
 
-        comboSubjectDescription.setMaximumSize(new java.awt.Dimension(250, 30));
-        comboSubjectDescription.setMinimumSize(new java.awt.Dimension(250, 30));
-        comboSubjectDescription.setName(""); // NOI18N
-        comboSubjectDescription.setPreferredSize(new java.awt.Dimension(250, 30));
-        panelSubjectDescription.add(comboSubjectDescription);
+        comboSubjectDesc.setMaximumSize(new java.awt.Dimension(250, 30));
+        comboSubjectDesc.setMinimumSize(new java.awt.Dimension(250, 30));
+        comboSubjectDesc.setName(""); // NOI18N
+        comboSubjectDesc.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboSubjectDesc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSubjectDescActionPerformed(evt);
+            }
+        });
+        panelSubjectDescription.add(comboSubjectDesc);
 
         panelInputs.add(panelSubjectDescription);
 
@@ -249,7 +280,28 @@ public class EncodingPane extends javax.swing.JPanel {
 
         panelInputs.add(panelGrade);
 
-        add(panelInputs, new java.awt.GridBagConstraints());
+        add(panelInputs);
+
+        tableGrades.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Subject code", "Description", "Units", "Grade"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableGrades.getTableHeader().setReorderingAllowed(false);
+        scrollGrades.setViewportView(tableGrades);
+
+        add(scrollGrades);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -257,20 +309,54 @@ public class EncodingPane extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
-        if (comboStudentName.getSelectedItem() == null) return;
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-        
-            txtStudentId.setText(String.valueOf(
-                Student.getStudentByName(
-                    db, comboStudentName.getSelectedItem().toString()
-                ).getStudentId()
-            ));
+        if (comboStudentName.getSelectedItem() == null) {
+            return;
+        }
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            Student student = Student.getStudentByName(db, comboStudentName.getSelectedItem().toString());
+            int studentId = student.getStudentId();
+            txtStudentId.setText(String.valueOf(studentId));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        PopulateTable.populateGradeTable(tableGrades, comboStudentName);
     }//GEN-LAST:event_comboStudentNameActionPerformed
+
+    private void comboSubjectDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSubjectDescActionPerformed
+        if (comboSubjectDesc.getSelectedItem() == null) {
+            return;
+        }
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            Subject subject = Subject.getSubjectByDesc(db, comboSubjectDesc.getSelectedItem().toString());
+            String subjectCode = subject.getSubjectCode();
+            comboSubjectCode.setSelectedItem(subjectCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_comboSubjectDescActionPerformed
+
+    private void comboSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSubjectCodeActionPerformed
+        if (comboSubjectCode.getSelectedItem() == null) {
+            return;
+        }
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            Subject subject = Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString());
+            String subjectDesc = subject.getDescription();
+            comboSubjectDesc.setSelectedItem(subjectDesc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_comboSubjectCodeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -278,7 +364,7 @@ public class EncodingPane extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> comboGrade;
     private javax.swing.JComboBox<String> comboStudentName;
     private javax.swing.JComboBox<String> comboSubjectCode;
-    private javax.swing.JComboBox<String> comboSubjectDescription;
+    private javax.swing.JComboBox<String> comboSubjectDesc;
     private javax.swing.JLabel lblGrade;
     private javax.swing.JLabel lblStudentID;
     private javax.swing.JLabel lblStudentName;
@@ -290,7 +376,9 @@ public class EncodingPane extends javax.swing.JPanel {
     private javax.swing.JPanel panelStudentName;
     private javax.swing.JPanel panelSubjectCode;
     private javax.swing.JPanel panelSubjectDescription;
+    private javax.swing.JScrollPane scrollGrades;
     private javax.swing.JSeparator separator;
+    private javax.swing.JTable tableGrades;
     private javax.swing.JTextField txtStudentId;
     // End of variables declaration//GEN-END:variables
 }

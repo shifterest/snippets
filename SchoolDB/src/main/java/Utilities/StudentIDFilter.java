@@ -12,7 +12,7 @@ import javax.swing.text.DocumentFilter;
  *
  * @author candy
  */
-public class IntFilter extends DocumentFilter{
+public class StudentIDFilter extends DocumentFilter{
     @Override
     public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
         if (isInt(string)) {

@@ -31,7 +31,7 @@ public class Subject {
         
         String subjectCode = doc.getString ("SubjectCode");
         String description = doc.getString ("Description");
-        double units = doc.getDouble ("Units");
+        double units = ((Number) doc.get ("Units")).doubleValue();
         
         return new Subject (subjectCode, description, units);
     }
@@ -53,7 +53,7 @@ public class Subject {
         for (Document doc : collection.find().sort(Sorts.ascending("SubjectCode"))) {
             String subjectCode = doc.getString("SubjectCode");
             String description = doc.getString("Description");
-            double units = doc.getDouble("Units");
+            double units = ((Number) doc.get ("Units")).doubleValue();
 
             if (subjectCode == null) continue;
             subjects.add(new Subject (subjectCode, description, units));
@@ -76,12 +76,12 @@ public class Subject {
         return subjectCodes;
     }
     
-    public static ArrayList<String> getSubjectDescriptions (MongoDatabase database) {
+    public static ArrayList<String> getSubjectDescs (MongoDatabase database) {
         MongoCollection<Document> collection = database.getCollection("Subject");
         ArrayList<String> subjectDescs = new ArrayList<>();
         
-        for (Document doc : collection.find().sort(Sorts.ascending("SubjectDescription"))) {
-            String subjectDesc = doc.getString("SubjectDescription");
+        for (Document doc : collection.find().sort(Sorts.ascending("Description"))) {
+            String subjectDesc = doc.getString("Description");
             
             if (subjectDesc == null) continue;
             subjectDescs.add (subjectDesc);
@@ -93,6 +93,13 @@ public class Subject {
     public static Subject getSubjectByCode (MongoDatabase database, String code) {
         MongoCollection<Document> collection = database.getCollection("Subject");
         Document query = new Document ("SubjectCode", code);
+        
+        return fromDocument (collection.find(query).first());
+    }
+    
+    public static Subject getSubjectByDesc (MongoDatabase database, String desc) {
+        MongoCollection<Document> collection = database.getCollection("Subject");
+        Document query = new Document ("Description", desc);
         
         return fromDocument (collection.find(query).first());
     }
