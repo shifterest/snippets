@@ -4,12 +4,15 @@
  */
 package Classes;
 
-import static Classes.Student.fromDocument;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -102,6 +105,29 @@ public class Subject {
         Document query = new Document ("Description", desc);
         
         return fromDocument (collection.find(query).first());
+    }
+    
+    public void addSubject(MongoDatabase db) {
+        MongoCollection<Document> collection = db.getCollection("Subject");
+
+        Bson filters = Filters.eq("SubjectCode", subjectCode);
+        Document result = collection.find(filters).first();
+
+        if (result != null) {
+//            JOptionPane.showMessageDialog(null, "Subject already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+            Subject existingSubject = fromDocument(result);
+            if (description.equals(existingSubject.getDescription()) && units == existingSubject.getUnits()) {
+                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Bson updates = Updates.combine(Updates.set("Description", description), Updates.set("Units", units));
+                collection.updateOne(filters, updates);
+                JOptionPane.showMessageDialog(null, "Subject updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+            return;
+        }
+
+        collection.insertOne(this.toDocument());
+        JOptionPane.showMessageDialog(null, "Subject added.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public double getUnits() {

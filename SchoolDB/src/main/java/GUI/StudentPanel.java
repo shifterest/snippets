@@ -5,95 +5,34 @@
 package GUI;
 
 import Classes.Student;
+import Utilities.PopulateTable;
 import Utilities.StudentIDFilter;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.awt.Color;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
-import org.bson.Document;
 
 /**
  *
  * @author Delmoro-Ke
  */
-public class StudentPane extends javax.swing.JPanel {
+public class StudentPanel extends javax.swing.JPanel {
+
     boolean courseFilter;
     boolean yearLevelFilter;
-    
+
     /**
      * Creates new form EnrollmentPane
      */
-    public StudentPane() {
+    public StudentPanel() {
         initComponents();
-        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter (new StudentIDFilter());
-        
-        populateTable();
+        ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter(new StudentIDFilter());
+
+        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
         courseFilter = false;
         yearLevelFilter = false;
-    }
-    
-    private void insertStudent() {
-        if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-            MongoCollection<Document> collection = db.getCollection("Student");
-            
-            Document queryId = new Document("StudentID", Integer.parseInt(txtStudentId.getText()));
-            Document queryName = new Document("StudentID", txtStudentName.getText());
-            
-            if (collection.find(queryId).first() != null || collection.find(queryName).first() != null) {
-                JOptionPane.showMessageDialog(null, "Student already exists!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        
-            Student student = new Student (
-                Integer.valueOf(txtStudentId.getText().trim()),
-                txtStudentName.getText().trim(),
-                comboCourse.getSelectedItem().toString(),
-                comboYearLevel.getSelectedIndex() + 1
-            );
-            
-            collection.insertOne(student.toDocument());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void populateTable() {
-        DefaultTableModel model = (DefaultTableModel) tableInfo.getModel();
-        model.setRowCount(0);
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");          
-            
-            ArrayList<Student> students = Student.getStudents(db);
-            for (Student s : students) {
-                if (courseFilter && !s.getCourse().equals(comboCourse.getSelectedItem().toString()))
-                    continue;
-                if (yearLevelFilter && !s.getYearLevelString().equals(comboYearLevel.getSelectedItem().toString()))
-                    continue;
-
-                String[] row = new String[] {
-                    Integer.toString(s.getStudentId()),
-                    s.getStudentName(),
-                    s.getCourse(),
-                    s.getYearLevelString()
-                };
-
-                model.addRow(row);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -109,7 +48,7 @@ public class StudentPane extends javax.swing.JPanel {
         panelStudentID = new javax.swing.JPanel();
         lblStudentID = new javax.swing.JLabel();
         txtStudentId = new javax.swing.JTextField();
-        btnAdd = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
         txtStudentName = new javax.swing.JTextField();
@@ -145,16 +84,16 @@ public class StudentPane extends javax.swing.JPanel {
         txtStudentId.setPreferredSize(new java.awt.Dimension(185, 30));
         panelStudentID.add(txtStudentId);
 
-        btnAdd.setText("Add");
-        btnAdd.setMaximumSize(new java.awt.Dimension(60, 30));
-        btnAdd.setMinimumSize(new java.awt.Dimension(60, 30));
-        btnAdd.setPreferredSize(new java.awt.Dimension(60, 30));
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("Save");
+        btnSave.setMaximumSize(new java.awt.Dimension(60, 30));
+        btnSave.setMinimumSize(new java.awt.Dimension(60, 30));
+        btnSave.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
-        panelStudentID.add(btnAdd);
+        panelStudentID.add(btnSave);
 
         panelInputs.add(panelStudentID);
 
@@ -260,45 +199,73 @@ public class StudentPane extends javax.swing.JPanel {
         });
         tableInfo.getTableHeader().setReorderingAllowed(false);
         scrollInfo.setViewportView(tableInfo);
+        if (tableInfo.getColumnModel().getColumnCount() > 0) {
+            tableInfo.getColumnModel().getColumn(0).setMinWidth(0);
+            tableInfo.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tableInfo.getColumnModel().getColumn(2).setMinWidth(0);
+            tableInfo.getColumnModel().getColumn(2).setPreferredWidth(0);
+            tableInfo.getColumnModel().getColumn(3).setMinWidth(0);
+            tableInfo.getColumnModel().getColumn(3).setPreferredWidth(0);
+        }
 
         add(scrollInfo);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCourseFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCourseFilterActionPerformed
         courseFilter = !courseFilter;
-        if (courseFilter)
+        if (courseFilter) {
             btnCourseFilter.setBackground(Color.YELLOW);
-        else
+        } else {
             btnCourseFilter.setBackground(Color.WHITE);
-        populateTable();
+        }
+        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_btnCourseFilterActionPerformed
 
     private void btnYearLevelFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnYearLevelFilterActionPerformed
         yearLevelFilter = !yearLevelFilter;
-        if (yearLevelFilter)
+        if (yearLevelFilter) {
             btnYearLevelFilter.setBackground(Color.YELLOW);
-        else
+        } else {
             btnYearLevelFilter.setBackground(Color.WHITE);
-        populateTable();
+        }
+        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_btnYearLevelFilterActionPerformed
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        insertStudent();
-        populateTable();
-    }//GEN-LAST:event_btnAddActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            Student student = new Student(
+                    Integer.valueOf(txtStudentId.getText().trim()),
+                    txtStudentName.getText().trim(),
+                    comboCourse.getSelectedItem().toString(),
+                    comboYearLevel.getSelectedIndex() + 1
+            );
+
+            student.addStudent(db);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     private void comboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCourseActionPerformed
-        populateTable();
+        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_comboCourseActionPerformed
 
     private void comboYearLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboYearLevelActionPerformed
-        populateTable();
+        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_comboYearLevelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCourseFilter;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnYearLevelFilter;
     private javax.swing.JComboBox<String> comboCourse;
     private javax.swing.JComboBox<String> comboYearLevel;

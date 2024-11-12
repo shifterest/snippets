@@ -8,11 +8,11 @@ package GUI;
  *
  * @author Delmoro-Ke
  */
-public class SchoolDB extends javax.swing.JFrame {
+public class SchoolFrame extends javax.swing.JFrame {
     /**
      * Creates new form SchoolDB
      */
-    public SchoolDB() {
+    public SchoolFrame() {
         initComponents();
     }
 
@@ -26,18 +26,19 @@ public class SchoolDB extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        gradesPane2 = new GUI.GradesPane();
-        encodingPane1 = new GUI.EncodingPane();
-        enrollmentPane2 = new GUI.StudentPane();
+        GradesPanel = new GUI.GradesPanel();
+        EncodingPanel = new GUI.EncodingPanel();
+        StudentPanel = new GUI.StudentPanel();
+        SubjectPanel = new GUI.SubjectPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(640, 480));
-        setPreferredSize(new java.awt.Dimension(640, 480));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        jTabbedPane1.addTab("Grades", gradesPane2);
-        jTabbedPane1.addTab("Encoding", encodingPane1);
-        jTabbedPane1.addTab("Student", enrollmentPane2);
+        jTabbedPane1.addTab("Grades", GradesPanel);
+        jTabbedPane1.addTab("Encoding", EncodingPanel);
+        jTabbedPane1.addTab("Student", StudentPanel);
+        jTabbedPane1.addTab("Subject", SubjectPanel);
 
         getContentPane().add(jTabbedPane1);
 
@@ -61,28 +62,30 @@ public class SchoolDB extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SchoolDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SchoolDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SchoolDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SchoolDB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SchoolDB().setVisible(true);
+                new SchoolFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private GUI.EncodingPane encodingPane1;
-    private GUI.StudentPane enrollmentPane2;
-    private GUI.GradesPane gradesPane2;
+    private GUI.EncodingPanel EncodingPanel;
+    private GUI.GradesPanel GradesPanel;
+    private GUI.StudentPanel StudentPanel;
+    private GUI.SubjectPanel SubjectPanel;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }

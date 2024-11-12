@@ -4,28 +4,24 @@
  */
 package GUI;
 
-import Classes.Enrollment;
 import Classes.Student;
-import Classes.Subject;
 import Utilities.PopulateTable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author Delmoro-Ke
  */
-public class GradesPane extends javax.swing.JPanel {
+public class GradesPanel extends javax.swing.JPanel {
     /**
      * Creates new form GradesPane
      */
-    public GradesPane() {
+    public GradesPanel() {
         initComponents();
         populateCombo();
-        PopulateTable.populateGradeTable(tableGrades, comboStudentName);
+        PopulateTable.grade(tableGrades, comboStudentName);
     }
     
     private void populateCombo() {
@@ -107,13 +103,21 @@ public class GradesPane extends javax.swing.JPanel {
         });
         tableGrades.getTableHeader().setReorderingAllowed(false);
         scrollGrades.setViewportView(tableGrades);
+        if (tableGrades.getColumnModel().getColumnCount() > 0) {
+            tableGrades.getColumnModel().getColumn(0).setMinWidth(0);
+            tableGrades.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tableGrades.getColumnModel().getColumn(2).setMinWidth(0);
+            tableGrades.getColumnModel().getColumn(2).setPreferredWidth(0);
+            tableGrades.getColumnModel().getColumn(3).setMinWidth(0);
+            tableGrades.getColumnModel().getColumn(3).setPreferredWidth(0);
+        }
 
         add(scrollGrades);
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
         populateCombo();
-        PopulateTable.populateGradeTable(tableGrades, comboStudentName);
+        PopulateTable.grade(tableGrades, comboStudentName);
     }//GEN-LAST:event_comboStudentNameActionPerformed
 
 

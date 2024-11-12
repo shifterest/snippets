@@ -6,9 +6,13 @@ package Classes;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -48,8 +52,8 @@ public class Enrollment {
         return doc;
     }
 
-    public static ArrayList<Enrollment> getEnrollments(MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("Enrollment");
+    public static ArrayList<Enrollment> getEnrollments(MongoDatabase db) {
+        MongoCollection<Document> collection = db.getCollection("Enrollment");
         ArrayList<Enrollment> enrollments = new ArrayList<>();
 
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
@@ -64,6 +68,36 @@ public class Enrollment {
         }
 
         return enrollments;
+    }
+    
+    public static Enrollment getEnrollment(MongoDatabase database, int id, String code) {
+        MongoCollection<Document> collection = database.getCollection("Student");
+        Document query = new Document("StudentID", id).append("SubjectCode", code);
+
+        return fromDocument(collection.find(query).first());
+    }
+
+    public void addEnrollment(MongoDatabase db) {
+        MongoCollection<Document> collection = db.getCollection("Enrollment");
+
+        Bson filters = Filters.and(Filters.eq("StudentID", studentId), Filters.eq("SubjectCode", subjectCode));
+        Document result = collection.find(filters).first();
+        
+        if (result != null) {
+//            JOptionPane.showMessageDialog(null, "Enrollment already exists for this student in this course!", "Error", JOptionPane.ERROR_MESSAGE);
+            Enrollment existingEnrollment = fromDocument(result);
+            if (grade == existingEnrollment.getGrade()) {
+                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Bson updates = Updates.set("Grade", grade);
+                collection.updateOne(filters, updates);
+                JOptionPane.showMessageDialog(null, "Enrollment updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+            return;
+        }
+
+        collection.insertOne(this.toDocument());
+        JOptionPane.showMessageDialog(null, "Enrollment added.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public double getGrade() {

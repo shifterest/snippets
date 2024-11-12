@@ -33,7 +33,7 @@ public class StudentIDFilter extends DocumentFilter{
     }
 
     private boolean isInt(String text) {
-        if (text.trim().isEmpty()) return true;
+        if (text == null || text.isBlank()) return true;
         try {
             Integer.valueOf (text);
             return true;
