@@ -4,17 +4,10 @@
  */
 package GUI;
 
-import Classes.Enrollment;
-import Classes.Student;
-import Classes.Subject;
-import Utilities.PopulateCombo;
-import Utilities.PopulateTable;
-import Utilities.StudentIDFilter;
-import Utilities.StudentIDListener;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-import javax.swing.JOptionPane;
+import Classes.*;
+import Utilities.*;
+import com.mongodb.client.*;
+import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 
 /**
@@ -86,6 +79,7 @@ public class EncodingPanel extends javax.swing.JPanel {
         lblStudentID.setPreferredSize(new java.awt.Dimension(110, 25));
         panelStudentID.add(lblStudentID);
 
+        txtStudentId.setEnabled(false);
         txtStudentId.setMaximumSize(new java.awt.Dimension(250, 30));
         txtStudentId.setMinimumSize(new java.awt.Dimension(250, 30));
         txtStudentId.setPreferredSize(new java.awt.Dimension(250, 30));
@@ -157,6 +151,7 @@ public class EncodingPanel extends javax.swing.JPanel {
         lblSubjectDescription.setPreferredSize(new java.awt.Dimension(110, 25));
         panelSubjectDescription.add(lblSubjectDescription);
 
+        comboSubjectDesc.setEnabled(false);
         comboSubjectDesc.setMaximumSize(new java.awt.Dimension(250, 30));
         comboSubjectDesc.setMinimumSize(new java.awt.Dimension(250, 30));
         comboSubjectDesc.setName(""); // NOI18N
@@ -250,8 +245,8 @@ public class EncodingPanel extends javax.swing.JPanel {
             MongoDatabase db = client.getDatabase("Enrollment");
 
             Enrollment enrollment = new Enrollment(
-                    Integer.parseInt(txtStudentId.getText().trim()),
-                    comboSubjectCode.getSelectedItem().toString(),
+                    Student.getStudentById(db, Integer.parseInt(txtStudentId.getText().trim())),
+                    Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString()),
                     Double.parseDouble(comboGrade.getSelectedItem().toString())
             );
             enrollment.addEnrollment(db);
@@ -262,7 +257,7 @@ public class EncodingPanel extends javax.swing.JPanel {
         PopulateCombo.studentName(comboStudentName);
         PopulateCombo.subjectCode(comboSubjectCode);
         PopulateCombo.subjectDesc(comboSubjectDesc);
-        PopulateTable.grade(tableGrades, comboStudentName);
+        PopulateTable.grade(tableGrades, studentName);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void comboSubjectCodePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubjectCodePopupMenuWillBecomeInvisible
@@ -306,8 +301,6 @@ public class EncodingPanel extends javax.swing.JPanel {
             return;
         }
 
-        PopulateTable.grade(tableGrades, comboStudentName);
-
         try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase("Enrollment");
 
@@ -323,7 +316,7 @@ public class EncodingPanel extends javax.swing.JPanel {
         }
 
         PopulateCombo.studentName(comboStudentName);
-        PopulateTable.grade(tableGrades, comboStudentName);
+        PopulateTable.grade(tableGrades, comboStudentName.getSelectedItem().toString());
     }//GEN-LAST:event_comboStudentNamePopupMenuWillBecomeInvisible
 
 

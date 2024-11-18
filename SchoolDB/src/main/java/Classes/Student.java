@@ -4,13 +4,10 @@
  */
 package Classes;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

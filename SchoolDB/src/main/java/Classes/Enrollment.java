@@ -4,13 +4,10 @@
  */
 package Classes;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -20,33 +17,33 @@ import org.bson.conversions.Bson;
  */
 public class Enrollment {
 
-    private int studentId;
-    private String subjectCode;
+    private Student student;
+    private Subject subject;
     private double grade;
 
-    public Enrollment(int studentId, String subjectCode, double grade) {
-        this.studentId = studentId;
-        this.subjectCode = subjectCode;
+    public Enrollment(Student student, Subject subject, double grade) {
+        this.student = student;
+        this.subject = subject;
         this.grade = grade;
     }
 
-    public static Enrollment fromDocument(Document doc) {
+    public static Enrollment fromDocument(MongoDatabase db, Document doc) {
         if (doc == null) {
             return null;
         }
 
-        int studentId = doc.getInteger("StudentID");
-        String subjectCode = doc.getString("SubjectCode");
+        Student student = Student.getStudentById(db, doc.getInteger("StudentID"));
+        Subject subject = Subject.getSubjectByCode(db, doc.getString("SubjectCode"));
         double grade = ((Number) doc.get("Grade")).doubleValue();
 
-        return new Enrollment(studentId, subjectCode, grade);
+        return new Enrollment(student, subject, grade);
     }
 
     public Document toDocument() {
         Document doc = new Document();
 
-        doc.append("StudentID", this.studentId);
-        doc.append("SubjectCode", this.subjectCode);
+        doc.append("StudentID", this.student.getStudentId());
+        doc.append("SubjectCode", this.subject.getSubjectCode());
         doc.append("Grade", this.grade);
 
         return doc;
@@ -57,35 +54,35 @@ public class Enrollment {
         ArrayList<Enrollment> enrollments = new ArrayList<>();
 
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
-            Integer studentId = doc.getInteger("StudentID");
-            String subjectCode = doc.getString("SubjectCode");
+            Student student = Student.getStudentById(db, doc.getInteger("StudentID"));
+            Subject subject = Subject.getSubjectByCode(db, doc.getString("SubjectCode"));
             double grade = ((Number) doc.get("Grade")).doubleValue();
 
-            if (studentId == null) {
+            if (student == null) {
                 continue;
             }
-            enrollments.add(new Enrollment(studentId, subjectCode, grade));
+            enrollments.add(new Enrollment(student, subject, grade));
         }
 
         return enrollments;
     }
-    
-    public static Enrollment getEnrollment(MongoDatabase database, int id, String code) {
-        MongoCollection<Document> collection = database.getCollection("Student");
+
+    public static Enrollment getEnrollment(MongoDatabase db, int id, String code) {
+        MongoCollection<Document> collection = db.getCollection("Student");
         Document query = new Document("StudentID", id).append("SubjectCode", code);
 
-        return fromDocument(collection.find(query).first());
+        return fromDocument(db, collection.find(query).first());
     }
 
     public void addEnrollment(MongoDatabase db) {
         MongoCollection<Document> collection = db.getCollection("Enrollment");
 
-        Bson filters = Filters.and(Filters.eq("StudentID", studentId), Filters.eq("SubjectCode", subjectCode));
+        Bson filters = Filters.and(Filters.eq("StudentID", student.getStudentId()), Filters.eq("SubjectCode", subject.getSubjectCode()));
         Document result = collection.find(filters).first();
-        
+
         if (result != null) {
 //            JOptionPane.showMessageDialog(null, "Enrollment already exists for this student in this course!", "Error", JOptionPane.ERROR_MESSAGE);
-            Enrollment existingEnrollment = fromDocument(result);
+            Enrollment existingEnrollment = fromDocument(db, result);
             if (grade == existingEnrollment.getGrade()) {
                 JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -108,20 +105,20 @@ public class Enrollment {
         this.grade = grade;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public String getSubjectCode() {
-        return subjectCode;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
 }

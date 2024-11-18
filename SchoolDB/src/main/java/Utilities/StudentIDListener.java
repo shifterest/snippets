@@ -1,11 +1,8 @@
 package Utilities;
 
-import Classes.Student;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import Classes.*;
+import com.mongodb.client.*;
+import javax.swing.event.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -47,11 +44,11 @@ public class StudentIDListener implements DocumentListener {
             String text = e.getDocument().getText(0, e.getDocument().getLength()).trim();
             Student student = (text.isEmpty()) ? null : Student.getStudentById(db, Integer.parseInt(text));
 
-            combo.setSelectedItem((student == null) ? "" : student.getStudentName());
+            combo.setSelectedItem(student == null ? "" : student.getStudentName());
+            
+            PopulateTable.grade(table, student.getStudentName());
         } catch (Exception error) {
             error.printStackTrace();
         }
-        
-        PopulateTable.grade(table, combo);
     }
 }

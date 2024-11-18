@@ -4,12 +4,10 @@
  */
 package GUI;
 
-import Classes.Subject;
-import Utilities.PopulateTable;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-import javax.swing.JOptionPane;
+import Classes.*;
+import Utilities.*;
+import com.mongodb.client.*;
+import javax.swing.*;
 
 /**
  *
@@ -178,6 +176,8 @@ public class SubjectPanel extends javax.swing.JPanel {
 
     private void comboUnitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboUnitsActionPerformed
         PopulateTable.subject(tableSubjects);
+        txtSubjectCode.setText("");
+        txtDescription.setText("");
     }//GEN-LAST:event_comboUnitsActionPerformed
 
 

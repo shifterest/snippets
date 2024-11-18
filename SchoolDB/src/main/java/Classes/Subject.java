@@ -4,13 +4,10 @@
  */
 package Classes;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -114,15 +111,15 @@ public class Subject {
         Document result = collection.find(filters).first();
 
         if (result != null) {
-//            JOptionPane.showMessageDialog(null, "Subject already exists!", "Error", JOptionPane.ERROR_MESSAGE);
-            Subject existingSubject = fromDocument(result);
-            if (description.equals(existingSubject.getDescription()) && units == existingSubject.getUnits()) {
-                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                Bson updates = Updates.combine(Updates.set("Description", description), Updates.set("Units", units));
-                collection.updateOne(filters, updates);
-                JOptionPane.showMessageDialog(null, "Subject updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
-            }
+            JOptionPane.showMessageDialog(null, "Subject already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+//            Subject existingSubject = fromDocument(result);
+//            if (description.equals(existingSubject.getDescription()) && units == existingSubject.getUnits()) {
+//                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
+//            } else {
+//                Bson updates = Updates.combine(Updates.set("Description", description), Updates.set("Units", units));
+//                collection.updateOne(filters, updates);
+//                JOptionPane.showMessageDialog(null, "Subject updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
+//            }
             return;
         }
 

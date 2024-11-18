@@ -4,13 +4,10 @@
  */
 package Utilities;
 
-import Classes.Enrollment;
-import Classes.Student;
-import Classes.Subject;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
+import Classes.*;
+import com.mongodb.client.*;
 import java.util.ArrayList;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PopulateTable {
 
-    public static void subject(javax.swing.JTable table) {
+    public static void subject(JTable table) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
@@ -41,7 +38,7 @@ public class PopulateTable {
         }
     }
 
-    public static void student(javax.swing.JTable table, boolean courseFilter, javax.swing.JComboBox<String> comboCourse, boolean yearLevelFilter, javax.swing.JComboBox<String> comboYearLevel) {
+    public static void student(JTable table, boolean courseFilter, JComboBox<String> comboCourse, boolean yearLevelFilter, JComboBox<String> comboYearLevel) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
@@ -71,26 +68,26 @@ public class PopulateTable {
         }
     }
 
-    public static void grade(javax.swing.JTable table, javax.swing.JComboBox<String> comboStudentName) {
+    public static void grade(JTable table, String studentName) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        if (comboStudentName.getSelectedItem() == null) {
+        if (studentName == null) {
             return;
         }
 
         try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase("Enrollment");
 
-            Student student = Student.getStudentByName(db, comboStudentName.getSelectedItem().toString());
+            Student student = Student.getStudentByName(db, studentName);
             if (student != null) {
                 ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
                 for (Enrollment e : enrollments) {
-                    if (e.getStudentId() == student.getStudentId()) {
-                        Subject subject = Subject.getSubjectByCode(db, e.getSubjectCode());
+                    if (e.getStudent().getStudentId() == student.getStudentId()) {
+                        Subject subject = Subject.getSubjectByCode(db, e.getSubject().getSubjectCode());
 
                         String[] row = new String[]{
-                            e.getSubjectCode(),
+                            e.getSubject().getSubjectCode(),
                             subject.getDescription(),
                             String.format("%.1f", subject.getUnits()),
                             String.format("%.2f", e.getGrade())

@@ -1,10 +1,7 @@
 package Utilities;
 
-import Classes.Student;
-import Classes.Subject;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
+import Classes.*;
+import com.mongodb.client.*;
 import java.util.ArrayList;
 
 /*

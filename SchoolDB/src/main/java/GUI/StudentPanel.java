@@ -4,14 +4,11 @@
  */
 package GUI;
 
-import Classes.Student;
-import Utilities.PopulateTable;
-import Utilities.StudentIDFilter;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
+import Classes.*;
+import Utilities.*;
+import com.mongodb.client.*;
 import java.awt.Color;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 
 /**

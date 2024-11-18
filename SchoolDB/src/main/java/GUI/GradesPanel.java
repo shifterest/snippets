@@ -4,11 +4,9 @@
  */
 package GUI;
 
-import Classes.Student;
-import Utilities.PopulateTable;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
+import Classes.*;
+import Utilities.*;
+import com.mongodb.client.*;
 import java.util.ArrayList;
 /**
  *
@@ -21,7 +19,8 @@ public class GradesPanel extends javax.swing.JPanel {
     public GradesPanel() {
         initComponents();
         populateCombo();
-        PopulateTable.grade(tableGrades, comboStudentName);
+        String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
+        PopulateTable.grade(tableGrades, name);
     }
     
     private void populateCombo() {
@@ -55,6 +54,8 @@ public class GradesPanel extends javax.swing.JPanel {
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
         comboStudentName = new javax.swing.JComboBox<>();
+        panelGPA = new javax.swing.JPanel();
+        lblGPA = new javax.swing.JLabel();
         scrollGrades = new javax.swing.JScrollPane();
         tableGrades = new javax.swing.JTable();
 
@@ -84,6 +85,21 @@ public class GradesPanel extends javax.swing.JPanel {
         panelStudentName.add(comboStudentName);
 
         add(panelStudentName);
+
+        panelGPA.setMaximumSize(new java.awt.Dimension(32767, 25));
+        panelGPA.setMinimumSize(new java.awt.Dimension(339, 25));
+        panelGPA.setOpaque(false);
+        panelGPA.setPreferredSize(new java.awt.Dimension(539, 25));
+        panelGPA.setLayout(new java.awt.GridLayout(1, 0));
+
+        lblGPA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblGPA.setText("General Percentile Average: N/A");
+        lblGPA.setMaximumSize(new java.awt.Dimension(250, 25));
+        lblGPA.setMinimumSize(new java.awt.Dimension(250, 25));
+        lblGPA.setPreferredSize(new java.awt.Dimension(250, 25));
+        panelGPA.add(lblGPA);
+
+        add(panelGPA);
 
         tableGrades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -117,13 +133,18 @@ public class GradesPanel extends javax.swing.JPanel {
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
         populateCombo();
-        PopulateTable.grade(tableGrades, comboStudentName);
+        String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
+        PopulateTable.grade(tableGrades, name);
+        double gpa = Calculate.GPA(name);
+        lblGPA.setText("General Percentile Average: " + (gpa > 0 ? String.format("%.2f", gpa) : "N/A"));
     }//GEN-LAST:event_comboStudentNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboStudentName;
+    private javax.swing.JLabel lblGPA;
     private javax.swing.JLabel lblStudentName;
+    private javax.swing.JPanel panelGPA;
     private javax.swing.JPanel panelStudentName;
     private javax.swing.JScrollPane scrollGrades;
     private javax.swing.JTable tableGrades;
