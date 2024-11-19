@@ -108,6 +108,11 @@ public class EncodingPanel extends javax.swing.JPanel {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
+        comboStudentName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboStudentNameActionPerformed(evt);
+            }
+        });
         panelStudentName.add(comboStudentName);
 
         panelInputs.add(panelStudentName);
@@ -137,6 +142,11 @@ public class EncodingPanel extends javax.swing.JPanel {
                 comboSubjectCodePopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        comboSubjectCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSubjectCodeActionPerformed(evt);
             }
         });
         panelSubjectCode.add(comboSubjectCode);
@@ -261,42 +271,65 @@ public class EncodingPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void comboSubjectCodePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubjectCodePopupMenuWillBecomeInvisible
-        if (comboSubjectCode.getSelectedItem() == null) {
-            return;
-        }
-
-        PopulateCombo.subjectCode(comboSubjectCode);
-        PopulateCombo.subjectDesc(comboSubjectDesc);
-
-        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase("Enrollment");
-
-            Subject subject = Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString());
-            comboSubjectDesc.setSelectedItem(subject == null ? "" : subject.getDescription());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        if (comboSubjectCode.getSelectedItem() == null) {
+//            return;
+//        }
+//
+//        PopulateCombo.subjectCode(comboSubjectCode);
+//        PopulateCombo.subjectDesc(comboSubjectDesc);
+//
+//        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+//            MongoDatabase db = client.getDatabase("Enrollment");
+//
+//            Subject subject = Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString());
+//            comboSubjectDesc.setSelectedItem(subject == null ? "" : subject.getDescription());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }//GEN-LAST:event_comboSubjectCodePopupMenuWillBecomeInvisible
 
     private void comboSubjectDescPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubjectDescPopupMenuWillBecomeInvisible
-        if (comboSubjectDesc.getSelectedItem() == null) {
-            return;
-        }
-
-        PopulateCombo.subjectCode(comboSubjectCode);
-        PopulateCombo.subjectDesc(comboSubjectDesc);
-
-        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase("Enrollment");
-
-            Subject subject = Subject.getSubjectByDesc(db, comboSubjectDesc.getSelectedItem().toString());
-            comboSubjectCode.setSelectedItem(subject == null ? "" : subject.getSubjectCode());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        if (comboSubjectDesc.getSelectedItem() == null) {
+//            return;
+//        }
+//
+//        PopulateCombo.subjectCode(comboSubjectCode);
+//        PopulateCombo.subjectDesc(comboSubjectDesc);
+//
+//        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+//            MongoDatabase db = client.getDatabase("Enrollment");
+//
+//            Subject subject = Subject.getSubjectByDesc(db, comboSubjectDesc.getSelectedItem().toString());
+//            comboSubjectCode.setSelectedItem(subject == null ? "" : subject.getSubjectCode());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }//GEN-LAST:event_comboSubjectDescPopupMenuWillBecomeInvisible
 
     private void comboStudentNamePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboStudentNamePopupMenuWillBecomeInvisible
+//        if (comboStudentName.getSelectedItem() == null) {
+//            return;
+//        }
+//
+//        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+//            MongoDatabase db = client.getDatabase("Enrollment");
+//
+//            Student student = Student.getStudentByName(db, comboStudentName.getSelectedItem().toString());
+//            if (student == null) {
+//                txtStudentId.setText(null);
+//            } else {
+//                int studentId = student.getStudentId();
+//                txtStudentId.setText(String.valueOf(studentId));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        PopulateCombo.studentName(comboStudentName);
+//        PopulateTable.grade(tableGrades, comboStudentName.getSelectedItem().toString());
+    }//GEN-LAST:event_comboStudentNamePopupMenuWillBecomeInvisible
+
+    private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
         if (comboStudentName.getSelectedItem() == null) {
             return;
         }
@@ -317,7 +350,25 @@ public class EncodingPanel extends javax.swing.JPanel {
 
         PopulateCombo.studentName(comboStudentName);
         PopulateTable.grade(tableGrades, comboStudentName.getSelectedItem().toString());
-    }//GEN-LAST:event_comboStudentNamePopupMenuWillBecomeInvisible
+    }//GEN-LAST:event_comboStudentNameActionPerformed
+
+    private void comboSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSubjectCodeActionPerformed
+        if (comboSubjectCode.getSelectedItem() == null) {
+            return;
+        }
+
+        PopulateCombo.subjectCode(comboSubjectCode);
+        PopulateCombo.subjectDesc(comboSubjectDesc);
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            Subject subject = Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString());
+            comboSubjectDesc.setSelectedItem(subject == null ? "" : subject.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_comboSubjectCodeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

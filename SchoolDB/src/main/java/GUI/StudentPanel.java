@@ -7,9 +7,13 @@ package GUI;
 import Classes.*;
 import Utilities.*;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
 import java.awt.Color;
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.text.AbstractDocument;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -19,6 +23,7 @@ public class StudentPanel extends javax.swing.JPanel {
 
     boolean courseFilter;
     boolean yearLevelFilter;
+    boolean saveState;
 
     /**
      * Creates new form EnrollmentPane
@@ -26,10 +31,17 @@ public class StudentPanel extends javax.swing.JPanel {
     public StudentPanel() {
         initComponents();
         ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter(new StudentIDFilter());
-
+        tableInfo.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                tableSelectionChanged(e);
+            }
+        });
+                
         PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
         courseFilter = false;
         yearLevelFilter = false;
+        saveState = false;
     }
 
     /**
@@ -42,13 +54,6 @@ public class StudentPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         panelInputs = new javax.swing.JPanel();
-        panelStudentID = new javax.swing.JPanel();
-        lblStudentID = new javax.swing.JLabel();
-        txtStudentId = new javax.swing.JTextField();
-        btnSave = new javax.swing.JButton();
-        panelStudentName = new javax.swing.JPanel();
-        lblStudentName = new javax.swing.JLabel();
-        txtStudentName = new javax.swing.JTextField();
         panelCourse = new javax.swing.JPanel();
         lblCourse = new javax.swing.JLabel();
         comboCourse = new javax.swing.JComboBox<>();
@@ -57,6 +62,17 @@ public class StudentPanel extends javax.swing.JPanel {
         lblYearLevel = new javax.swing.JLabel();
         comboYearLevel = new javax.swing.JComboBox<>();
         btnYearLevelFilter = new javax.swing.JButton();
+        panelStudentID = new javax.swing.JPanel();
+        lblStudentID = new javax.swing.JLabel();
+        txtStudentId = new javax.swing.JTextField();
+        panelStudentName = new javax.swing.JPanel();
+        lblStudentName = new javax.swing.JLabel();
+        txtStudentName = new javax.swing.JTextField();
+        btnAddSave = new javax.swing.JButton();
+        panelButtons = new javax.swing.JPanel();
+        lblStudentName1 = new javax.swing.JLabel();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         scrollInfo = new javax.swing.JScrollPane();
         tableInfo = new javax.swing.JTable();
 
@@ -68,47 +84,6 @@ public class StudentPanel extends javax.swing.JPanel {
         panelInputs.setPreferredSize(new java.awt.Dimension(100, 160));
         panelInputs.setLayout(new javax.swing.BoxLayout(panelInputs, javax.swing.BoxLayout.Y_AXIS));
 
-        panelStudentID.setOpaque(false);
-
-        lblStudentID.setText("Student ID");
-        lblStudentID.setMaximumSize(new java.awt.Dimension(100, 25));
-        lblStudentID.setMinimumSize(new java.awt.Dimension(100, 25));
-        lblStudentID.setPreferredSize(new java.awt.Dimension(100, 25));
-        panelStudentID.add(lblStudentID);
-
-        txtStudentId.setMaximumSize(new java.awt.Dimension(185, 30));
-        txtStudentId.setMinimumSize(new java.awt.Dimension(185, 30));
-        txtStudentId.setPreferredSize(new java.awt.Dimension(185, 30));
-        panelStudentID.add(txtStudentId);
-
-        btnSave.setText("Save");
-        btnSave.setMaximumSize(new java.awt.Dimension(60, 30));
-        btnSave.setMinimumSize(new java.awt.Dimension(60, 30));
-        btnSave.setPreferredSize(new java.awt.Dimension(60, 30));
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-        panelStudentID.add(btnSave);
-
-        panelInputs.add(panelStudentID);
-
-        panelStudentName.setOpaque(false);
-
-        lblStudentName.setText("Student name");
-        lblStudentName.setMaximumSize(new java.awt.Dimension(100, 25));
-        lblStudentName.setMinimumSize(new java.awt.Dimension(100, 25));
-        lblStudentName.setPreferredSize(new java.awt.Dimension(100, 25));
-        panelStudentName.add(lblStudentName);
-
-        txtStudentName.setMaximumSize(new java.awt.Dimension(250, 30));
-        txtStudentName.setMinimumSize(new java.awt.Dimension(250, 30));
-        txtStudentName.setPreferredSize(new java.awt.Dimension(250, 30));
-        panelStudentName.add(txtStudentName);
-
-        panelInputs.add(panelStudentName);
-
         panelCourse.setOpaque(false);
 
         lblCourse.setText("Course");
@@ -117,11 +92,11 @@ public class StudentPanel extends javax.swing.JPanel {
         lblCourse.setPreferredSize(new java.awt.Dimension(100, 25));
         panelCourse.add(lblCourse);
 
-        comboCourse.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BSIT", "BSCS", "BLIS" }));
-        comboCourse.setMaximumSize(new java.awt.Dimension(185, 30));
-        comboCourse.setMinimumSize(new java.awt.Dimension(185, 30));
+        comboCourse.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BLIS", "BSCS", "BSIT" }));
+        comboCourse.setMaximumSize(new java.awt.Dimension(175, 30));
+        comboCourse.setMinimumSize(new java.awt.Dimension(175, 30));
         comboCourse.setName(""); // NOI18N
-        comboCourse.setPreferredSize(new java.awt.Dimension(185, 30));
+        comboCourse.setPreferredSize(new java.awt.Dimension(175, 30));
         comboCourse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboCourseActionPerformed(evt);
@@ -130,9 +105,9 @@ public class StudentPanel extends javax.swing.JPanel {
         panelCourse.add(comboCourse);
 
         btnCourseFilter.setText("Filter");
-        btnCourseFilter.setMaximumSize(new java.awt.Dimension(60, 30));
-        btnCourseFilter.setMinimumSize(new java.awt.Dimension(60, 30));
-        btnCourseFilter.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnCourseFilter.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnCourseFilter.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnCourseFilter.setPreferredSize(new java.awt.Dimension(70, 30));
         btnCourseFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCourseFilterActionPerformed(evt);
@@ -152,10 +127,10 @@ public class StudentPanel extends javax.swing.JPanel {
 
         comboYearLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First year", "Second year", "Third year", "Fourth year", "Fifth year" }));
         comboYearLevel.setToolTipText("");
-        comboYearLevel.setMaximumSize(new java.awt.Dimension(185, 30));
-        comboYearLevel.setMinimumSize(new java.awt.Dimension(185, 30));
+        comboYearLevel.setMaximumSize(new java.awt.Dimension(175, 30));
+        comboYearLevel.setMinimumSize(new java.awt.Dimension(175, 30));
         comboYearLevel.setName(""); // NOI18N
-        comboYearLevel.setPreferredSize(new java.awt.Dimension(185, 30));
+        comboYearLevel.setPreferredSize(new java.awt.Dimension(175, 30));
         comboYearLevel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboYearLevelActionPerformed(evt);
@@ -164,9 +139,9 @@ public class StudentPanel extends javax.swing.JPanel {
         panelYearLevel.add(comboYearLevel);
 
         btnYearLevelFilter.setText("Filter");
-        btnYearLevelFilter.setMaximumSize(new java.awt.Dimension(60, 30));
-        btnYearLevelFilter.setMinimumSize(new java.awt.Dimension(60, 30));
-        btnYearLevelFilter.setPreferredSize(new java.awt.Dimension(60, 30));
+        btnYearLevelFilter.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnYearLevelFilter.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnYearLevelFilter.setPreferredSize(new java.awt.Dimension(70, 30));
         btnYearLevelFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnYearLevelFilterActionPerformed(evt);
@@ -176,7 +151,86 @@ public class StudentPanel extends javax.swing.JPanel {
 
         panelInputs.add(panelYearLevel);
 
+        panelStudentID.setOpaque(false);
+
+        lblStudentID.setText("Student ID");
+        lblStudentID.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblStudentID.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblStudentID.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelStudentID.add(lblStudentID);
+
+        txtStudentId.setEnabled(false);
+        txtStudentId.setMaximumSize(new java.awt.Dimension(250, 30));
+        txtStudentId.setMinimumSize(new java.awt.Dimension(250, 30));
+        txtStudentId.setPreferredSize(new java.awt.Dimension(250, 30));
+        panelStudentID.add(txtStudentId);
+
+        panelInputs.add(panelStudentID);
+
+        panelStudentName.setOpaque(false);
+
+        lblStudentName.setText("Student name");
+        lblStudentName.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblStudentName.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblStudentName.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelStudentName.add(lblStudentName);
+
+        txtStudentName.setEnabled(false);
+        txtStudentName.setMaximumSize(new java.awt.Dimension(175, 30));
+        txtStudentName.setMinimumSize(new java.awt.Dimension(175, 30));
+        txtStudentName.setPreferredSize(new java.awt.Dimension(175, 30));
+        panelStudentName.add(txtStudentName);
+
+        btnAddSave.setText("Add");
+        btnAddSave.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnAddSave.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnAddSave.setPreferredSize(new java.awt.Dimension(70, 30));
+        btnAddSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSaveActionPerformed(evt);
+            }
+        });
+        panelStudentName.add(btnAddSave);
+
+        panelInputs.add(panelStudentName);
+
         add(panelInputs);
+
+        panelButtons.setOpaque(false);
+
+        lblStudentName1.setText("Selected student");
+        lblStudentName1.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblStudentName1.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblStudentName1.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelButtons.add(lblStudentName1);
+
+        btnUpdate.setText("Update");
+        btnUpdate.setEnabled(false);
+        btnUpdate.setMaximumSize(new java.awt.Dimension(175, 30));
+        btnUpdate.setMinimumSize(new java.awt.Dimension(175, 30));
+        btnUpdate.setPreferredSize(new java.awt.Dimension(175, 30));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        panelButtons.add(btnUpdate);
+
+        btnDelete.setBackground(new java.awt.Color(255, 102, 102));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setEnabled(false);
+        btnDelete.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnDelete.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnDelete.setPreferredSize(new java.awt.Dimension(70, 30));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        panelButtons.add(btnDelete);
+
+        add(panelButtons);
 
         tableInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -194,8 +248,10 @@ public class StudentPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tableInfo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableInfo.getTableHeader().setReorderingAllowed(false);
         scrollInfo.setViewportView(tableInfo);
+        tableInfo.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tableInfo.getColumnModel().getColumnCount() > 0) {
             tableInfo.getColumnModel().getColumn(0).setMinWidth(0);
             tableInfo.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -228,28 +284,62 @@ public class StudentPanel extends javax.swing.JPanel {
         PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_btnYearLevelFilterActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+    private void btnAddSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSaveActionPerformed
+        if (!saveState) {
+            saveState = true;
+            comboCourse.setEnabled(false);
+            comboYearLevel.setEnabled(false);
+            txtStudentId.setEnabled(true);
+            txtStudentName.setEnabled(true);
+            btnAddSave.setText("Save");
+        } else {
+            if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Enter a valid student ID and name!", "Input error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+                MongoDatabase db = client.getDatabase("Enrollment");              
+                MongoCollection<Document> collection = db.getCollection("Student");
+
+                Student student = new Student(
+                        Integer.valueOf(txtStudentId.getText().trim()),
+                        txtStudentName.getText().trim(),
+                        comboCourse.getSelectedItem().toString(),
+                        comboYearLevel.getSelectedIndex() + 1
+                );
+                
+                Bson filterId = Filters.eq("StudentID", student.getStudentId());
+                Bson filterName = Filters.eq("StudentName", student.getStudentName());
+
+                Document resultId = collection.find(filterId).first(); 
+                if (resultId != null) {
+                    JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                    txtStudentId.requestFocus();
+                    return;
+                }
+                Document resultName = collection.find(filterName).first(); 
+                if (resultName != null) {
+                    JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                    txtStudentName.requestFocus();
+                    return;
+                }
+
+                student.addStudent(db);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            saveState = false;
+            comboCourse.setEnabled(true);
+            comboYearLevel.setEnabled(true);
+            txtStudentId.setEnabled(false);
+            txtStudentName.setEnabled(false);
+            btnAddSave.setText("Add");
         }
-
-        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase("Enrollment");
-
-            Student student = new Student(
-                    Integer.valueOf(txtStudentId.getText().trim()),
-                    txtStudentName.getText().trim(),
-                    comboCourse.getSelectedItem().toString(),
-                    comboYearLevel.getSelectedIndex() + 1
-            );
-
-            student.addStudent(db);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
         PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnAddSaveActionPerformed
 
     private void comboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCourseActionPerformed
         PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
@@ -259,17 +349,52 @@ public class StudentPanel extends javax.swing.JPanel {
         PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_comboYearLevelActionPerformed
 
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tableSelectionChanged(ListSelectionEvent evt) {
+        if (!evt.getValueIsAdjusting()) {
+            if (tableInfo.getSelectedRow() >= 0) {
+                int row = tableInfo.getSelectedRow();
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+
+                txtStudentId.setText(tableInfo.getValueAt(row, 0).toString());
+                txtStudentName.setText(tableInfo.getValueAt(row, 1).toString());
+//                comboCourse.setSelectedItem(tableInfo.getValueAt(row, 2).toString());
+//                comboYearLevel.setSelectedItem(tableInfo.getValueAt(row, 3).toString());
+            }
+//            else {
+//                btnUpdate.setEnabled(false);
+//                btnDelete.setEnabled(false);
+//
+//                txtStudentId.setText("");
+//                txtStudentName.setText("");
+//                comboCourse.setSelectedIndex(0);
+//                comboYearLevel.setSelectedIndex(0);
+//            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddSave;
     private javax.swing.JButton btnCourseFilter;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnYearLevelFilter;
     private javax.swing.JComboBox<String> comboCourse;
     private javax.swing.JComboBox<String> comboYearLevel;
     private javax.swing.JLabel lblCourse;
     private javax.swing.JLabel lblStudentID;
     private javax.swing.JLabel lblStudentName;
+    private javax.swing.JLabel lblStudentName1;
     private javax.swing.JLabel lblYearLevel;
+    private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelCourse;
     private javax.swing.JPanel panelInputs;
     private javax.swing.JPanel panelStudentID;

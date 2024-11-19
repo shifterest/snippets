@@ -122,24 +122,54 @@ public class Student {
     public void addStudent(MongoDatabase db) {
         MongoCollection<Document> collection = db.getCollection("Student");
 
-        Bson filters = Filters.or(Filters.eq("StudentID", studentId), Filters.eq("StudentName", studentName));
-        Document result = collection.find(filters).first(); 
+//        Bson filterId = Filters.eq("StudentID", studentId);
+//        Bson filterName = Filters.eq("StudentName", studentName);
+//        
+//        Document resultId = collection.find(filterId).first(); 
+//        if (resultId != null) {
+//            JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+//            id.requestFocus();
+//            return;
+//        }
+//        Document resultName = collection.find(filterName).first(); 
+//        if (resultName != null) {
+//            JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+//            name.requestFocus();
+//            return;
+//        }
         
-        if (result != null) {
+//        if (resultId != null) {
 //            JOptionPane.showMessageDialog(null, "Student already exists!", "Error", JOptionPane.ERROR_MESSAGE);
-            Student existingStudent = fromDocument(result);
-            if (course.equals(existingStudent.getCourse()) && yearLevel == existingStudent.getYearLevel()) {
-                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                Bson updates = Updates.combine(Updates.set("Course", course), Updates.set("YearLevel", yearLevel));
-                collection.updateOne(filters, updates);
-                JOptionPane.showMessageDialog(null, "Student updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
-            }
-            return;
-        }
+//            Student existingStudent = fromDocument(resultId);
+//            if (course.equals(existingStudent.getCourse()) && yearLevel == existingStudent.getYearLevel()) {
+//                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
+//            } else {
+//                Bson updates = Updates.combine(Updates.set("Course", course), Updates.set("YearLevel", yearLevel));
+//                collection.updateOne(filters, updates);
+//                JOptionPane.showMessageDialog(null, "Student updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
+//            }
+//            return;
+//        }
 
         collection.insertOne(this.toDocument());
-        JOptionPane.showMessageDialog(null, "Student added.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Student added!", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void deleteStudent(MongoDatabase db) {
+        MongoCollection<Document> students = db.getCollection("Student");
+        Document resultStudent = students.find(Filters.eq("StudentID", studentId)).first(); 
+        if (resultStudent != null) {
+            MongoCollection<Document> enrollments = db.getCollection("Enrollment");
+            Document resultEnrollment = enrollments.find(Filters.eq("StudentID", studentId)).first(); 
+            if (resultEnrollment != null) {
+                JOptionPane.showMessageDialog(null, "Clear this student's enrollments before deleting them!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            students.deleteOne(resultStudent);
+            JOptionPane.showMessageDialog(null, "Student deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Student does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public int getYearLevel() {

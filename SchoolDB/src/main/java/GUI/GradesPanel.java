@@ -18,28 +18,9 @@ public class GradesPanel extends javax.swing.JPanel {
      */
     public GradesPanel() {
         initComponents();
-        populateCombo();
+        PopulateCombo.studentName(comboStudentName);
         String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
         PopulateTable.grade(tableGrades, name);
-    }
-    
-    private void populateCombo() {
-        Object curr = comboStudentName.getSelectedItem();
-        comboStudentName.removeAllItems();
-        comboStudentName.addItem(null);
-        
-        try (MongoClient client = MongoClients.create ("mongodb://localhost:27017")) {
-            MongoDatabase db = client.getDatabase ("Enrollment");
-            
-            ArrayList<String> names = Student.getStudentNames(db);
-            for (String name : names) {
-                comboStudentName.addItem(name);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        comboStudentName.setSelectedItem(curr);
     }
 
     /**
@@ -132,7 +113,7 @@ public class GradesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
-        populateCombo();
+        PopulateCombo.studentName(comboStudentName);
         String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
         PopulateTable.grade(tableGrades, name);
         double gpa = Calculate.GPA(name);
