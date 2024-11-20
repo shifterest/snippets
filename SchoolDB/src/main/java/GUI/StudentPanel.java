@@ -7,13 +7,11 @@ package GUI;
 import Classes.*;
 import Utilities.*;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
 import java.awt.Color;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.AbstractDocument;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 /**
  *
@@ -21,9 +19,10 @@ import org.bson.conversions.Bson;
  */
 public class StudentPanel extends javax.swing.JPanel {
 
-    boolean courseFilter;
-    boolean yearLevelFilter;
-    boolean saveState;
+    private boolean courseFilter;
+    private boolean yearLevelFilter;
+    private boolean saveState;
+    private boolean isAdjusting;
 
     /**
      * Creates new form EnrollmentPane
@@ -31,17 +30,18 @@ public class StudentPanel extends javax.swing.JPanel {
     public StudentPanel() {
         initComponents();
         ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter(new StudentIDFilter());
-        tableInfo.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        tableStudents.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 tableSelectionChanged(e);
             }
         });
-                
-        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+
+        PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
         courseFilter = false;
         yearLevelFilter = false;
         saveState = false;
+        isAdjusting = false;
     }
 
     /**
@@ -69,12 +69,13 @@ public class StudentPanel extends javax.swing.JPanel {
         lblStudentName = new javax.swing.JLabel();
         txtStudentName = new javax.swing.JTextField();
         btnAddSave = new javax.swing.JButton();
-        panelButtons = new javax.swing.JPanel();
+        panelSelected = new javax.swing.JPanel();
         lblStudentName1 = new javax.swing.JLabel();
+        btnDeselect = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         scrollInfo = new javax.swing.JScrollPane();
-        tableInfo = new javax.swing.JTable();
+        tableStudents = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 204, 255));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
@@ -196,25 +197,37 @@ public class StudentPanel extends javax.swing.JPanel {
 
         add(panelInputs);
 
-        panelButtons.setOpaque(false);
+        panelSelected.setOpaque(false);
 
         lblStudentName1.setText("Selected student");
         lblStudentName1.setMaximumSize(new java.awt.Dimension(100, 25));
         lblStudentName1.setMinimumSize(new java.awt.Dimension(100, 25));
         lblStudentName1.setPreferredSize(new java.awt.Dimension(100, 25));
-        panelButtons.add(lblStudentName1);
+        panelSelected.add(lblStudentName1);
+
+        btnDeselect.setText("Deselect");
+        btnDeselect.setEnabled(false);
+        btnDeselect.setMaximumSize(new java.awt.Dimension(85, 30));
+        btnDeselect.setMinimumSize(new java.awt.Dimension(85, 30));
+        btnDeselect.setPreferredSize(new java.awt.Dimension(85, 30));
+        btnDeselect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeselectActionPerformed(evt);
+            }
+        });
+        panelSelected.add(btnDeselect);
 
         btnUpdate.setText("Update");
         btnUpdate.setEnabled(false);
-        btnUpdate.setMaximumSize(new java.awt.Dimension(175, 30));
-        btnUpdate.setMinimumSize(new java.awt.Dimension(175, 30));
-        btnUpdate.setPreferredSize(new java.awt.Dimension(175, 30));
+        btnUpdate.setMaximumSize(new java.awt.Dimension(85, 30));
+        btnUpdate.setMinimumSize(new java.awt.Dimension(85, 30));
+        btnUpdate.setPreferredSize(new java.awt.Dimension(85, 30));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
-        panelButtons.add(btnUpdate);
+        panelSelected.add(btnUpdate);
 
         btnDelete.setBackground(new java.awt.Color(255, 102, 102));
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
@@ -228,11 +241,11 @@ public class StudentPanel extends javax.swing.JPanel {
                 btnDeleteActionPerformed(evt);
             }
         });
-        panelButtons.add(btnDelete);
+        panelSelected.add(btnDelete);
 
-        add(panelButtons);
+        add(panelSelected);
 
-        tableInfo.setModel(new javax.swing.table.DefaultTableModel(
+        tableStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -248,17 +261,22 @@ public class StudentPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tableInfo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tableInfo.getTableHeader().setReorderingAllowed(false);
-        scrollInfo.setViewportView(tableInfo);
-        tableInfo.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        if (tableInfo.getColumnModel().getColumnCount() > 0) {
-            tableInfo.getColumnModel().getColumn(0).setMinWidth(0);
-            tableInfo.getColumnModel().getColumn(0).setPreferredWidth(0);
-            tableInfo.getColumnModel().getColumn(2).setMinWidth(0);
-            tableInfo.getColumnModel().getColumn(2).setPreferredWidth(0);
-            tableInfo.getColumnModel().getColumn(3).setMinWidth(0);
-            tableInfo.getColumnModel().getColumn(3).setPreferredWidth(0);
+        tableStudents.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableStudents.getTableHeader().setReorderingAllowed(false);
+        tableStudents.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tableStudentsKeyPressed(evt);
+            }
+        });
+        scrollInfo.setViewportView(tableStudents);
+        tableStudents.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tableStudents.getColumnModel().getColumnCount() > 0) {
+            tableStudents.getColumnModel().getColumn(0).setMinWidth(0);
+            tableStudents.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tableStudents.getColumnModel().getColumn(2).setMinWidth(0);
+            tableStudents.getColumnModel().getColumn(2).setPreferredWidth(0);
+            tableStudents.getColumnModel().getColumn(3).setMinWidth(0);
+            tableStudents.getColumnModel().getColumn(3).setPreferredWidth(0);
         }
 
         add(scrollInfo);
@@ -271,7 +289,7 @@ public class StudentPanel extends javax.swing.JPanel {
         } else {
             btnCourseFilter.setBackground(Color.WHITE);
         }
-        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+        PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_btnCourseFilterActionPerformed
 
     private void btnYearLevelFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnYearLevelFilterActionPerformed
@@ -281,103 +299,197 @@ public class StudentPanel extends javax.swing.JPanel {
         } else {
             btnYearLevelFilter.setBackground(Color.WHITE);
         }
-        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+        PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
     }//GEN-LAST:event_btnYearLevelFilterActionPerformed
 
     private void btnAddSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSaveActionPerformed
-        if (!saveState) {
-            saveState = true;
-            comboCourse.setEnabled(false);
-            comboYearLevel.setEnabled(false);
-            txtStudentId.setEnabled(true);
-            txtStudentName.setEnabled(true);
-            btnAddSave.setText("Save");
-        } else {
+        if (saveState) {
             if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Enter a valid student ID and name!", "Input error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
-                MongoDatabase db = client.getDatabase("Enrollment");              
+                MongoDatabase db = client.getDatabase("Enrollment");
                 MongoCollection<Document> collection = db.getCollection("Student");
 
                 Student student = new Student(
-                        Integer.valueOf(txtStudentId.getText().trim()),
+                        Integer.valueOf(txtStudentId.getText()),
                         txtStudentName.getText().trim(),
                         comboCourse.getSelectedItem().toString(),
                         comboYearLevel.getSelectedIndex() + 1
                 );
-                
-                Bson filterId = Filters.eq("StudentID", student.getStudentId());
-                Bson filterName = Filters.eq("StudentName", student.getStudentName());
 
-                Document resultId = collection.find(filterId).first(); 
-                if (resultId != null) {
+                if (Student.getStudentById(db, student.getStudentId()) != null) {
                     JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
                     txtStudentId.requestFocus();
                     return;
                 }
-                Document resultName = collection.find(filterName).first(); 
-                if (resultName != null) {
+                if (Student.getStudentByName(db, student.getStudentName()) != null) {
                     JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
                     txtStudentName.requestFocus();
                     return;
                 }
 
                 student.addStudent(db);
+                txtStudentId.setText("");
+                txtStudentName.setText("");
+                PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+                JOptionPane.showMessageDialog(null, "Student added!", "Information", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
+
             saveState = false;
+            setSaveState();
+        } else {
+            saveState = true;
+            setSaveState();
+        }
+    }//GEN-LAST:event_btnAddSaveActionPerformed
+
+    private void comboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCourseActionPerformed
+        if (courseFilter) {
+            PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+        }
+    }//GEN-LAST:event_comboCourseActionPerformed
+
+    private void comboYearLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboYearLevelActionPerformed
+        if (yearLevelFilter) {
+            PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+        }
+    }//GEN-LAST:event_comboYearLevelActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            MongoCollection<Document> collection = db.getCollection("Student");
+            int id = Integer.parseInt(tableStudents.getValueAt(tableStudents.getSelectedRow(), 0).toString());
+            Student s = Student.getStudentById(db, id);
+
+            if (s.hasEnrollments(db)) {
+                JOptionPane.showMessageDialog(null, "Remove this student's enrollments before deleting it!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            s.deleteStudent(db);
+            PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+            JOptionPane.showMessageDialog(null, "Student deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnDeselectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeselectActionPerformed
+        tableStudents.clearSelection();
+    }//GEN-LAST:event_btnDeselectActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Enter a valid student ID and name!", "Input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            MongoCollection<Document> collection = db.getCollection("Student");
+            int oldId = Integer.parseInt(tableStudents.getValueAt(tableStudents.getSelectedRow(), 0).toString());
+            Student oldS = Student.getStudentById(db, oldId);
+            Student newS = new Student(
+                    Integer.valueOf(txtStudentId.getText()),
+                    txtStudentName.getText().trim(),
+                    comboCourse.getSelectedItem().toString(),
+                    comboYearLevel.getSelectedIndex() + 1
+            );
+
+            if (oldId != newS.getStudentId() && oldS.hasEnrollments(db)) {
+                JOptionPane.showMessageDialog(null, "Remove this student's enrollments before updating it!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (Student.getStudentById(db, newS.getStudentId()) != null && !Student.getStudentById(db, newS.getStudentId()).equals(oldS)) {
+                JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                txtStudentId.requestFocus();
+                return;
+            }
+            if (Student.getStudentByName(db, newS.getStudentName()) != null && !Student.getStudentByName(db, newS.getStudentName()).equals(oldS)) {
+                JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                txtStudentName.requestFocus();
+                return;
+            }
+
+            oldS.deleteStudent(db);
+            newS.addStudent(db);
+            PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+            JOptionPane.showMessageDialog(null, "Student updated!", "Information", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void tableStudentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableStudentsKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) {
+            btnDeleteActionPerformed(null);
+        }
+    }//GEN-LAST:event_tableStudentsKeyPressed
+
+    private void tableSelectionChanged(ListSelectionEvent evt) {
+        if (isAdjusting || evt.getValueIsAdjusting()) {
+            return;
+        }
+
+        isAdjusting = true;
+
+        if (tableStudents.getSelectedRow() >= 0) {
+            int row = tableStudents.getSelectedRow();
+            btnDeselect.setEnabled(true);
+            btnUpdate.setEnabled(true);
+            btnDelete.setEnabled(true);
+            btnCourseFilter.setEnabled(false);
+            btnYearLevelFilter.setEnabled(false);
+            btnAddSave.setEnabled(false);
+            comboCourse.setEnabled(true);
+            comboYearLevel.setEnabled(true);
+            txtStudentId.setEnabled(true);
+            txtStudentName.setEnabled(true);
+            saveState = false;
+
+            txtStudentId.setText(tableStudents.getValueAt(row, 0).toString());
+            txtStudentName.setText(tableStudents.getValueAt(row, 1).toString());
+            comboCourse.setSelectedItem(tableStudents.getValueAt(row, 2).toString());
+            comboYearLevel.setSelectedItem(tableStudents.getValueAt(row, 3).toString());
+
+            tableStudents.setRowSelectionInterval(row, row);
+        } else {
+            btnDeselect.setEnabled(false);
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            btnCourseFilter.setEnabled(true);
+            btnYearLevelFilter.setEnabled(true);
+            btnAddSave.setEnabled(true);
+            setSaveState();
+
+            txtStudentId.setText("");
+            txtStudentName.setText("");
+        }
+
+        isAdjusting = false;
+    }
+
+    private void setSaveState() {
+        if (saveState) {
+            comboCourse.setEnabled(false);
+            comboYearLevel.setEnabled(false);
+            txtStudentId.setEnabled(true);
+            txtStudentName.setEnabled(true);
+            btnAddSave.setText("Save");
+        } else {
             comboCourse.setEnabled(true);
             comboYearLevel.setEnabled(true);
             txtStudentId.setEnabled(false);
             txtStudentName.setEnabled(false);
             btnAddSave.setText("Add");
-        }
-        
-        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
-    }//GEN-LAST:event_btnAddSaveActionPerformed
-
-    private void comboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCourseActionPerformed
-        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
-    }//GEN-LAST:event_comboCourseActionPerformed
-
-    private void comboYearLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboYearLevelActionPerformed
-        PopulateTable.student(tableInfo, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
-    }//GEN-LAST:event_comboYearLevelActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void tableSelectionChanged(ListSelectionEvent evt) {
-        if (!evt.getValueIsAdjusting()) {
-            if (tableInfo.getSelectedRow() >= 0) {
-                int row = tableInfo.getSelectedRow();
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-
-                txtStudentId.setText(tableInfo.getValueAt(row, 0).toString());
-                txtStudentName.setText(tableInfo.getValueAt(row, 1).toString());
-//                comboCourse.setSelectedItem(tableInfo.getValueAt(row, 2).toString());
-//                comboYearLevel.setSelectedItem(tableInfo.getValueAt(row, 3).toString());
-            }
-//            else {
-//                btnUpdate.setEnabled(false);
-//                btnDelete.setEnabled(false);
-//
-//                txtStudentId.setText("");
-//                txtStudentName.setText("");
-//                comboCourse.setSelectedIndex(0);
-//                comboYearLevel.setSelectedIndex(0);
-//            }
         }
     }
 
@@ -385,6 +497,7 @@ public class StudentPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnAddSave;
     private javax.swing.JButton btnCourseFilter;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeselect;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnYearLevelFilter;
     private javax.swing.JComboBox<String> comboCourse;
@@ -394,14 +507,14 @@ public class StudentPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblStudentName;
     private javax.swing.JLabel lblStudentName1;
     private javax.swing.JLabel lblYearLevel;
-    private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelCourse;
     private javax.swing.JPanel panelInputs;
+    private javax.swing.JPanel panelSelected;
     private javax.swing.JPanel panelStudentID;
     private javax.swing.JPanel panelStudentName;
     private javax.swing.JPanel panelYearLevel;
     private javax.swing.JScrollPane scrollInfo;
-    private javax.swing.JTable tableInfo;
+    private javax.swing.JTable tableStudents;
     private javax.swing.JTextField txtStudentId;
     private javax.swing.JTextField txtStudentName;
     // End of variables declaration//GEN-END:variables

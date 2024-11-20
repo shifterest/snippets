@@ -7,9 +7,7 @@ package Classes;
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import java.util.ArrayList;
-import javax.swing.*;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 /**
  *
@@ -27,6 +25,23 @@ public class Student {
         this.studentName = studentName;
         this.course = course;
         this.yearLevel = yearLevel;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Student s = (Student) obj;
+
+        return studentId == s.studentId
+                && yearLevel == s.yearLevel
+                && studentName.equals(s.studentName)
+                && course.equals(s.course);
     }
 
     public static Student fromDocument(Document doc) {
@@ -53,8 +68,8 @@ public class Student {
         return doc;
     }
 
-    public static ArrayList<Student> getStudents(MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("Student");
+    public static ArrayList<Student> getStudents(MongoDatabase db) {
+        MongoCollection<Document> collection = db.getCollection("Student");
         ArrayList<Student> students = new ArrayList<>();
 
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
@@ -72,8 +87,8 @@ public class Student {
         return students;
     }
 
-    public static ArrayList<String> getStudentNames(MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("Student");
+    public static ArrayList<String> getStudentNames(MongoDatabase db) {
+        MongoCollection<Document> collection = db.getCollection("Student");
         ArrayList<String> studentNames = new ArrayList<>();
 
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
@@ -88,15 +103,15 @@ public class Student {
         return studentNames;
     }
 
-    public static Student getStudentById(MongoDatabase database, int id) {
-        MongoCollection<Document> collection = database.getCollection("Student");
+    public static Student getStudentById(MongoDatabase db, int id) {
+        MongoCollection<Document> collection = db.getCollection("Student");
         Document query = new Document("StudentID", id);
 
         return fromDocument(collection.find(query).first());
     }
 
-    public static Student getStudentByName(MongoDatabase database, String name) {
-        MongoCollection<Document> collection = database.getCollection("Student");
+    public static Student getStudentByName(MongoDatabase db, String name) {
+        MongoCollection<Document> collection = db.getCollection("Student");
         Document query = new Document("StudentName", name);
 
         return fromDocument(collection.find(query).first());
@@ -122,54 +137,35 @@ public class Student {
     public void addStudent(MongoDatabase db) {
         MongoCollection<Document> collection = db.getCollection("Student");
 
-//        Bson filterId = Filters.eq("StudentID", studentId);
-//        Bson filterName = Filters.eq("StudentName", studentName);
-//        
-//        Document resultId = collection.find(filterId).first(); 
-//        if (resultId != null) {
-//            JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
-//            id.requestFocus();
-//            return;
-//        }
-//        Document resultName = collection.find(filterName).first(); 
-//        if (resultName != null) {
-//            JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
-//            name.requestFocus();
-//            return;
-//        }
-        
-//        if (resultId != null) {
-//            JOptionPane.showMessageDialog(null, "Student already exists!", "Error", JOptionPane.ERROR_MESSAGE);
-//            Student existingStudent = fromDocument(resultId);
-//            if (course.equals(existingStudent.getCourse()) && yearLevel == existingStudent.getYearLevel()) {
-//                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
-//            } else {
-//                Bson updates = Updates.combine(Updates.set("Course", course), Updates.set("YearLevel", yearLevel));
-//                collection.updateOne(filters, updates);
-//                JOptionPane.showMessageDialog(null, "Student updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
-//            }
-//            return;
-//        }
-
         collection.insertOne(this.toDocument());
-        JOptionPane.showMessageDialog(null, "Student added!", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     public void deleteStudent(MongoDatabase db) {
         MongoCollection<Document> students = db.getCollection("Student");
-        Document resultStudent = students.find(Filters.eq("StudentID", studentId)).first(); 
-        if (resultStudent != null) {
-            MongoCollection<Document> enrollments = db.getCollection("Enrollment");
-            Document resultEnrollment = enrollments.find(Filters.eq("StudentID", studentId)).first(); 
-            if (resultEnrollment != null) {
-                JOptionPane.showMessageDialog(null, "Clear this student's enrollments before deleting them!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            students.deleteOne(resultStudent);
-            JOptionPane.showMessageDialog(null, "Student deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Student does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+        Document r = students.find(Filters.eq("StudentID", studentId)).first();
+        if (r != null) {
+            students.deleteOne(r);
         }
+    }
+
+    public boolean hasEnrollments(MongoDatabase db) {
+        MongoCollection<Document> enrollments = db.getCollection("Enrollment");
+        Document e = enrollments.find(Filters.eq("StudentID", studentId)).first();
+
+        return e != null;
+    }
+
+    public ArrayList<Enrollment> getEnrollments(MongoDatabase db) {
+        ArrayList<Enrollment> enrollmentsList = new ArrayList<>();
+
+        MongoCollection<Document> enrollments = db.getCollection("Enrollment");
+        FindIterable<Document> enrollmentsIter = enrollments.find(Filters.eq("StudentID", studentId));
+
+        for (Document e : enrollmentsIter) {
+            enrollmentsList.add(Enrollment.fromDocument(db, e));
+        }
+
+        return enrollmentsList;
     }
 
     public int getYearLevel() {

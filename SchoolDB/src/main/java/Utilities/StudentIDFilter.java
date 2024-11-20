@@ -10,7 +10,8 @@ import javax.swing.text.*;
  *
  * @author candy
  */
-public class StudentIDFilter extends DocumentFilter{
+public class StudentIDFilter extends DocumentFilter {
+
     @Override
     public void insertString(DocumentFilter.FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
         if (isInt(string)) {
@@ -31,9 +32,11 @@ public class StudentIDFilter extends DocumentFilter{
     }
 
     private boolean isInt(String text) {
-        if (text == null || text.isBlank()) return true;
+        if (text == null || text.isBlank()) {
+            return true;
+        }
         try {
-            Integer.valueOf (text);
+            Integer.valueOf(text);
             return true;
         } catch (NumberFormatException e) {
             return false;

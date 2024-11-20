@@ -8,6 +8,8 @@ import Classes.*;
 import Utilities.*;
 import com.mongodb.client.*;
 import javax.swing.*;
+import javax.swing.event.*;
+import org.bson.Document;
 
 /**
  *
@@ -15,15 +17,28 @@ import javax.swing.*;
  */
 public class SubjectPanel extends javax.swing.JPanel {
 
-    boolean courseFilter;
-    boolean yearLevelFilter;
+    String codeToAdd;
+    String descToAdd;
+    boolean saveState;
+    boolean isAdjusting;
 
     /**
      * Creates new form EnrollmentPane
      */
     public SubjectPanel() {
         initComponents();
+        tableSubjects.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                tableSelectionChanged(e);
+            }
+        });
+        
         PopulateTable.subject(tableSubjects);
+        saveState = false;
+        isAdjusting = false;
+        codeToAdd = null;
+        descToAdd = null;
     }
 
     /**
@@ -45,14 +60,19 @@ public class SubjectPanel extends javax.swing.JPanel {
         panelUnits = new javax.swing.JPanel();
         lblUnits = new javax.swing.JLabel();
         comboUnits = new javax.swing.JComboBox<>();
-        btnSave = new javax.swing.JButton();
+        btnAddSave = new javax.swing.JButton();
+        panelSelected = new javax.swing.JPanel();
+        lblStudentName1 = new javax.swing.JLabel();
+        btnDeselect = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         scrollSubjects = new javax.swing.JScrollPane();
         tableSubjects = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 204, 204));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
 
-        panelInputs.setMaximumSize(new java.awt.Dimension(32767, 160));
+        panelInputs.setMaximumSize(new java.awt.Dimension(32767, 120));
         panelInputs.setOpaque(false);
         panelInputs.setPreferredSize(new java.awt.Dimension(100, 120));
         panelInputs.setLayout(new javax.swing.BoxLayout(panelInputs, javax.swing.BoxLayout.Y_AXIS));
@@ -95,34 +115,77 @@ public class SubjectPanel extends javax.swing.JPanel {
         lblUnits.setPreferredSize(new java.awt.Dimension(100, 25));
         panelUnits.add(lblUnits);
 
-        comboUnits.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1.0", "2.0", "3.0", "4.0", "5.0" }));
+        comboUnits.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1.0", "2.0", "3.0", "4.0", "5.0", "6.0" }));
         comboUnits.setToolTipText("");
-        comboUnits.setMaximumSize(new java.awt.Dimension(185, 30));
-        comboUnits.setMinimumSize(new java.awt.Dimension(185, 30));
+        comboUnits.setMaximumSize(new java.awt.Dimension(175, 30));
+        comboUnits.setMinimumSize(new java.awt.Dimension(175, 30));
         comboUnits.setName(""); // NOI18N
-        comboUnits.setPreferredSize(new java.awt.Dimension(185, 30));
-        comboUnits.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboUnitsActionPerformed(evt);
-            }
-        });
+        comboUnits.setPreferredSize(new java.awt.Dimension(175, 30));
         panelUnits.add(comboUnits);
         comboUnits.getAccessibleContext().setAccessibleName("");
 
-        btnSave.setText("Save");
-        btnSave.setMaximumSize(new java.awt.Dimension(60, 30));
-        btnSave.setMinimumSize(new java.awt.Dimension(60, 30));
-        btnSave.setPreferredSize(new java.awt.Dimension(60, 30));
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnAddSave.setText("Save");
+        btnAddSave.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnAddSave.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnAddSave.setPreferredSize(new java.awt.Dimension(70, 30));
+        btnAddSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnAddSaveActionPerformed(evt);
             }
         });
-        panelUnits.add(btnSave);
+        panelUnits.add(btnAddSave);
 
         panelInputs.add(panelUnits);
 
         add(panelInputs);
+
+        panelSelected.setOpaque(false);
+
+        lblStudentName1.setText("Selected subject");
+        lblStudentName1.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblStudentName1.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblStudentName1.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelSelected.add(lblStudentName1);
+
+        btnDeselect.setText("Deselect");
+        btnDeselect.setEnabled(false);
+        btnDeselect.setMaximumSize(new java.awt.Dimension(85, 30));
+        btnDeselect.setMinimumSize(new java.awt.Dimension(85, 30));
+        btnDeselect.setPreferredSize(new java.awt.Dimension(85, 30));
+        btnDeselect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeselectActionPerformed(evt);
+            }
+        });
+        panelSelected.add(btnDeselect);
+
+        btnUpdate.setText("Update");
+        btnUpdate.setEnabled(false);
+        btnUpdate.setMaximumSize(new java.awt.Dimension(85, 30));
+        btnUpdate.setMinimumSize(new java.awt.Dimension(85, 30));
+        btnUpdate.setPreferredSize(new java.awt.Dimension(85, 30));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        panelSelected.add(btnUpdate);
+
+        btnDelete.setBackground(new java.awt.Color(255, 102, 102));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setEnabled(false);
+        btnDelete.setMaximumSize(new java.awt.Dimension(70, 30));
+        btnDelete.setMinimumSize(new java.awt.Dimension(70, 30));
+        btnDelete.setPreferredSize(new java.awt.Dimension(70, 30));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        panelSelected.add(btnDelete);
+
+        add(panelSelected);
 
         tableSubjects.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -141,6 +204,11 @@ public class SubjectPanel extends javax.swing.JPanel {
             }
         });
         tableSubjects.getTableHeader().setReorderingAllowed(false);
+        tableSubjects.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tableSubjectsKeyPressed(evt);
+            }
+        });
         scrollSubjects.setViewportView(tableSubjects);
         if (tableSubjects.getColumnModel().getColumnCount() > 0) {
             tableSubjects.getColumnModel().getColumn(0).setMinWidth(0);
@@ -152,43 +220,180 @@ public class SubjectPanel extends javax.swing.JPanel {
         add(scrollSubjects);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnAddSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSaveActionPerformed
+        if (saveState) {
+            if (txtSubjectCode.getText().isBlank() || txtDescription.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "Enter a valid subject code and description!", "Input error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+                MongoDatabase db = client.getDatabase("Enrollment");
+                MongoCollection<Document> collection = db.getCollection("Subject");
+
+                Subject s =  new Subject(
+                    codeToAdd,
+                    descToAdd,
+                    Double.parseDouble(comboUnits.getSelectedItem().toString())
+                );
+                if (Subject.getSubjectByCode(db, s.getSubjectCode()) != null) {
+                    JOptionPane.showMessageDialog(null, "A subject with this code already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                    txtSubjectCode.requestFocus();
+                } else {
+                    s.addSubject(db);
+                    txtSubjectCode.setText("");
+                    txtDescription.setText("");
+                    PopulateTable.subject(tableSubjects);
+                    JOptionPane.showMessageDialog(null, "Subject added!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            codeToAdd = null;
+            descToAdd = null;
+            saveState = false;
+            setSaveState();
+        } else {
+            codeToAdd = txtSubjectCode.getText().trim();
+            descToAdd = txtDescription.getText().trim();
+            saveState = true;
+            setSaveState();
+        }
+    }//GEN-LAST:event_btnAddSaveActionPerformed
+
+    private void btnDeselectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeselectActionPerformed
+        tableSubjects.clearSelection();
+    }//GEN-LAST:event_btnDeselectActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            MongoCollection<Document> collection = db.getCollection("Subject");
+            String code = tableSubjects.getValueAt(tableSubjects.getSelectedRow(), 0).toString();
+            Subject s = Subject.getSubjectByCode(db, code);
+
+            if (s.hasEnrollments(db)) {
+                JOptionPane.showMessageDialog(null, "Remove this subjects's enrollments before deleting it!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            s.deleteSubject(db);
+            PopulateTable.subject(tableSubjects);
+            JOptionPane.showMessageDialog(null, "Subject deleted!", "Information", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         if (txtSubjectCode.getText().isBlank() || txtDescription.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Enter a valid subject code and description!", "Input error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase("Enrollment");
 
-            Subject s = new Subject(
-                    txtSubjectCode.getText().trim(),
-                    txtDescription.getText().trim(),
-                    Double.parseDouble(comboUnits.getSelectedItem().toString())
+            MongoCollection<Document> collection = db.getCollection("Subject");
+            String oldCode = tableSubjects.getValueAt(tableSubjects.getSelectedRow(), 0).toString();
+            Subject oldS = Subject.getSubjectByCode(db, oldCode);
+            Subject newS = new Subject(
+                txtSubjectCode.getText().trim(),
+                txtDescription.getText().trim(),
+                Double.parseDouble(comboUnits.getSelectedItem().toString())
             );
+            
+            if (!oldCode.equals(newS.getSubjectCode()) && oldS.hasEnrollments(db)) {
+                JOptionPane.showMessageDialog(null, "Remove this subject's enrollments before updating it!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (Subject.getSubjectByCode(db, newS.getSubjectCode()) != null && !Subject.getSubjectByCode(db, newS.getSubjectCode()).equals(oldS)) {
+                JOptionPane.showMessageDialog(null, "A subject with this code already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                txtSubjectCode.requestFocus();
+                return;
+            }
 
-            s.addSubject(db);
+            oldS.deleteSubject(db);
+            newS.addSubject(db);
+            PopulateTable.subject(tableSubjects);
+            JOptionPane.showMessageDialog(null, "Subject updated!", "Information", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        PopulateTable.subject(tableSubjects);
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void comboUnitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboUnitsActionPerformed
-        PopulateTable.subject(tableSubjects);
-        txtSubjectCode.setText("");
-        txtDescription.setText("");
-    }//GEN-LAST:event_comboUnitsActionPerformed
+    private void tableSubjectsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableSubjectsKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) {
+            btnDeleteActionPerformed(null);
+        }
+    }//GEN-LAST:event_tableSubjectsKeyPressed
 
+    private void tableSelectionChanged(ListSelectionEvent evt) {
+        if (isAdjusting || evt.getValueIsAdjusting()) {
+            return;
+        }
+
+        isAdjusting = true;
+
+        if (tableSubjects.getSelectedRow() >= 0) {
+            int row = tableSubjects.getSelectedRow();
+            btnDeselect.setEnabled(true);
+            btnUpdate.setEnabled(true);
+            btnDelete.setEnabled(true);
+            btnAddSave.setEnabled(false);
+            txtSubjectCode.setEnabled(false);
+            txtDescription.setEnabled(true);
+            comboUnits.setEnabled(true);
+            saveState = false;
+
+            txtSubjectCode.setText(tableSubjects.getValueAt(row, 0).toString());
+            txtDescription.setText(tableSubjects.getValueAt(row, 1).toString());
+            comboUnits.setSelectedItem(tableSubjects.getValueAt(row, 2).toString());
+
+            tableSubjects.setRowSelectionInterval(row, row);
+        } else {
+            btnDeselect.setEnabled(false);
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            btnAddSave.setEnabled(true);
+            setSaveState();
+
+            txtSubjectCode.setText("");
+            txtDescription.setText("");
+        }
+
+        isAdjusting = false;
+    }
+    
+    private void setSaveState() {
+        if (saveState) {
+            txtSubjectCode.setEnabled(false);
+            txtDescription.setEnabled(false);
+            comboUnits.setEnabled(false);
+            btnAddSave.setText("Save");
+        } else {
+            txtSubjectCode.setEnabled(true);
+            txtDescription.setEnabled(true);
+            comboUnits.setEnabled(true);
+            btnAddSave.setText("Add");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnAddSave;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeselect;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> comboUnits;
     private javax.swing.JLabel lblDescription;
+    private javax.swing.JLabel lblStudentName1;
     private javax.swing.JLabel lblSubjectCode;
     private javax.swing.JLabel lblUnits;
     private javax.swing.JPanel panelDescription;
     private javax.swing.JPanel panelInputs;
+    private javax.swing.JPanel panelSelected;
     private javax.swing.JPanel panelSubjectCode;
     private javax.swing.JPanel panelUnits;
     private javax.swing.JScrollPane scrollSubjects;

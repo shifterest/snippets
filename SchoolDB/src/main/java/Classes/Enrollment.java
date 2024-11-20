@@ -84,17 +84,17 @@ public class Enrollment {
 //            JOptionPane.showMessageDialog(null, "Enrollment already exists for this student in this course!", "Error", JOptionPane.ERROR_MESSAGE);
             Enrollment existingEnrollment = fromDocument(db, result);
             if (grade == existingEnrollment.getGrade()) {
-                JOptionPane.showMessageDialog(null, "Nothing to update.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Nothing to update!", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 Bson updates = Updates.set("Grade", grade);
                 collection.updateOne(filters, updates);
-                JOptionPane.showMessageDialog(null, "Enrollment updated.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Enrollment updated!", "Information", JOptionPane.INFORMATION_MESSAGE);
             }
             return;
         }
 
         collection.insertOne(this.toDocument());
-        JOptionPane.showMessageDialog(null, "Enrollment added.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Enrollment added!", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public double getGrade() {
