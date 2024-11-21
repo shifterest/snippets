@@ -306,6 +306,7 @@ public class StudentPanel extends JPanel {
         if (saveState) {
             if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Enter a valid student ID and name!", "Input error", JOptionPane.ERROR_MESSAGE);
+                txtStudentId.requestFocus();
                 return;
             } else {
                 try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
@@ -322,9 +323,11 @@ public class StudentPanel extends JPanel {
                     if (Student.getStudentById(db, student.getStudentId()) != null) {
                         JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
                         txtStudentId.requestFocus();
+                        return;
                     } else if (Student.getStudentByName(db, student.getStudentName()) != null) {
                         JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
                         txtStudentName.requestFocus();
+                        return;
                     } else {
                         student.addStudent(db);
                         PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);

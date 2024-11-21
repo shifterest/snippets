@@ -100,7 +100,7 @@ public class GradesPanel extends JPanel implements TabSwitchListener {
         scrollGrades.setViewportView(tableGrades);
         if (tableGrades.getColumnModel().getColumnCount() > 0) {
             tableGrades.getColumnModel().getColumn(0).setMinWidth(0);
-            tableGrades.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tableGrades.getColumnModel().getColumn(0).setPreferredWidth(50);
             tableGrades.getColumnModel().getColumn(2).setMinWidth(0);
             tableGrades.getColumnModel().getColumn(2).setPreferredWidth(0);
             tableGrades.getColumnModel().getColumn(3).setMinWidth(0);
