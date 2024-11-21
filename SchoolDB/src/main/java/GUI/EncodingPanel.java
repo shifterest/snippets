@@ -14,7 +14,7 @@ import javax.swing.text.AbstractDocument;
  *
  * @author Delmoro-Ke
  */
-public class EncodingPanel extends javax.swing.JPanel {
+public class EncodingPanel extends JPanel implements TabSwitchListener {
 
     /**
      * Creates new form EnrollmentPane
@@ -22,7 +22,7 @@ public class EncodingPanel extends javax.swing.JPanel {
     public EncodingPanel() {
         initComponents();
         ((AbstractDocument) txtStudentId.getDocument()).setDocumentFilter(new StudentIDFilter());
-        txtStudentId.getDocument().addDocumentListener(new StudentIDListener(comboStudentName, tableGrades));
+//        txtStudentId.getDocument().addDocumentListener(new StudentIDListener(comboStudentName, tableGrades));
 
         PopulateCombo.studentName(comboStudentName);
         PopulateCombo.subjectCode(comboSubjectCode);
@@ -38,6 +38,7 @@ public class EncodingPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        comboSubjectDesc = new javax.swing.JComboBox<>();
         panelInputs = new javax.swing.JPanel();
         panelStudentID = new javax.swing.JPanel();
         lblStudentID = new javax.swing.JLabel();
@@ -51,13 +52,28 @@ public class EncodingPanel extends javax.swing.JPanel {
         comboSubjectCode = new javax.swing.JComboBox<>();
         panelSubjectDescription = new javax.swing.JPanel();
         lblSubjectDescription = new javax.swing.JLabel();
-        comboSubjectDesc = new javax.swing.JComboBox<>();
+        txtSubjectDesc = new javax.swing.JTextField();
         panelGrade = new javax.swing.JPanel();
         lblGrade = new javax.swing.JLabel();
         comboGrade = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
         scrollGrades = new javax.swing.JScrollPane();
         tableGrades = new javax.swing.JTable();
+
+        comboSubjectDesc.setEnabled(false);
+        comboSubjectDesc.setMaximumSize(new java.awt.Dimension(250, 30));
+        comboSubjectDesc.setMinimumSize(new java.awt.Dimension(250, 30));
+        comboSubjectDesc.setName(""); // NOI18N
+        comboSubjectDesc.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboSubjectDesc.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                comboSubjectDescPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
 
         setBackground(new java.awt.Color(204, 204, 255));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
@@ -161,21 +177,11 @@ public class EncodingPanel extends javax.swing.JPanel {
         lblSubjectDescription.setPreferredSize(new java.awt.Dimension(110, 25));
         panelSubjectDescription.add(lblSubjectDescription);
 
-        comboSubjectDesc.setEnabled(false);
-        comboSubjectDesc.setMaximumSize(new java.awt.Dimension(250, 30));
-        comboSubjectDesc.setMinimumSize(new java.awt.Dimension(250, 30));
-        comboSubjectDesc.setName(""); // NOI18N
-        comboSubjectDesc.setPreferredSize(new java.awt.Dimension(250, 30));
-        comboSubjectDesc.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                comboSubjectDescPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        panelSubjectDescription.add(comboSubjectDesc);
+        txtSubjectDesc.setEnabled(false);
+        txtSubjectDesc.setMaximumSize(new java.awt.Dimension(250, 30));
+        txtSubjectDesc.setMinimumSize(new java.awt.Dimension(250, 30));
+        txtSubjectDesc.setPreferredSize(new java.awt.Dimension(250, 30));
+        panelSubjectDescription.add(txtSubjectDesc);
 
         panelInputs.add(panelSubjectDescription);
 
@@ -244,7 +250,7 @@ public class EncodingPanel extends javax.swing.JPanel {
         String studentId = txtStudentId.getText();
         String studentName = (comboStudentName.getSelectedItem() != null) ? comboStudentName.getSelectedItem().toString() : "";
         String subjectCode = (comboSubjectCode.getSelectedItem() != null) ? comboSubjectCode.getSelectedItem().toString() : "";
-        String subjectDesc = (comboSubjectDesc.getSelectedItem() != null) ? comboSubjectDesc.getSelectedItem().toString() : "";
+        String subjectDesc = txtSubjectDesc.getText();
 
         if (studentId.isBlank() || studentName.isBlank() || subjectCode.isBlank() || subjectDesc.isBlank()) {
             JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -255,7 +261,7 @@ public class EncodingPanel extends javax.swing.JPanel {
             MongoDatabase db = client.getDatabase("Enrollment");
 
             Enrollment enrollment = new Enrollment(
-                    Student.getStudentById(db, Integer.parseInt(txtStudentId.getText().trim())),
+                    Student.getStudentById(db, txtStudentId.getText().trim()),
                     Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString()),
                     Double.parseDouble(comboGrade.getSelectedItem().toString())
             );
@@ -266,7 +272,7 @@ public class EncodingPanel extends javax.swing.JPanel {
 
         PopulateCombo.studentName(comboStudentName);
         PopulateCombo.subjectCode(comboSubjectCode);
-        PopulateCombo.subjectDesc(comboSubjectDesc);
+//        PopulateCombo.subjectDesc(comboSubjectDesc);
         PopulateTable.grade(tableGrades, studentName);
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -341,8 +347,8 @@ public class EncodingPanel extends javax.swing.JPanel {
             if (student == null) {
                 txtStudentId.setText(null);
             } else {
-                int studentId = student.getStudentId();
-                txtStudentId.setText(String.valueOf(studentId));
+                String studentId = student.getStudentId();
+                txtStudentId.setText(studentId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -358,18 +364,25 @@ public class EncodingPanel extends javax.swing.JPanel {
         }
 
         PopulateCombo.subjectCode(comboSubjectCode);
-        PopulateCombo.subjectDesc(comboSubjectDesc);
+//        PopulateCombo.subjectDesc(comboSubjectDesc);
 
         try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase("Enrollment");
 
             Subject subject = Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString());
-            comboSubjectDesc.setSelectedItem(subject == null ? "" : subject.getDescription());
+//            comboSubjectDesc.setSelectedItem(subject == null ? "" : subject.getDescription());
+            txtSubjectDesc.setText(subject == null ? "" : subject.getDescription());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_comboSubjectCodeActionPerformed
 
+    @Override
+    public void onTabSwitch() {
+        PopulateCombo.studentName(comboStudentName);
+        PopulateCombo.subjectCode(comboSubjectCode);
+//        PopulateCombo.subjectDesc(comboSubjectDesc);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
@@ -392,5 +405,6 @@ public class EncodingPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator separator;
     private javax.swing.JTable tableGrades;
     private javax.swing.JTextField txtStudentId;
+    private javax.swing.JTextField txtSubjectDesc;
     // End of variables declaration//GEN-END:variables
 }

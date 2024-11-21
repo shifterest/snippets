@@ -55,7 +55,7 @@ public class PopulateTable {
                 }
 
                 String[] row = new String[]{
-                    Integer.toString(s.getStudentId()),
+                    s.getStudentId(),
                     s.getStudentName(),
                     s.getCourse(),
                     s.getYearLevelString()
@@ -83,7 +83,7 @@ public class PopulateTable {
             if (student != null) {
                 ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
                 for (Enrollment e : enrollments) {
-                    if (e.getStudent().getStudentId() == student.getStudentId()) {
+                    if (e.getStudent().getStudentId().equals(student.getStudentId())) {
                         Subject subject = Subject.getSubjectByCode(db, e.getSubject().getSubjectCode());
 
                         String[] row = new String[]{

@@ -15,7 +15,7 @@ import org.bson.Document;
  *
  * @author Delmoro-Ke
  */
-public class SubjectPanel extends javax.swing.JPanel {
+public class SubjectPanel extends JPanel {
 
     String codeToAdd;
     String descToAdd;
@@ -124,7 +124,7 @@ public class SubjectPanel extends javax.swing.JPanel {
         panelUnits.add(comboUnits);
         comboUnits.getAccessibleContext().setAccessibleName("");
 
-        btnAddSave.setText("Save");
+        btnAddSave.setText("Add");
         btnAddSave.setMaximumSize(new java.awt.Dimension(70, 30));
         btnAddSave.setMinimumSize(new java.awt.Dimension(70, 30));
         btnAddSave.setPreferredSize(new java.awt.Dimension(70, 30));
@@ -139,6 +139,7 @@ public class SubjectPanel extends javax.swing.JPanel {
 
         add(panelInputs);
 
+        panelSelected.setMaximumSize(new java.awt.Dimension(32767, 40));
         panelSelected.setOpaque(false);
 
         lblStudentName1.setText("Selected subject");
@@ -203,6 +204,7 @@ public class SubjectPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tableSubjects.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableSubjects.getTableHeader().setReorderingAllowed(false);
         tableSubjects.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -224,32 +226,30 @@ public class SubjectPanel extends javax.swing.JPanel {
         if (saveState) {
             if (txtSubjectCode.getText().isBlank() || txtDescription.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Enter a valid subject code and description!", "Input error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            } else {
+                try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+                    MongoDatabase db = client.getDatabase("Enrollment");
+                    MongoCollection<Document> collection = db.getCollection("Subject");
 
-            try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
-                MongoDatabase db = client.getDatabase("Enrollment");
-                MongoCollection<Document> collection = db.getCollection("Subject");
-
-                Subject s =  new Subject(
-                    codeToAdd,
-                    descToAdd,
-                    Double.parseDouble(comboUnits.getSelectedItem().toString())
-                );
-                if (Subject.getSubjectByCode(db, s.getSubjectCode()) != null) {
-                    JOptionPane.showMessageDialog(null, "A subject with this code already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
-                    txtSubjectCode.requestFocus();
-                } else {
-                    s.addSubject(db);
-                    txtSubjectCode.setText("");
-                    txtDescription.setText("");
-                    PopulateTable.subject(tableSubjects);
-                    JOptionPane.showMessageDialog(null, "Subject added!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    Subject s =  new Subject(
+                        codeToAdd,
+                        descToAdd,
+                        Double.parseDouble(comboUnits.getSelectedItem().toString())
+                    );
+                    if (Subject.getSubjectByCode(db, s.getSubjectCode()) != null) {
+                        JOptionPane.showMessageDialog(null, "A subject with this code already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                        txtSubjectCode.requestFocus();
+                    } else {
+                        s.addSubject(db);
+                        txtSubjectCode.setText("");
+                        txtDescription.setText("");
+                        PopulateTable.subject(tableSubjects);
+                        JOptionPane.showMessageDialog(null, "Subject added!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
             codeToAdd = null;
             descToAdd = null;
             saveState = false;

@@ -4,6 +4,10 @@
  */
 package GUI;
 
+import Utilities.*;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import javax.swing.*;
+
 /**
  *
  * @author Delmoro-Ke
@@ -25,25 +29,52 @@ public class SchoolFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabbedSchool = new javax.swing.JTabbedPane();
         GradesPanel = new GUI.GradesPanel();
         EncodingPanel = new GUI.EncodingPanel();
         StudentPanel = new GUI.StudentPanel();
         SubjectPanel = new GUI.SubjectPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("School Grading System - Kenji A. Delmoro");
         setMinimumSize(new java.awt.Dimension(640, 480));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        jTabbedPane1.addTab("Grades", GradesPanel);
-        jTabbedPane1.addTab("Encoding", EncodingPanel);
-        jTabbedPane1.addTab("Student", StudentPanel);
-        jTabbedPane1.addTab("Subject", SubjectPanel);
+        tabbedSchool.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedSchoolStateChanged(evt);
+            }
+        });
+        tabbedSchool.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                tabbedSchoolPropertyChange(evt);
+            }
+        });
+        tabbedSchool.addTab("Grades", GradesPanel);
+        tabbedSchool.addTab("Encoding", EncodingPanel);
+        tabbedSchool.addTab("Student", StudentPanel);
+        tabbedSchool.addTab("Subject", SubjectPanel);
 
-        getContentPane().add(jTabbedPane1);
+        getContentPane().add(tabbedSchool);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tabbedSchoolPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tabbedSchoolPropertyChange
+//        int selectedIndex = tabbedSchool.getSelectedIndex();
+//        JPanel selectedPanel = (JPanel) tabbedSchool.getComponentAt(selectedIndex);
+//        if (selectedPanel instanceof TabSwitchListener) {
+//            ((TabSwitchListener) selectedPanel).onTabSwitch();
+//        }
+    }//GEN-LAST:event_tabbedSchoolPropertyChange
+
+    private void tabbedSchoolStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedSchoolStateChanged
+        int selectedIndex = tabbedSchool.getSelectedIndex();
+        JPanel selectedPanel = (JPanel) tabbedSchool.getComponentAt(selectedIndex);
+        if (selectedPanel instanceof TabSwitchListener) {
+            ((TabSwitchListener) selectedPanel).onTabSwitch();
+        }
+    }//GEN-LAST:event_tabbedSchoolStateChanged
 
     /**
      * @param args the command line arguments
@@ -55,30 +86,42 @@ public class SchoolFrame extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new SchoolFrame().setVisible(true);
                 }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            });
+        } catch (UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("FlatLaf Light".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(SchoolFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SchoolFrame().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new SchoolFrame().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -86,6 +129,6 @@ public class SchoolFrame extends javax.swing.JFrame {
     private GUI.GradesPanel GradesPanel;
     private GUI.StudentPanel StudentPanel;
     private GUI.SubjectPanel SubjectPanel;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane tabbedSchool;
     // End of variables declaration//GEN-END:variables
 }

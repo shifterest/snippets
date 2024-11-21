@@ -15,12 +15,12 @@ import org.bson.Document;
  */
 public class Student {
 
-    private int studentId;
+    private String studentId;
     private String studentName;
     private String course;
     private int yearLevel;
 
-    public Student(Integer studentId, String studentName, String course, Integer yearLevel) {
+    public Student(String studentId, String studentName, String course, Integer yearLevel) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.course = course;
@@ -49,7 +49,7 @@ public class Student {
             return null;
         }
 
-        int studentID = doc.getInteger("StudentID");
+        String studentID = doc.getString("StudentID");
         String studentName = doc.getString("StudentName");
         String course = doc.getString("Course");
         int yearLevel = doc.getInteger("YearLevel");
@@ -73,7 +73,7 @@ public class Student {
         ArrayList<Student> students = new ArrayList<>();
 
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
-            Integer studentId = doc.getInteger("StudentID");
+            String studentId = doc.getString("StudentID");
             String studentName = doc.getString("StudentName");
             String course = doc.getString("Course");
             int yearLevel = doc.getInteger("YearLevel");
@@ -103,7 +103,7 @@ public class Student {
         return studentNames;
     }
 
-    public static Student getStudentById(MongoDatabase db, int id) {
+    public static Student getStudentById(MongoDatabase db, String id) {
         MongoCollection<Document> collection = db.getCollection("Student");
         Document query = new Document("StudentID", id);
 
@@ -176,11 +176,11 @@ public class Student {
         this.yearLevel = yearLevel;
     }
 
-    public int getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 

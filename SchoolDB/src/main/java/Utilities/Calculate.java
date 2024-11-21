@@ -24,7 +24,7 @@ public class Calculate {
                     double units = 0.0;
                     ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
                     for (Enrollment e : enrollments) {
-                        if (e.getStudent().getStudentId() == student.getStudentId()) {
+                        if (e.getStudent().getStudentId().equals(student.getStudentId())) {
                             Subject s = Subject.getSubjectByCode(db, e.getSubject().getSubjectCode());
                             wg += e.getGrade() * s.getUnits();
                             units += s.getUnits();

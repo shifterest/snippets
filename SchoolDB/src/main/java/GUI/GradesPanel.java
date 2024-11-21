@@ -4,15 +4,13 @@
  */
 package GUI;
 
-import Classes.*;
 import Utilities.*;
-import com.mongodb.client.*;
-import java.util.ArrayList;
+import javax.swing.*;
 /**
  *
  * @author Delmoro-Ke
  */
-public class GradesPanel extends javax.swing.JPanel {
+public class GradesPanel extends JPanel implements TabSwitchListener {
     /**
      * Creates new form GradesPane
      */
@@ -120,6 +118,10 @@ public class GradesPanel extends javax.swing.JPanel {
         lblGPA.setText("General Percentile Average: " + (gpa > 0 ? String.format("%.2f", gpa) : "N/A"));
     }//GEN-LAST:event_comboStudentNameActionPerformed
 
+    @Override
+    public void onTabSwitch() {
+        PopulateCombo.studentName(comboStudentName);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboStudentName;

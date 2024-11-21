@@ -17,7 +17,7 @@ import org.bson.Document;
  *
  * @author Delmoro-Ke
  */
-public class StudentPanel extends javax.swing.JPanel {
+public class StudentPanel extends JPanel {
 
     private boolean courseFilter;
     private boolean yearLevelFilter;
@@ -307,39 +307,36 @@ public class StudentPanel extends javax.swing.JPanel {
             if (txtStudentId.getText().isBlank() || txtStudentName.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Enter a valid student ID and name!", "Input error", JOptionPane.ERROR_MESSAGE);
                 return;
-            }
+            } else {
+                try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+                    MongoDatabase db = client.getDatabase("Enrollment");
+                    MongoCollection<Document> collection = db.getCollection("Student");
 
-            try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
-                MongoDatabase db = client.getDatabase("Enrollment");
-                MongoCollection<Document> collection = db.getCollection("Student");
+                    Student student = new Student(
+                            txtStudentId.getText().trim(),
+                            txtStudentName.getText().trim(),
+                            comboCourse.getSelectedItem().toString(),
+                            comboYearLevel.getSelectedIndex() + 1
+                    );
 
-                Student student = new Student(
-                        Integer.valueOf(txtStudentId.getText()),
-                        txtStudentName.getText().trim(),
-                        comboCourse.getSelectedItem().toString(),
-                        comboYearLevel.getSelectedIndex() + 1
-                );
-
-                if (Student.getStudentById(db, student.getStudentId()) != null) {
-                    JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
-                    txtStudentId.requestFocus();
-                    return;
+                    if (Student.getStudentById(db, student.getStudentId()) != null) {
+                        JOptionPane.showMessageDialog(null, "A student with this ID already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                        txtStudentId.requestFocus();
+                    } else if (Student.getStudentByName(db, student.getStudentName()) != null) {
+                        JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
+                        txtStudentName.requestFocus();
+                    } else {
+                        student.addStudent(db);
+                        PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
+                        JOptionPane.showMessageDialog(null, "Student added!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (Student.getStudentByName(db, student.getStudentName()) != null) {
-                    JOptionPane.showMessageDialog(null, "A student with this name already exists!", "Duplicate entry", JOptionPane.ERROR_MESSAGE);
-                    txtStudentName.requestFocus();
-                    return;
-                }
-
-                student.addStudent(db);
-                txtStudentId.setText("");
-                txtStudentName.setText("");
-                PopulateTable.student(tableStudents, courseFilter, comboCourse, yearLevelFilter, comboYearLevel);
-                JOptionPane.showMessageDialog(null, "Student added!", "Information", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
+            
+            txtStudentId.setText("");
+            txtStudentName.setText("");
             saveState = false;
             setSaveState();
         } else {
@@ -365,7 +362,7 @@ public class StudentPanel extends javax.swing.JPanel {
             MongoDatabase db = client.getDatabase("Enrollment");
 
             MongoCollection<Document> collection = db.getCollection("Student");
-            int id = Integer.parseInt(tableStudents.getValueAt(tableStudents.getSelectedRow(), 0).toString());
+            String id = tableStudents.getValueAt(tableStudents.getSelectedRow(), 0).toString();
             Student s = Student.getStudentById(db, id);
 
             if (s.hasEnrollments(db)) {
@@ -395,16 +392,16 @@ public class StudentPanel extends javax.swing.JPanel {
             MongoDatabase db = client.getDatabase("Enrollment");
 
             MongoCollection<Document> collection = db.getCollection("Student");
-            int oldId = Integer.parseInt(tableStudents.getValueAt(tableStudents.getSelectedRow(), 0).toString());
+            String oldId = tableStudents.getValueAt(tableStudents.getSelectedRow(), 0).toString();
             Student oldS = Student.getStudentById(db, oldId);
             Student newS = new Student(
-                    Integer.valueOf(txtStudentId.getText()),
+                    txtStudentId.getText().trim(),
                     txtStudentName.getText().trim(),
                     comboCourse.getSelectedItem().toString(),
                     comboYearLevel.getSelectedIndex() + 1
             );
 
-            if (oldId != newS.getStudentId() && oldS.hasEnrollments(db)) {
+            if (!oldId.equals(newS.getStudentId()) && oldS.hasEnrollments(db)) {
                 JOptionPane.showMessageDialog(null, "Remove this student's enrollments before updating it!", "Enrollments exist", JOptionPane.ERROR_MESSAGE);
                 return;
             }

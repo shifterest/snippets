@@ -32,7 +32,7 @@ public class Enrollment {
             return null;
         }
 
-        Student student = Student.getStudentById(db, doc.getInteger("StudentID"));
+        Student student = Student.getStudentById(db, doc.getString("StudentID"));
         Subject subject = Subject.getSubjectByCode(db, doc.getString("SubjectCode"));
         double grade = ((Number) doc.get("Grade")).doubleValue();
 
@@ -54,7 +54,7 @@ public class Enrollment {
         ArrayList<Enrollment> enrollments = new ArrayList<>();
 
         for (Document doc : collection.find().sort(Sorts.ascending("StudentName"))) {
-            Student student = Student.getStudentById(db, doc.getInteger("StudentID"));
+            Student student = Student.getStudentById(db, doc.getString("StudentID"));
             Subject subject = Subject.getSubjectByCode(db, doc.getString("SubjectCode"));
             double grade = ((Number) doc.get("Grade")).doubleValue();
 

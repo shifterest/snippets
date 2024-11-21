@@ -42,7 +42,7 @@ public class StudentIDListener implements DocumentListener {
             MongoDatabase db = client.getDatabase("Enrollment");
 
             String text = e.getDocument().getText(0, e.getDocument().getLength()).trim();
-            Student student = (text.isEmpty()) ? null : Student.getStudentById(db, Integer.parseInt(text));
+            Student student = (text.isEmpty()) ? null : Student.getStudentById(db, text);
 
             combo.setSelectedItem(student == null ? "" : student.getStudentName());
             
