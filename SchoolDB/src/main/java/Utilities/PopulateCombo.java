@@ -33,6 +33,44 @@ public class PopulateCombo {
         comboStudentName.setSelectedItem(curr);
     }
     
+    public static void semesterName(javax.swing.JComboBox<String> comboSemesterName) {
+        Object curr = comboSemesterName.getSelectedItem();
+        comboSemesterName.removeAllItems();
+        comboSemesterName.addItem("");
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            ArrayList<String> names = Semester.getUniqueSemesterNamesByYear(db);
+            for (String name : names) {
+                comboSemesterName.addItem(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        comboSemesterName.setSelectedItem(curr);
+    }
+    
+    public static void schoolYear(javax.swing.JComboBox<String> comboSchoolYear) {
+        Object curr = comboSchoolYear.getSelectedItem();
+        comboSchoolYear.removeAllItems();
+        comboSchoolYear.addItem("");
+
+        try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase db = client.getDatabase("Enrollment");
+
+            ArrayList<String> names = Semester.getUniqueSchoolYears(db);
+            for (String name : names) {
+                comboSchoolYear.addItem(name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        comboSchoolYear.setSelectedItem(curr);
+    }
+    
     public static void subjectCode(javax.swing.JComboBox<String> comboSubjectCode) {
         Object curr = comboSubjectCode.getSelectedItem();
         comboSubjectCode.removeAllItems();

@@ -6,19 +6,19 @@ package GUI;
 
 import Utilities.*;
 import javax.swing.*;
+
 /**
  *
  * @author Delmoro-Ke
  */
 public class GradesPanel extends JPanel implements TabSwitchListener {
+
     /**
      * Creates new form GradesPane
      */
     public GradesPanel() {
         initComponents();
-        PopulateCombo.studentName(comboStudentName);
-        String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
-        PopulateTable.grade(tableGrades, name);
+        update();
     }
 
     /**
@@ -30,9 +30,16 @@ public class GradesPanel extends JPanel implements TabSwitchListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelInputs = new javax.swing.JPanel();
         panelStudentName = new javax.swing.JPanel();
         lblStudentName = new javax.swing.JLabel();
         comboStudentName = new javax.swing.JComboBox<>();
+        panelSemester = new javax.swing.JPanel();
+        lblSemester = new javax.swing.JLabel();
+        comboSemester = new javax.swing.JComboBox<>();
+        panelSchoolYear = new javax.swing.JPanel();
+        lblSchoolYear = new javax.swing.JLabel();
+        comboSchoolYear = new javax.swing.JComboBox<>();
         panelGPA = new javax.swing.JPanel();
         lblGPA = new javax.swing.JLabel();
         scrollGrades = new javax.swing.JScrollPane();
@@ -40,6 +47,13 @@ public class GradesPanel extends JPanel implements TabSwitchListener {
 
         setBackground(new java.awt.Color(204, 255, 204));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
+
+        panelInputs.setMaximumSize(new java.awt.Dimension(32767, 120));
+        panelInputs.setMinimumSize(new java.awt.Dimension(349, 120));
+        panelInputs.setName(""); // NOI18N
+        panelInputs.setOpaque(false);
+        panelInputs.setPreferredSize(new java.awt.Dimension(100, 120));
+        panelInputs.setLayout(new javax.swing.BoxLayout(panelInputs, javax.swing.BoxLayout.Y_AXIS));
 
         panelStudentName.setMaximumSize(new java.awt.Dimension(32767, 40));
         panelStudentName.setMinimumSize(new java.awt.Dimension(339, 40));
@@ -63,14 +77,66 @@ public class GradesPanel extends JPanel implements TabSwitchListener {
         });
         panelStudentName.add(comboStudentName);
 
-        add(panelStudentName);
+        panelInputs.add(panelStudentName);
 
+        panelSemester.setMaximumSize(new java.awt.Dimension(32767, 40));
+        panelSemester.setMinimumSize(new java.awt.Dimension(339, 40));
+        panelSemester.setOpaque(false);
+        panelSemester.setPreferredSize(new java.awt.Dimension(539, 40));
+
+        lblSemester.setText("Semester");
+        lblSemester.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblSemester.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblSemester.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelSemester.add(lblSemester);
+
+        comboSemester.setMaximumSize(new java.awt.Dimension(250, 30));
+        comboSemester.setMinimumSize(new java.awt.Dimension(250, 30));
+        comboSemester.setName(""); // NOI18N
+        comboSemester.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboSemester.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSemesterActionPerformed(evt);
+            }
+        });
+        panelSemester.add(comboSemester);
+
+        panelInputs.add(panelSemester);
+
+        panelSchoolYear.setMaximumSize(new java.awt.Dimension(32767, 40));
+        panelSchoolYear.setMinimumSize(new java.awt.Dimension(339, 40));
+        panelSchoolYear.setOpaque(false);
+        panelSchoolYear.setPreferredSize(new java.awt.Dimension(539, 40));
+
+        lblSchoolYear.setText("School year");
+        lblSchoolYear.setMaximumSize(new java.awt.Dimension(100, 25));
+        lblSchoolYear.setMinimumSize(new java.awt.Dimension(100, 25));
+        lblSchoolYear.setPreferredSize(new java.awt.Dimension(100, 25));
+        panelSchoolYear.add(lblSchoolYear);
+
+        comboSchoolYear.setMaximumSize(new java.awt.Dimension(250, 30));
+        comboSchoolYear.setMinimumSize(new java.awt.Dimension(250, 30));
+        comboSchoolYear.setName(""); // NOI18N
+        comboSchoolYear.setPreferredSize(new java.awt.Dimension(250, 30));
+        comboSchoolYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSchoolYearActionPerformed(evt);
+            }
+        });
+        panelSchoolYear.add(comboSchoolYear);
+
+        panelInputs.add(panelSchoolYear);
+
+        add(panelInputs);
+
+        panelGPA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         panelGPA.setMaximumSize(new java.awt.Dimension(32767, 25));
         panelGPA.setMinimumSize(new java.awt.Dimension(339, 25));
         panelGPA.setOpaque(false);
         panelGPA.setPreferredSize(new java.awt.Dimension(539, 25));
         panelGPA.setLayout(new java.awt.GridLayout(1, 0));
 
+        lblGPA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblGPA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblGPA.setText("General Percentile Average: N/A");
         lblGPA.setMaximumSize(new java.awt.Dimension(250, 25));
@@ -111,23 +177,50 @@ public class GradesPanel extends JPanel implements TabSwitchListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboStudentNameActionPerformed
-        PopulateCombo.studentName(comboStudentName);
-        String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
-        PopulateTable.grade(tableGrades, name);
-        double gpa = Calculate.GPA(name);
-        lblGPA.setText("General Percentile Average: " + (gpa > 0 ? String.format("%.2f", gpa) : "N/A"));
+        update();
     }//GEN-LAST:event_comboStudentNameActionPerformed
+
+    private void comboSemesterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSemesterActionPerformed
+        update();
+    }//GEN-LAST:event_comboSemesterActionPerformed
+
+    private void comboSchoolYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSchoolYearActionPerformed
+        update();
+    }//GEN-LAST:event_comboSchoolYearActionPerformed
+
+    private void update() {
+        PopulateCombo.studentName(comboStudentName);
+        PopulateCombo.semesterName(comboSemester);
+        PopulateCombo.schoolYear(comboSchoolYear);
+
+        String name = comboStudentName.getSelectedItem() == null ? null : comboStudentName.getSelectedItem().toString();
+        String semesterName = comboSemester.getSelectedItem() == null ? null : comboSemester.getSelectedItem().toString();
+        String schoolYear = comboSchoolYear.getSelectedItem() == null ? null : comboSchoolYear.getSelectedItem().toString();
+
+        PopulateTable.grade(tableGrades, name, semesterName, schoolYear);
+        double gpa = Calculate.GPA(name, semesterName, schoolYear);
+        lblGPA.setText("General Percentile Average: " + (gpa > 0 ? String.format("%.2f", gpa) : "N/A"));
+    }
 
     @Override
     public void onTabSwitch() {
         PopulateCombo.studentName(comboStudentName);
+        PopulateCombo.semesterName(comboSemester);
+        PopulateCombo.schoolYear(comboSchoolYear);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboSchoolYear;
+    private javax.swing.JComboBox<String> comboSemester;
     private javax.swing.JComboBox<String> comboStudentName;
     private javax.swing.JLabel lblGPA;
+    private javax.swing.JLabel lblSchoolYear;
+    private javax.swing.JLabel lblSemester;
     private javax.swing.JLabel lblStudentName;
     private javax.swing.JPanel panelGPA;
+    private javax.swing.JPanel panelInputs;
+    private javax.swing.JPanel panelSchoolYear;
+    private javax.swing.JPanel panelSemester;
     private javax.swing.JPanel panelStudentName;
     private javax.swing.JScrollPane scrollGrades;
     private javax.swing.JTable tableGrades;

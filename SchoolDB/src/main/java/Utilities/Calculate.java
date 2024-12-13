@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Calculate {
 
-    public static double GPA(String studentName) {
+    public static double GPA(String studentName, String semesterName, String schoolYear) {
         if (studentName != null) {
             try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
                 MongoDatabase db = client.getDatabase("Enrollment");
@@ -22,13 +22,15 @@ public class Calculate {
                 if (student != null) {
                     double wg = 0.0;
                     double units = 0.0;
-                    ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
-                    for (Enrollment e : enrollments) {
-                        if (e.getStudent().getStudentId().equals(student.getStudentId())) {
-                            Subject s = Subject.getSubjectByCode(db, e.getSubject().getSubjectCode());
-                            wg += e.getGrade() * s.getUnits();
-                            units += s.getUnits();
-                        }
+                    Student stud = Student.getStudentByName(db, studentName);
+                    Semester sem = Semester.getSemesterByNameYear(db, semesterName, schoolYear);
+                    Enrollment e = Enrollment.getEnrollmentByStudent(
+                            db, stud != null ? stud.getStudentId() : null, sem != null ? sem.getSemesterId() : -1
+                    );
+                    for (int i = 0; i < e.getSubjects().size(); i++) {
+                        Subject s = e.getSubjects().get(i);
+                        wg += e.getGrades().get(i) * s.getUnits();
+                        units += s.getUnits();
                     }
                     return wg / units;
                 }

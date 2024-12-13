@@ -47,6 +47,10 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         lblStudentName = new javax.swing.JLabel();
         comboStudentName = new javax.swing.JComboBox<>();
         separator = new javax.swing.JSeparator();
+        panelSemesterSY = new javax.swing.JPanel();
+        lblSemesterSY = new javax.swing.JLabel();
+        comboSemester = new javax.swing.JComboBox<>();
+        comboSchoolYear = new javax.swing.JComboBox<>();
         panelSubjectCode = new javax.swing.JPanel();
         lblSubjectCode = new javax.swing.JLabel();
         comboSubjectCode = new javax.swing.JComboBox<>();
@@ -80,11 +84,11 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
 
         panelInputs.setAlignmentX(0.0F);
         panelInputs.setAlignmentY(0.0F);
-        panelInputs.setMaximumSize(new java.awt.Dimension(32767, 200));
-        panelInputs.setMinimumSize(new java.awt.Dimension(365, 205));
+        panelInputs.setMaximumSize(new java.awt.Dimension(32767, 260));
+        panelInputs.setMinimumSize(new java.awt.Dimension(365, 260));
         panelInputs.setName(""); // NOI18N
         panelInputs.setOpaque(false);
-        panelInputs.setPreferredSize(new java.awt.Dimension(370, 200));
+        panelInputs.setPreferredSize(new java.awt.Dimension(370, 260));
         panelInputs.setLayout(new javax.swing.BoxLayout(panelInputs, javax.swing.BoxLayout.Y_AXIS));
 
         panelStudentID.setOpaque(false);
@@ -138,6 +142,56 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         separator.setMinimumSize(new java.awt.Dimension(365, 5));
         separator.setPreferredSize(new java.awt.Dimension(365, 5));
         panelInputs.add(separator);
+
+        panelSemesterSY.setOpaque(false);
+
+        lblSemesterSY.setText("Semester, S.Y.");
+        lblSemesterSY.setMaximumSize(new java.awt.Dimension(110, 25));
+        lblSemesterSY.setMinimumSize(new java.awt.Dimension(110, 25));
+        lblSemesterSY.setPreferredSize(new java.awt.Dimension(110, 25));
+        panelSemesterSY.add(lblSemesterSY);
+
+        comboSemester.setMaximumSize(new java.awt.Dimension(125, 30));
+        comboSemester.setMinimumSize(new java.awt.Dimension(125, 30));
+        comboSemester.setName(""); // NOI18N
+        comboSemester.setPreferredSize(new java.awt.Dimension(125, 30));
+        comboSemester.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                comboSemesterPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        comboSemester.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSemesterActionPerformed(evt);
+            }
+        });
+        panelSemesterSY.add(comboSemester);
+
+        comboSchoolYear.setMaximumSize(new java.awt.Dimension(120, 30));
+        comboSchoolYear.setMinimumSize(new java.awt.Dimension(120, 30));
+        comboSchoolYear.setName(""); // NOI18N
+        comboSchoolYear.setPreferredSize(new java.awt.Dimension(120, 30));
+        comboSchoolYear.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                comboSchoolYearPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        comboSchoolYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSchoolYearActionPerformed(evt);
+            }
+        });
+        panelSemesterSY.add(comboSchoolYear);
+
+        panelInputs.add(panelSemesterSY);
 
         panelSubjectCode.setOpaque(false);
 
@@ -221,11 +275,11 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
 
             },
             new String [] {
-                "Subject code", "Description", "Units", "Grade"
+                "School year", "Semester", "Subject code", "Description", "Units", "Grade"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -234,14 +288,6 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         });
         tableGrades.getTableHeader().setReorderingAllowed(false);
         scrollGrades.setViewportView(tableGrades);
-        if (tableGrades.getColumnModel().getColumnCount() > 0) {
-            tableGrades.getColumnModel().getColumn(0).setMinWidth(0);
-            tableGrades.getColumnModel().getColumn(0).setPreferredWidth(0);
-            tableGrades.getColumnModel().getColumn(2).setMinWidth(0);
-            tableGrades.getColumnModel().getColumn(2).setPreferredWidth(0);
-            tableGrades.getColumnModel().getColumn(3).setMinWidth(0);
-            tableGrades.getColumnModel().getColumn(3).setPreferredWidth(0);
-        }
 
         add(scrollGrades);
     }// </editor-fold>//GEN-END:initComponents
@@ -249,10 +295,12 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String studentId = txtStudentId.getText();
         String studentName = (comboStudentName.getSelectedItem() != null) ? comboStudentName.getSelectedItem().toString() : "";
+        String semesterName = (comboSemester.getSelectedItem() != null) ? comboSemester.getSelectedItem().toString() : "";
+        String schoolYear = (comboSchoolYear.getSelectedItem() != null) ? comboSchoolYear.getSelectedItem().toString() : "";        
         String subjectCode = (comboSubjectCode.getSelectedItem() != null) ? comboSubjectCode.getSelectedItem().toString() : "";
         String subjectDesc = txtSubjectDesc.getText();
 
-        if (studentId.isBlank() || studentName.isBlank() || subjectCode.isBlank() || subjectDesc.isBlank()) {
+        if (studentId.isBlank() || studentName.isBlank() || semesterName.isBlank() || schoolYear.isBlank() || subjectCode.isBlank() || subjectDesc.isBlank()) {
             JOptionPane.showMessageDialog(null, "Missing info!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -260,12 +308,12 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         try (MongoClient client = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase db = client.getDatabase("Enrollment");
 
-            Enrollment enrollment = new Enrollment(
-                    Student.getStudentById(db, txtStudentId.getText().trim()),
-                    Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString()),
-                    Double.parseDouble(comboGrade.getSelectedItem().toString())
-            );
-            enrollment.addEnrollment(db);
+//            Enrollment enrollment = new Enrollment(
+//                    Student.getStudentById(db, txtStudentId.getText().trim()),
+//                    Subject.getSubjectByCode(db, comboSubjectCode.getSelectedItem().toString()),
+//                    Double.parseDouble(comboGrade.getSelectedItem().toString())
+//            );
+//            enrollment.addEnrollment(db);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -273,7 +321,7 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         PopulateCombo.studentName(comboStudentName);
         PopulateCombo.subjectCode(comboSubjectCode);
 //        PopulateCombo.subjectDesc(comboSubjectDesc);
-        PopulateTable.grade(tableGrades, studentName);
+        PopulateTable.grade(tableGrades, studentName, null, null);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void comboSubjectCodePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSubjectCodePopupMenuWillBecomeInvisible
@@ -355,7 +403,7 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         }
 
         PopulateCombo.studentName(comboStudentName);
-        PopulateTable.grade(tableGrades, comboStudentName.getSelectedItem().toString());
+//        PopulateTable.grade(tableGrades, comboStudentName.getSelectedItem().toString());
     }//GEN-LAST:event_comboStudentNameActionPerformed
 
     private void comboSubjectCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSubjectCodeActionPerformed
@@ -377,6 +425,22 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
         }
     }//GEN-LAST:event_comboSubjectCodeActionPerformed
 
+    private void comboSemesterPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSemesterPopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSemesterPopupMenuWillBecomeInvisible
+
+    private void comboSemesterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSemesterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSemesterActionPerformed
+
+    private void comboSchoolYearPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_comboSchoolYearPopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSchoolYearPopupMenuWillBecomeInvisible
+
+    private void comboSchoolYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSchoolYearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSchoolYearActionPerformed
+
     @Override
     public void onTabSwitch() {
         PopulateCombo.studentName(comboStudentName);
@@ -387,16 +451,20 @@ public class EncodingPanel extends JPanel implements TabSwitchListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> comboGrade;
+    private javax.swing.JComboBox<String> comboSchoolYear;
+    private javax.swing.JComboBox<String> comboSemester;
     private javax.swing.JComboBox<String> comboStudentName;
     private javax.swing.JComboBox<String> comboSubjectCode;
     private javax.swing.JComboBox<String> comboSubjectDesc;
     private javax.swing.JLabel lblGrade;
+    private javax.swing.JLabel lblSemesterSY;
     private javax.swing.JLabel lblStudentID;
     private javax.swing.JLabel lblStudentName;
     private javax.swing.JLabel lblSubjectCode;
     private javax.swing.JLabel lblSubjectDescription;
     private javax.swing.JPanel panelGrade;
     private javax.swing.JPanel panelInputs;
+    private javax.swing.JPanel panelSemesterSY;
     private javax.swing.JPanel panelStudentID;
     private javax.swing.JPanel panelStudentName;
     private javax.swing.JPanel panelSubjectCode;

@@ -68,7 +68,7 @@ public class PopulateTable {
         }
     }
 
-    public static void grade(JTable table, String studentName) {
+    public static void grade(JTable table, String studentName, String semesterName, String schoolYear) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
@@ -81,20 +81,20 @@ public class PopulateTable {
 
             Student student = Student.getStudentByName(db, studentName);
             if (student != null) {
-                ArrayList<Enrollment> enrollments = Enrollment.getEnrollments(db);
-                for (Enrollment e : enrollments) {
-                    if (e.getStudent().getStudentId().equals(student.getStudentId())) {
-                        Subject subject = Subject.getSubjectByCode(db, e.getSubject().getSubjectCode());
+                Student stud = Student.getStudentByName(db, studentName);
+                Semester sem = (semesterName != null || schoolYear != null) ? Semester.getSemesterByNameYear(db, semesterName, schoolYear) : null;
+                Enrollment e = Enrollment.getEnrollmentByStudent(db, stud.getStudentId(), sem != null ? sem.getSemesterId() : -1);
+                for (int i = 0; i < e.getSubjects().size(); i++) {
+                    Subject s = e.getSubjects().get(i);
+                   
+                    String[] row = new String[]{
+                        s.getSubjectCode(),
+                        s.getDescription(),
+                        String.format("%.1f", s.getUnits()),
+                        String.format("%.2f", e.getGrades().get(i))
+                    };
 
-                        String[] row = new String[]{
-                            e.getSubject().getSubjectCode(),
-                            subject.getDescription(),
-                            String.format("%.1f", subject.getUnits()),
-                            String.format("%.2f", e.getGrade())
-                        };
-
-                        model.addRow(row);
-                    }
+                    model.addRow(row);
                 }
             }
         } catch (Exception e) {
